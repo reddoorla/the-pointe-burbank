@@ -1,5 +1,5 @@
 {
-  "repositoryName": "your-prismic-repo-name",
+  "repositoryName": "the-pointe-burbank",
   "adapter": "@slicemachine/adapter-sveltekit",
   "libraries": ["./src/lib/slices"],
   "localSliceSimulatorURL": "http://localhost:5173/slice-simulator"

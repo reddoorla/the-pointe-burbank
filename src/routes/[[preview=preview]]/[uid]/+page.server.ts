@@ -11,7 +11,7 @@ import {
   toPrerenderEntries,
 } from "$lib/blux-catalog/page-doc";
 import { frozenUids, resolveFrozen } from "$lib/blux-frozen/load";
-import { createClient, isPlaceholderRepo } from "$lib/prismicio";
+import { createClient, isFrozenSite, isPlaceholderRepo } from "$lib/prismicio";
 
 export async function load({ params, fetch, cookies }) {
   if (params.uid === "home") redirect(308, "/");
@@ -42,6 +42,17 @@ export async function load({ params, fetch, cookies }) {
 
 export async function entries() {
   if (isPlaceholderRepo) return [];
+
+  // A frozen Blux site's routes ARE its committed frozen artifacts — its Prismic
+  // holds only `frozen_page` docs (never native `page`/`catalog_page`), so skip
+  // the page-doc probe entirely: it would either error on the absent types or, in
+  // a repo that also carries stray `catalog_page` docs, prerender them as junk.
+  // ("home" renders at "/" via the root route, so it is excluded here.)
+  if (isFrozenSite) {
+    return frozenUids()
+      .filter((uid) => uid !== "home")
+      .map((uid) => ({ uid }));
+  }
 
   const client = createClient();
 

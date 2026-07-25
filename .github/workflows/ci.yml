@@ -11,4 +11,4 @@ jobs:
     uses: reddoorla/.github/.github/workflows/ci.yml@4a32c3d0caf2050d6f72274d3325f2306772860d # v1.3.0
     with:
       node-version: "24"
-      netlify-site: "reddoor-wireframer"
+      netlify-site: "the-pointe-burbank"

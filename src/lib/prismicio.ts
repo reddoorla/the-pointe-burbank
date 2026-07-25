@@ -4,6 +4,7 @@ import {
   type CreateClientConfig,
 } from "@prismicio/svelte/kit";
 import config from "../../slicemachine.config.json";
+import { frozenArtifacts } from "./blux-frozen/artifacts";
 
 export const repositoryName =
   import.meta.env.VITE_PRISMIC_ENVIRONMENT || config.repositoryName;
@@ -14,6 +15,19 @@ export const repositoryName =
  * results in that case so `pnpm build` succeeds on an unconfigured clone.
  */
 export const isPlaceholderRepo = repositoryName === "your-prismic-repo-name";
+
+/**
+ * True when this repo committed frozen-page artifacts (a Blux freeze site). Such
+ * a repo's Prismic contains ONLY the `frozen_page` type — never native `page` or
+ * `catalog_page`. Prismic's routes resolver rejects EVERY query whose `routes`
+ * config names a type absent from the repo, so the native page/catalog routes
+ * below would 500 on every request against a frozen repo. Frozen pages render
+ * from a committed template (never `doc.url`), so they need no link-resolution
+ * routes: a frozen site uses a routes-free client, which also lets
+ * `getAllByType("page"|"catalog_page")` resolve to an empty list instead of
+ * erroring.
+ */
+export const isFrozenSite = Object.keys(frozenArtifacts).length > 0;
 
 // Both the native `page` type and the Blux-migration `catalog_page` type
 // resolve to the same routes: a cloned repo populates only one, so a migrated
@@ -44,7 +58,7 @@ export const createClient = ({
   ...config
 }: CreateClientConfig = {}) => {
   const client = prismic.createClient(repositoryName, {
-    routes,
+    routes: isFrozenSite ? undefined : routes,
     ...config,
   });
 

@@ -1,4 +1,4 @@
-import { readFileSync } from "node:fs";
+import { readFileSync, readdirSync } from "node:fs";
 import adapter from "@sveltejs/adapter-netlify";
 import { vitePreprocess } from "@sveltejs/vite-plugin-svelte";
 
@@ -8,6 +8,20 @@ const slicemachine = JSON.parse(
 const isPlaceholderRepo =
   (process.env.VITE_PRISMIC_ENVIRONMENT || slicemachine.repositoryName) ===
   "your-prismic-repo-name";
+
+// A frozen Blux site commits page artifacts under src/lib/blux-frozen/frozen.
+// Its prerendered pages keep dead Blux link artifacts — JS-driven `#n` slider
+// anchors whose targets never existed statically — so tolerate missing fragment
+// ids during the crawl rather than failing the build (a native site still fails
+// loudly on a genuine broken in-page anchor).
+let isFrozenSite = false;
+try {
+  isFrozenSite = readdirSync(
+    new URL("./src/lib/blux-frozen/frozen", import.meta.url),
+  ).some((f) => f.endsWith(".html"));
+} catch {
+  // no frozen artifact dir → not a frozen site
+}
 
 /** @type {import('@sveltejs/kit').Config} */
 const config = {
@@ -32,10 +46,18 @@ const config = {
         if (isPlaceholderRepo && status === 404) {
           return;
         }
+        // Cloudflare infrastructure paths are never prerenderable routes. Frozen
+        // Blux HTML keeps a dead `/cdn-cgi/l/email-protection` link (Cloudflare's
+        // email-obfuscation, only resolvable behind Cloudflare) — a 404 on it
+        // during the crawl is expected, not a build failure.
+        if (status === 404 && path.startsWith("/cdn-cgi/")) {
+          return;
+        }
         throw new Error(
           `${status} ${path}${referrer ? ` (linked from ${referrer})` : ""}: ${message}`,
         );
       },
+      handleMissingId: isFrozenSite ? "warn" : "fail",
     },
     alias: {
       $components: "src/lib/components",
