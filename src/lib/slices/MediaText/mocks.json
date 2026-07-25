@@ -1,0 +1,41 @@
+[
+  {
+    "__TYPE__": "SharedSliceContent",
+    "variation": "imageRight",
+    "primary": {
+      "heading": {
+        "__TYPE__": "StructuredTextContent",
+        "value": [{ "type": "heading2", "content": { "text": "Amenities" } }]
+      },
+      "body": {
+        "__TYPE__": "StructuredTextContent",
+        "value": [
+          {
+            "type": "paragraph",
+            "content": { "text": "A resort-style pool and fitness center." }
+          }
+        ]
+      },
+      "media": {
+        "__TYPE__": "ImageContent",
+        "url": "https://images.unsplash.com/photo-1571902943202-507ec2618e8f",
+        "origin": {
+          "id": "main",
+          "url": "https://images.unsplash.com/photo-1571902943202-507ec2618e8f",
+          "width": 800,
+          "height": 600
+        },
+        "width": 800,
+        "height": 600,
+        "edit": {
+          "background": "transparent",
+          "zoom": 1,
+          "crop": { "x": 0, "y": 0 }
+        },
+        "thumbnails": {},
+        "alt": "Pool"
+      }
+    },
+    "items": []
+  }
+]

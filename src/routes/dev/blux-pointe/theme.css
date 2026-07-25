@@ -1,0 +1,409 @@
+/* Fonts to load — Scope One 400; Montserrat 300,500,400,600; Martel 200 */
+@theme {
+  --color-text: #053a6c;
+  --color-background: #fff;
+  --color-links: #053a6c;
+  --color-icons: #053a6c;
+  --color-overlay-background: #fff;
+  --color-overlay-text: #000;
+  --color-overlay-icons: #000;
+  --font-heading: Scope One;
+  --font-body: Montserrat;
+  /* text0 — Title (Default) */
+  --text-text0: 44px;
+  --text-text0--line-height: 60px;
+  --text-text0--font-weight: normal;
+  --text-text0--font-family: Scope One;
+  --text-text0--text-transform: capitalize;
+  --text-text0--letter-spacing: 1.5px;
+  --text-text0--mobile-font-size: 30px;
+  --text-text0--mobile-line-height: 48px;
+  /* text1 — Body (Default) */
+  --text-text1: 18px;
+  --text-text1--line-height: 36px;
+  --text-text1--font-weight: 300;
+  --text-text1--font-family: Montserrat;
+  --text-text1--mobile-font-size: 18px;
+  --text-text1--mobile-line-height: 30px;
+  /* text2 — Page Title */
+  --text-text2: 70px;
+  --text-text2--line-height: 100px;
+  --text-text2--font-weight: 300;
+  --text-text2--font-family: Montserrat;
+  --text-text2--text-transform: uppercase;
+  --text-text2--letter-spacing: 1.5px;
+  --text-text2--margin: 4px 0;
+  --text-text2--mobile-font-size: 40px;
+  --text-text2--mobile-line-height: 60px;
+  /* text3 — Sub-Body (Default) */
+  --text-text3: 16px;
+  --text-text3--line-height: 36px;
+  --text-text3--font-weight: 300;
+  --text-text3--font-family: Montserrat;
+  --text-text3--mobile-font-size: 18px;
+  --text-text3--mobile-line-height: 30px;
+  /* text5 — Grid Titles */
+  --text-text5: 15px;
+  --text-text5--line-height: 26px;
+  --text-text5--font-weight: 500;
+  --text-text5--font-family: Montserrat;
+  --text-text5--text-transform: uppercase;
+  --text-text5--letter-spacing: 1.5px;
+  --text-text5--margin: 10px 0;
+  /* text6 — Headline */
+  --text-text6: 26px;
+  --text-text6--line-height: 60px;
+  --text-text6--font-weight: 300;
+  --text-text6--font-family: Montserrat;
+  --text-text6--letter-spacing: 1px;
+  --text-text6--margin: 10px 0;
+  --text-text6--mobile-font-size: 18px;
+  /* text7 — Sub-Title */
+  --text-text7: 22px;
+  --text-text7--line-height: 30px;
+  --text-text7--font-weight: normal;
+  --text-text7--font-family: Montserrat;
+  --text-text7--text-transform: uppercase;
+  --text-text7--margin: 10px 0;
+  --text-text7--mobile-font-size: 20px;
+  --text-text7--mobile-line-height: 30px;
+  /* text8 — Caption Body */
+  --text-text8: 18px;
+  --text-text8--line-height: 28px;
+  --text-text8--font-weight: normal;
+  --text-text8--font-family: Montserrat;
+  --text-text8--margin: 10px 0;
+  /* text9 — large body */
+  --text-text9: 26px;
+  --text-text9--line-height: 42px;
+  --text-text9--font-weight: normal;
+  --text-text9--font-family: Scope One;
+  /* text10 — extra large title */
+  --text-text10: 84px;
+  --text-text10--line-height: 115px;
+  --text-text10--font-weight: normal;
+  --text-text10--font-family: Scope One;
+  --text-text10--text-transform: capitalize;
+  --text-text10--mobile-font-size: 36px;
+  --text-text10--mobile-line-height: 48px;
+  /* text11 — Page Title Serif */
+  --text-text11: 50px;
+  --text-text11--line-height: 80px;
+  --text-text11--font-weight: 200;
+  --text-text11--font-family: Martel;
+  --text-text11--text-transform: capitalize;
+  --text-text11--mobile-font-size: 40px;
+  --text-text11--mobile-line-height: 60px;
+  /* text12 — XL Serif */
+  --text-text12: 80px;
+  --text-text12--line-height: 120px;
+  --text-text12--font-weight: 200;
+  --text-text12--font-family: Martel;
+  --text-text12--text-transform: capitalize;
+  --text-text12--mobile-font-size: 48px;
+  --text-text12--mobile-line-height: 70px;
+  /* text13 — grid title bold */
+  --text-text13: 20px;
+  --text-text13--line-height: 60px;
+  --text-text13--font-weight: 600;
+  --text-text13--font-family: Montserrat;
+  --text-text13--text-transform: uppercase;
+  --text-text13--letter-spacing: 1.5px;
+  /* text14 — Body Serif */
+  --text-text14: 22px;
+  --text-text14--line-height: 38px;
+  --text-text14--font-weight: 200;
+  --text-text14--font-family: Martel;
+}
+
+:root {
+  --color-text: #053a6c;
+  --color-background: #fff;
+  --color-links: #053a6c;
+  --color-icons: #053a6c;
+  --color-overlay-background: #fff;
+  --color-overlay-text: #000;
+  --color-overlay-icons: #000;
+  --font-heading: Scope One;
+  --font-body: Montserrat;
+  /* text0 — Title (Default) */
+  --text-text0: 44px;
+  --text-text0--line-height: 60px;
+  --text-text0--font-weight: normal;
+  --text-text0--font-family: Scope One;
+  --text-text0--text-transform: capitalize;
+  --text-text0--letter-spacing: 1.5px;
+  --text-text0--mobile-font-size: 30px;
+  --text-text0--mobile-line-height: 48px;
+  /* text1 — Body (Default) */
+  --text-text1: 18px;
+  --text-text1--line-height: 36px;
+  --text-text1--font-weight: 300;
+  --text-text1--font-family: Montserrat;
+  --text-text1--mobile-font-size: 18px;
+  --text-text1--mobile-line-height: 30px;
+  /* text2 — Page Title */
+  --text-text2: 70px;
+  --text-text2--line-height: 100px;
+  --text-text2--font-weight: 300;
+  --text-text2--font-family: Montserrat;
+  --text-text2--text-transform: uppercase;
+  --text-text2--letter-spacing: 1.5px;
+  --text-text2--margin: 4px 0;
+  --text-text2--mobile-font-size: 40px;
+  --text-text2--mobile-line-height: 60px;
+  /* text3 — Sub-Body (Default) */
+  --text-text3: 16px;
+  --text-text3--line-height: 36px;
+  --text-text3--font-weight: 300;
+  --text-text3--font-family: Montserrat;
+  --text-text3--mobile-font-size: 18px;
+  --text-text3--mobile-line-height: 30px;
+  /* text5 — Grid Titles */
+  --text-text5: 15px;
+  --text-text5--line-height: 26px;
+  --text-text5--font-weight: 500;
+  --text-text5--font-family: Montserrat;
+  --text-text5--text-transform: uppercase;
+  --text-text5--letter-spacing: 1.5px;
+  --text-text5--margin: 10px 0;
+  /* text6 — Headline */
+  --text-text6: 26px;
+  --text-text6--line-height: 60px;
+  --text-text6--font-weight: 300;
+  --text-text6--font-family: Montserrat;
+  --text-text6--letter-spacing: 1px;
+  --text-text6--margin: 10px 0;
+  --text-text6--mobile-font-size: 18px;
+  /* text7 — Sub-Title */
+  --text-text7: 22px;
+  --text-text7--line-height: 30px;
+  --text-text7--font-weight: normal;
+  --text-text7--font-family: Montserrat;
+  --text-text7--text-transform: uppercase;
+  --text-text7--margin: 10px 0;
+  --text-text7--mobile-font-size: 20px;
+  --text-text7--mobile-line-height: 30px;
+  /* text8 — Caption Body */
+  --text-text8: 18px;
+  --text-text8--line-height: 28px;
+  --text-text8--font-weight: normal;
+  --text-text8--font-family: Montserrat;
+  --text-text8--margin: 10px 0;
+  /* text9 — large body */
+  --text-text9: 26px;
+  --text-text9--line-height: 42px;
+  --text-text9--font-weight: normal;
+  --text-text9--font-family: Scope One;
+  /* text10 — extra large title */
+  --text-text10: 84px;
+  --text-text10--line-height: 115px;
+  --text-text10--font-weight: normal;
+  --text-text10--font-family: Scope One;
+  --text-text10--text-transform: capitalize;
+  --text-text10--mobile-font-size: 36px;
+  --text-text10--mobile-line-height: 48px;
+  /* text11 — Page Title Serif */
+  --text-text11: 50px;
+  --text-text11--line-height: 80px;
+  --text-text11--font-weight: 200;
+  --text-text11--font-family: Martel;
+  --text-text11--text-transform: capitalize;
+  --text-text11--mobile-font-size: 40px;
+  --text-text11--mobile-line-height: 60px;
+  /* text12 — XL Serif */
+  --text-text12: 80px;
+  --text-text12--line-height: 120px;
+  --text-text12--font-weight: 200;
+  --text-text12--font-family: Martel;
+  --text-text12--text-transform: capitalize;
+  --text-text12--mobile-font-size: 48px;
+  --text-text12--mobile-line-height: 70px;
+  /* text13 — grid title bold */
+  --text-text13: 20px;
+  --text-text13--line-height: 60px;
+  --text-text13--font-weight: 600;
+  --text-text13--font-family: Montserrat;
+  --text-text13--text-transform: uppercase;
+  --text-text13--letter-spacing: 1.5px;
+  /* text14 — Body Serif */
+  --text-text14: 22px;
+  --text-text14--line-height: 38px;
+  --text-text14--font-weight: 200;
+  --text-text14--font-family: Martel;
+}
+
+/* Role utilities — one .txt-role-textN per Blux text style, mapping its
+   @theme vars onto the heading/paragraph it wraps. Generated by blux emit. */
+.txt-role-text0 :is(h1, h2, h3, h4, h5, h6, p) {
+  font-family: var(--text-text0--font-family);
+  font-size: var(--text-text0);
+  font-weight: var(--text-text0--font-weight);
+  line-height: var(--text-text0--line-height);
+  letter-spacing: var(--text-text0--letter-spacing, normal);
+  text-transform: var(--text-text0--text-transform, none);
+  margin: var(--text-text0--margin, 0);
+}
+.txt-role-text1 :is(h1, h2, h3, h4, h5, h6, p) {
+  font-family: var(--text-text1--font-family);
+  font-size: var(--text-text1);
+  font-weight: var(--text-text1--font-weight);
+  line-height: var(--text-text1--line-height);
+  letter-spacing: var(--text-text1--letter-spacing, normal);
+  text-transform: var(--text-text1--text-transform, none);
+  margin: var(--text-text1--margin, 0);
+}
+.txt-role-text2 :is(h1, h2, h3, h4, h5, h6, p) {
+  font-family: var(--text-text2--font-family);
+  font-size: var(--text-text2);
+  font-weight: var(--text-text2--font-weight);
+  line-height: var(--text-text2--line-height);
+  letter-spacing: var(--text-text2--letter-spacing, normal);
+  text-transform: var(--text-text2--text-transform, none);
+  margin: var(--text-text2--margin, 0);
+}
+.txt-role-text3 :is(h1, h2, h3, h4, h5, h6, p) {
+  font-family: var(--text-text3--font-family);
+  font-size: var(--text-text3);
+  font-weight: var(--text-text3--font-weight);
+  line-height: var(--text-text3--line-height);
+  letter-spacing: var(--text-text3--letter-spacing, normal);
+  text-transform: var(--text-text3--text-transform, none);
+  margin: var(--text-text3--margin, 0);
+}
+.txt-role-text5 :is(h1, h2, h3, h4, h5, h6, p) {
+  font-family: var(--text-text5--font-family);
+  font-size: var(--text-text5);
+  font-weight: var(--text-text5--font-weight);
+  line-height: var(--text-text5--line-height);
+  letter-spacing: var(--text-text5--letter-spacing, normal);
+  text-transform: var(--text-text5--text-transform, none);
+  margin: var(--text-text5--margin, 0);
+}
+.txt-role-text6 :is(h1, h2, h3, h4, h5, h6, p) {
+  font-family: var(--text-text6--font-family);
+  font-size: var(--text-text6);
+  font-weight: var(--text-text6--font-weight);
+  line-height: var(--text-text6--line-height);
+  letter-spacing: var(--text-text6--letter-spacing, normal);
+  text-transform: var(--text-text6--text-transform, none);
+  margin: var(--text-text6--margin, 0);
+}
+.txt-role-text7 :is(h1, h2, h3, h4, h5, h6, p) {
+  font-family: var(--text-text7--font-family);
+  font-size: var(--text-text7);
+  font-weight: var(--text-text7--font-weight);
+  line-height: var(--text-text7--line-height);
+  letter-spacing: var(--text-text7--letter-spacing, normal);
+  text-transform: var(--text-text7--text-transform, none);
+  margin: var(--text-text7--margin, 0);
+}
+.txt-role-text8 :is(h1, h2, h3, h4, h5, h6, p) {
+  font-family: var(--text-text8--font-family);
+  font-size: var(--text-text8);
+  font-weight: var(--text-text8--font-weight);
+  line-height: var(--text-text8--line-height);
+  letter-spacing: var(--text-text8--letter-spacing, normal);
+  text-transform: var(--text-text8--text-transform, none);
+  margin: var(--text-text8--margin, 0);
+}
+.txt-role-text9 :is(h1, h2, h3, h4, h5, h6, p) {
+  font-family: var(--text-text9--font-family);
+  font-size: var(--text-text9);
+  font-weight: var(--text-text9--font-weight);
+  line-height: var(--text-text9--line-height);
+  letter-spacing: var(--text-text9--letter-spacing, normal);
+  text-transform: var(--text-text9--text-transform, none);
+  margin: var(--text-text9--margin, 0);
+}
+.txt-role-text10 :is(h1, h2, h3, h4, h5, h6, p) {
+  font-family: var(--text-text10--font-family);
+  font-size: var(--text-text10);
+  font-weight: var(--text-text10--font-weight);
+  line-height: var(--text-text10--line-height);
+  letter-spacing: var(--text-text10--letter-spacing, normal);
+  text-transform: var(--text-text10--text-transform, none);
+  margin: var(--text-text10--margin, 0);
+}
+.txt-role-text11 :is(h1, h2, h3, h4, h5, h6, p) {
+  font-family: var(--text-text11--font-family);
+  font-size: var(--text-text11);
+  font-weight: var(--text-text11--font-weight);
+  line-height: var(--text-text11--line-height);
+  letter-spacing: var(--text-text11--letter-spacing, normal);
+  text-transform: var(--text-text11--text-transform, none);
+  margin: var(--text-text11--margin, 0);
+}
+.txt-role-text12 :is(h1, h2, h3, h4, h5, h6, p) {
+  font-family: var(--text-text12--font-family);
+  font-size: var(--text-text12);
+  font-weight: var(--text-text12--font-weight);
+  line-height: var(--text-text12--line-height);
+  letter-spacing: var(--text-text12--letter-spacing, normal);
+  text-transform: var(--text-text12--text-transform, none);
+  margin: var(--text-text12--margin, 0);
+}
+.txt-role-text13 :is(h1, h2, h3, h4, h5, h6, p) {
+  font-family: var(--text-text13--font-family);
+  font-size: var(--text-text13);
+  font-weight: var(--text-text13--font-weight);
+  line-height: var(--text-text13--line-height);
+  letter-spacing: var(--text-text13--letter-spacing, normal);
+  text-transform: var(--text-text13--text-transform, none);
+  margin: var(--text-text13--margin, 0);
+}
+.txt-role-text14 :is(h1, h2, h3, h4, h5, h6, p) {
+  font-family: var(--text-text14--font-family);
+  font-size: var(--text-text14);
+  font-weight: var(--text-text14--font-weight);
+  line-height: var(--text-text14--line-height);
+  letter-spacing: var(--text-text14--letter-spacing, normal);
+  text-transform: var(--text-text14--text-transform, none);
+  margin: var(--text-text14--margin, 0);
+}
+
+/* Button skins — one .buttonsN per Blux button style; raw anchors carry
+   `ib middle buttonsN` verbatim. Generated by blux emit. */
+.ib {
+  display: inline-block;
+}
+/* Text links (`ib middle links`) are underlined by the Blux platform CSS;
+   an inline-block box does not inherit an ancestor's text-decoration, so
+   the affordance must be declared on the anchor itself. */
+.links {
+  text-decoration: underline;
+}
+/* buttons0 — White Buttons */
+.buttons0 {
+  padding: 6px 0 6px 0;
+  font-size: 18px;
+  text-decoration: none;
+  border: 1px solid #fff;
+  font-family: "Montserrat";
+  font-weight: normal;
+  font-style: normal;
+  color: #fff;
+  border-top: 0;
+  border-right: 0;
+  border-left: 0;
+}
+.buttons0:hover {
+  background-color: transparent;
+}
+/* buttons2 — Blue Buttons */
+.buttons2 {
+  padding: 6px 0 6px 0;
+  font-size: 18px;
+  text-decoration: none;
+  border: 1px solid #053a6c;
+  font-family: "Montserrat";
+  font-weight: 300;
+  font-style: normal;
+  color: #053a6c;
+  border-top: 0;
+  border-right: 0;
+  border-left: 0;
+}
+.buttons2:hover {
+  background-color: transparent;
+}

@@ -1,0 +1,54 @@
+{
+  "id": "collection_list",
+  "type": "SharedSlice",
+  "name": "CollectionList",
+  "description": "Renders documents of a linked repeatable Custom Type",
+  "variations": [
+    {
+      "id": "grid",
+      "name": "Grid",
+      "docURL": "...",
+      "version": "initial",
+      "description": "Grid of linked collection documents",
+      "imageUrl": "",
+      "primary": {
+        "heading": {
+          "type": "StructuredText",
+          "config": { "label": "heading", "single": "heading2,heading3" }
+        },
+        "collection_type": {
+          "type": "Text",
+          "config": { "label": "collection_type" }
+        },
+        "max_items": {
+          "type": "Number",
+          "config": { "label": "max_items", "placeholder": "12" }
+        }
+      },
+      "items": {}
+    },
+    {
+      "id": "list",
+      "name": "List",
+      "docURL": "...",
+      "version": "initial",
+      "description": "Vertical list of linked collection documents",
+      "imageUrl": "",
+      "primary": {
+        "heading": {
+          "type": "StructuredText",
+          "config": { "label": "heading", "single": "heading2,heading3" }
+        },
+        "collection_type": {
+          "type": "Text",
+          "config": { "label": "collection_type" }
+        },
+        "max_items": {
+          "type": "Number",
+          "config": { "label": "max_items", "placeholder": "12" }
+        }
+      },
+      "items": {}
+    }
+  ]
+}

@@ -1,0 +1,40 @@
+{
+  "id": "carousel",
+  "type": "SharedSlice",
+  "name": "Carousel",
+  "description": "Source slider band — media frames from the presentation manifest, captions editable per slide",
+  "variations": [
+    {
+      "id": "default",
+      "name": "Default",
+      "docURL": "...",
+      "version": "initial",
+      "description": "APG slider over the band's manifest slides",
+      "imageUrl": "",
+      "primary": {
+        "band": {
+          "type": "Number",
+          "config": { "label": "band (index from the Blux export)" }
+        },
+        "label": {
+          "type": "Text",
+          "config": { "label": "Accessible name for the slider region" }
+        }
+      },
+      "items": {
+        "caption": {
+          "type": "Text",
+          "config": {
+            "label": "Slide caption (order matches the manifest slides)"
+          }
+        },
+        "subcaption": {
+          "type": "Text",
+          "config": {
+            "label": "Slide subcaption / second line (e.g. a hero slide's location)"
+          }
+        }
+      }
+    }
+  ]
+}

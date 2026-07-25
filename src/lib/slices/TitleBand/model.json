@@ -1,0 +1,25 @@
+{
+  "id": "title_band",
+  "type": "SharedSlice",
+  "name": "TitleBand",
+  "description": "Centered band title with optional subtitle",
+  "variations": [
+    {
+      "id": "default",
+      "name": "Default",
+      "docURL": "...",
+      "version": "initial",
+      "description": "Heading + optional subtitle",
+      "imageUrl": "",
+      "primary": {
+        "band": {
+          "type": "Number",
+          "config": { "label": "band (index from the Blux export)" }
+        },
+        "heading": { "type": "Text", "config": { "label": "heading" } },
+        "subtitle": { "type": "Text", "config": { "label": "subtitle" } }
+      },
+      "items": {}
+    }
+  ]
+}

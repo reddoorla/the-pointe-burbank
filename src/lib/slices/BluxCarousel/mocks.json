@@ -1,0 +1,320 @@
+[
+  {
+    "__TYPE__": "SharedSliceContent",
+    "variation": "default",
+    "primary": {
+      "heading": {
+        "__TYPE__": "StructuredTextContent",
+        "value": [
+          {
+            "type": "paragraph",
+            "content": {
+              "text": "Est non irure consequat magna excepteur exercitation aliqua occaecat laboris cupidatat minim veniam laborum nisi et. Culpa amet ut ea reprehenderit ea. Veniam dolore voluptate nulla adipisicing ad in."
+            }
+          }
+        ]
+      },
+      "background_image": {
+        "__TYPE__": "ImageContent",
+        "origin": {
+          "id": "main",
+          "url": "https://images.unsplash.com/photo-1448932223592-d1fc686e76ea",
+          "width": 3500,
+          "height": 2338
+        },
+        "url": "https://images.unsplash.com/photo-1448932223592-d1fc686e76ea",
+        "width": 3500,
+        "height": 2338,
+        "edit": {
+          "zoom": 1,
+          "crop": {
+            "x": 0,
+            "y": 0
+          },
+          "background": "transparent"
+        },
+        "alt": "got",
+        "thumbnails": {}
+      },
+      "background_color": {
+        "__TYPE__": "FieldContent",
+        "value": "block",
+        "type": "Text"
+      },
+      "overlay": {
+        "__TYPE__": "FieldContent",
+        "value": "verb",
+        "type": "Text"
+      },
+      "max_content_width": {
+        "__TYPE__": "FieldContent",
+        "value": "every",
+        "type": "Text"
+      },
+      "vertical_align": {
+        "__TYPE__": "FieldContent",
+        "value": "top",
+        "type": "Select"
+      },
+      "min_height": {
+        "__TYPE__": "FieldContent",
+        "value": "cat",
+        "type": "Text"
+      },
+      "widget_kind": {
+        "__TYPE__": "FieldContent",
+        "value": "path",
+        "type": "Text"
+      },
+      "widget_html": {
+        "__TYPE__": "FieldContent",
+        "value": "softly",
+        "type": "Text"
+      },
+      "columns_visible": {
+        "__TYPE__": "FieldContent",
+        "value": "44",
+        "type": "Number"
+      },
+      "arrows": {
+        "__TYPE__": "FieldContent",
+        "value": "on",
+        "type": "Select"
+      },
+      "dots": {
+        "__TYPE__": "FieldContent",
+        "value": "on",
+        "type": "Select"
+      },
+      "dots_position": {
+        "__TYPE__": "FieldContent",
+        "value": "circle",
+        "type": "Text"
+      },
+      "autoplay": {
+        "__TYPE__": "FieldContent",
+        "value": "off",
+        "type": "Select"
+      },
+      "transition": {
+        "__TYPE__": "FieldContent",
+        "value": "hour",
+        "type": "Text"
+      },
+      "transition_speed": {
+        "__TYPE__": "FieldContent",
+        "value": "32",
+        "type": "Number"
+      },
+      "cells": {
+        "__TYPE__": "GroupContentType",
+        "value": [
+          {
+            "__TYPE__": "GroupItemContent",
+            "value": [
+              [
+                "kind",
+                {
+                  "__TYPE__": "FieldContent",
+                  "value": "embed",
+                  "type": "Select"
+                }
+              ],
+              [
+                "title",
+                {
+                  "__TYPE__": "StructuredTextContent",
+                  "value": [
+                    {
+                      "type": "paragraph",
+                      "content": {
+                        "text": "Eiusmod sit laborum cillum elit cupidatat est ad et. Magna enim minim ipsum fugiat labore qui Lorem aliquip labore labore minim cupidatat do. Ea ullamco non mollit eiusmod qui non irure ea voluptate cupidatat consectetur fugiat do cillum."
+                      }
+                    }
+                  ]
+                }
+              ],
+              [
+                "body_html",
+                {
+                  "__TYPE__": "FieldContent",
+                  "value": "rather",
+                  "type": "Text"
+                }
+              ],
+              [
+                "media",
+                {
+                  "__TYPE__": "ImageContent",
+                  "origin": {
+                    "id": "main",
+                    "url": "https://images.unsplash.com/photo-1587613865763-4b8b0d19e8ab",
+                    "width": 12288,
+                    "height": 16384
+                  },
+                  "url": "https://images.unsplash.com/photo-1587613865763-4b8b0d19e8ab",
+                  "width": 12288,
+                  "height": 16384,
+                  "edit": {
+                    "zoom": 1,
+                    "crop": {
+                      "x": 0,
+                      "y": 0
+                    },
+                    "background": "transparent"
+                  },
+                  "alt": "former",
+                  "thumbnails": {}
+                }
+              ],
+              [
+                "media_ratio",
+                {
+                  "__TYPE__": "FieldContent",
+                  "value": "series",
+                  "type": "Text"
+                }
+              ],
+              [
+                "link",
+                {
+                  "__TYPE__": "LinkContent",
+                  "key": "948c87fe-61db-4ae2-b856-0620b2f08612",
+                  "value": {
+                    "__TYPE__": "ExternalLink",
+                    "url": "https://prismic.io"
+                  }
+                }
+              ],
+              [
+                "link_label",
+                {
+                  "__TYPE__": "FieldContent",
+                  "value": "instrument",
+                  "type": "Text"
+                }
+              ],
+              [
+                "embed_html",
+                {
+                  "__TYPE__": "FieldContent",
+                  "value": "adult",
+                  "type": "Text"
+                }
+              ],
+              [
+                "subgrid",
+                {
+                  "__TYPE__": "GroupContentType",
+                  "value": [
+                    {
+                      "__TYPE__": "GroupItemContent",
+                      "value": [
+                        [
+                          "kind",
+                          {
+                            "__TYPE__": "FieldContent",
+                            "value": "media",
+                            "type": "Select"
+                          }
+                        ],
+                        [
+                          "title",
+                          {
+                            "__TYPE__": "StructuredTextContent",
+                            "value": [
+                              {
+                                "type": "paragraph",
+                                "content": {
+                                  "text": "Excepteur duis sunt est culpa id tempor tempor et. Qui officia qui minim duis nisi occaecat laboris velit et pariatur."
+                                }
+                              }
+                            ]
+                          }
+                        ],
+                        [
+                          "body_html",
+                          {
+                            "__TYPE__": "FieldContent",
+                            "value": "everybody",
+                            "type": "Text"
+                          }
+                        ],
+                        [
+                          "media",
+                          {
+                            "__TYPE__": "ImageContent",
+                            "origin": {
+                              "id": "main",
+                              "url": "https://images.unsplash.com/photo-1551739440-5dd934d3a94a",
+                              "width": 3456,
+                              "height": 4320
+                            },
+                            "url": "https://images.unsplash.com/photo-1551739440-5dd934d3a94a",
+                            "width": 3456,
+                            "height": 4320,
+                            "edit": {
+                              "zoom": 1,
+                              "crop": {
+                                "x": 0,
+                                "y": 0
+                              },
+                              "background": "transparent"
+                            },
+                            "alt": "feathers",
+                            "thumbnails": {}
+                          }
+                        ],
+                        [
+                          "media_ratio",
+                          {
+                            "__TYPE__": "FieldContent",
+                            "value": "wolf",
+                            "type": "Text"
+                          }
+                        ],
+                        [
+                          "link",
+                          {
+                            "__TYPE__": "LinkContent",
+                            "key": "02f5c9e5-0fcd-4b9f-bd4a-2f7896542d99",
+                            "value": {
+                              "__TYPE__": "ExternalLink",
+                              "url": "https://prismic.io"
+                            }
+                          }
+                        ],
+                        [
+                          "link_label",
+                          {
+                            "__TYPE__": "FieldContent",
+                            "value": "hospital",
+                            "type": "Text"
+                          }
+                        ],
+                        [
+                          "embed_html",
+                          {
+                            "__TYPE__": "FieldContent",
+                            "value": "future",
+                            "type": "Text"
+                          }
+                        ]
+                      ]
+                    }
+                  ]
+                }
+              ]
+            ]
+          }
+        ]
+      }
+    },
+    "items": [
+      {
+        "__TYPE__": "GroupItemContent",
+        "value": []
+      }
+    ]
+  }
+]

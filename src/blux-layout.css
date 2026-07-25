@@ -1,0 +1,90 @@
+/* Generic, site-agnostic layout for the Blux catalog `blux_*` slices. Ports the
+   band prototype's flexbox technique — percentage flex-basis from cols/ratio
+   with a 4% gutter (see layout.ts gridCellBasis), cover-fill media, flow-root
+   stack rhythm — onto the catalog markup. Per-site values arrive via slice
+   fields (inline styles / CSS vars) and theme.css tokens; nothing here is
+   site-specific. Imported once from app.css. */
+
+/* ── Band: full-bleed section with a background layer ───────────────────── */
+.blux-grid,
+.blux-section {
+  position: relative;
+  isolation: isolate;
+  width: 100%;
+}
+.blux-grid__bg,
+.blux-section__bg {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* ── Content wrapper = the cells row (max-width, padding, flex grid) ────── */
+.blux-grid__cells,
+.blux-section__cells {
+  display: flex;
+  flex-wrap: wrap;
+  column-gap: 4%; /* the reserved Blux gutter — matches layout.ts GRID_GUTTER */
+  row-gap: 2.5rem;
+  max-width: var(--blux-max-width, 1280px);
+  margin-inline: auto;
+  padding: var(--band-pad, 0 4%);
+  align-content: flex-start;
+}
+@media (max-width: 700px) {
+  .blux-grid__cells,
+  .blux-section__cells {
+    padding: var(--band-pad-m, var(--band-pad, 0 4%));
+  }
+}
+/* vertical centering when the band pins its own height */
+.blux-grid__cells[data-align="middle"],
+.blux-section__cells[data-align="middle"] {
+  align-content: center;
+  min-height: inherit;
+}
+
+/* ── Cell: a flex item, full-width on mobile, --cell-basis at md+ ───────── */
+.blux-cell {
+  display: flow-root; /* contains child block margins = the stack rhythm */
+  min-width: 0;
+  flex-basis: 100%;
+}
+@media (min-width: 768px) {
+  .blux-cell {
+    flex-basis: var(--cell-basis, auto);
+  }
+}
+.blux-cell[data-valign="on"] {
+  align-self: center;
+}
+
+/* ── Media: in-flow natural, or cover-fill a ratio box ─────────────────── */
+.blux-cell__media img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+.blux-cell__media[data-cover="on"] {
+  position: relative;
+  aspect-ratio: var(--media-ratio, 3 / 2);
+}
+.blux-cell__media[data-cover="on"] img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* ── Subgrid: nested flex row inside a cell ────────────────────────────── */
+.blux-subgrid {
+  display: flex;
+  flex-wrap: wrap;
+  column-gap: 4%;
+  row-gap: 1.5rem;
+  width: 100%;
+}

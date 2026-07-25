@@ -1,0 +1,23 @@
+{
+  "id": "location_map",
+  "type": "SharedSlice",
+  "name": "LocationMap",
+  "description": "Interactive pinned map from the Blux export",
+  "variations": [
+    {
+      "id": "default",
+      "name": "Default",
+      "docURL": "...",
+      "version": "initial",
+      "description": "Google Map with KML layers from the blux presentation manifest",
+      "imageUrl": "",
+      "primary": {
+        "band": {
+          "type": "Number",
+          "config": { "label": "band (index from the Blux export)" }
+        }
+      },
+      "items": {}
+    }
+  ]
+}

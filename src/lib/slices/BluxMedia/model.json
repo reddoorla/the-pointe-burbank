@@ -1,0 +1,79 @@
+{
+  "id": "blux_media",
+  "type": "SharedSlice",
+  "name": "BluxMedia",
+  "description": "Blux catalog: a single media leaf — image, or a video/embed via raw HTML — with ratio/crop, caption, and an optional link.",
+  "variations": [
+    {
+      "id": "default",
+      "name": "Default",
+      "docURL": "...",
+      "version": "initial",
+      "description": "Media",
+      "imageUrl": "",
+      "primary": {
+        "media": {
+          "type": "Image",
+          "config": {
+            "label": "media",
+            "constraint": {},
+            "thumbnails": []
+          }
+        },
+        "background_image": {
+          "type": "Image",
+          "config": {
+            "label": "background_image",
+            "constraint": {},
+            "thumbnails": []
+          }
+        },
+        "background_color": {
+          "type": "Text",
+          "config": {
+            "label": "background_color"
+          }
+        },
+        "video_embed": {
+          "type": "Text",
+          "config": {
+            "label": "video_embed (raw html for video/youtube/vimeo)"
+          }
+        },
+        "ratio": {
+          "type": "Text",
+          "config": {
+            "label": "ratio"
+          }
+        },
+        "crop": {
+          "type": "Text",
+          "config": {
+            "label": "crop"
+          }
+        },
+        "caption": {
+          "type": "StructuredText",
+          "config": {
+            "label": "caption",
+            "multi": "paragraph,heading1,heading2,heading3,heading4,heading5,heading6,strong,em,hyperlink,list-item,o-list-item,image,embed"
+          }
+        },
+        "link": {
+          "type": "Link",
+          "config": {
+            "label": "link",
+            "allowTargetBlank": true
+          }
+        },
+        "link_label": {
+          "type": "Text",
+          "config": {
+            "label": "link_label"
+          }
+        }
+      },
+      "items": {}
+    }
+  ]
+}

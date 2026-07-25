@@ -1,0 +1,23 @@
+{
+  "id": "grid_band",
+  "type": "SharedSlice",
+  "name": "GridBand",
+  "description": "Render-faithful fallback band — layout tree lives in the presentation manifest",
+  "variations": [
+    {
+      "id": "default",
+      "name": "Default",
+      "docURL": "...",
+      "version": "initial",
+      "description": "Band rendered from the blux presentation manifest by band index",
+      "imageUrl": "",
+      "primary": {
+        "band": {
+          "type": "Number",
+          "config": { "label": "band (index from the Blux export)" }
+        }
+      },
+      "items": {}
+    }
+  ]
+}

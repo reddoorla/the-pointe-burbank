@@ -1,0 +1,23 @@
+{
+  "id": "media_full",
+  "type": "SharedSlice",
+  "name": "MediaFull",
+  "description": "Full-bleed manifest media band",
+  "variations": [
+    {
+      "id": "default",
+      "name": "Default",
+      "docURL": "...",
+      "version": "initial",
+      "description": "Full-bleed media from the blux presentation manifest",
+      "imageUrl": "",
+      "primary": {
+        "band": {
+          "type": "Number",
+          "config": { "label": "band (index from the Blux export)" }
+        }
+      },
+      "items": {}
+    }
+  ]
+}

@@ -1,0 +1,447 @@
+[
+  {
+    "__TYPE__": "SharedSliceContent",
+    "variation": "default",
+    "primary": {
+      "heading": {
+        "__TYPE__": "StructuredTextContent",
+        "value": [
+          {
+            "type": "paragraph",
+            "content": {
+              "text": "Magna qui nisi tempor eiusmod id adipisicing dolore minim dolore velit irure adipisicing. Laborum in nulla minim quis labore anim tempor est. Laborum ad eu do esse aliqua pariatur quis mollit non elit labore pariatur pariatur consequat occaecat."
+            }
+          }
+        ]
+      },
+      "background_image": {
+        "__TYPE__": "ImageContent",
+        "origin": {
+          "id": "main",
+          "url": "https://images.unsplash.com/photo-1593642633279-1796119d5482",
+          "width": 4016,
+          "height": 6016
+        },
+        "url": "https://images.unsplash.com/photo-1593642633279-1796119d5482",
+        "width": 4016,
+        "height": 6016,
+        "edit": {
+          "zoom": 1,
+          "crop": {
+            "x": 0,
+            "y": 0
+          },
+          "background": "transparent"
+        },
+        "alt": "together",
+        "thumbnails": {}
+      },
+      "background_color": {
+        "__TYPE__": "FieldContent",
+        "value": "part",
+        "type": "Text"
+      },
+      "overlay": {
+        "__TYPE__": "FieldContent",
+        "value": "chair",
+        "type": "Text"
+      },
+      "max_content_width": {
+        "__TYPE__": "FieldContent",
+        "value": "whether",
+        "type": "Text"
+      },
+      "vertical_align": {
+        "__TYPE__": "FieldContent",
+        "value": "bottom",
+        "type": "Select"
+      },
+      "min_height": {
+        "__TYPE__": "FieldContent",
+        "value": "mirror",
+        "type": "Text"
+      },
+      "content_padding": {
+        "__TYPE__": "FieldContent",
+        "value": "friendly",
+        "type": "Text"
+      },
+      "content_padding_mobile": {
+        "__TYPE__": "FieldContent",
+        "value": "football",
+        "type": "Text"
+      },
+      "text_align": {
+        "__TYPE__": "FieldContent",
+        "value": "left",
+        "type": "Select"
+      },
+      "column_side": {
+        "__TYPE__": "FieldContent",
+        "value": "left",
+        "type": "Select"
+      },
+      "heading_role": {
+        "__TYPE__": "FieldContent",
+        "value": "plates",
+        "type": "Text"
+      },
+      "widget_kind": {
+        "__TYPE__": "FieldContent",
+        "value": "public",
+        "type": "Text"
+      },
+      "widget_html": {
+        "__TYPE__": "FieldContent",
+        "value": "chief",
+        "type": "Text"
+      },
+      "columns": {
+        "__TYPE__": "FieldContent",
+        "value": "46",
+        "type": "Number"
+      },
+      "column_width": {
+        "__TYPE__": "FieldContent",
+        "value": "check",
+        "type": "Text"
+      },
+      "spacing": {
+        "__TYPE__": "FieldContent",
+        "value": "23",
+        "type": "Number"
+      },
+      "mobile_spacing": {
+        "__TYPE__": "FieldContent",
+        "value": "69",
+        "type": "Number"
+      },
+      "row_height": {
+        "__TYPE__": "FieldContent",
+        "value": "thank",
+        "type": "Text"
+      },
+      "cells": {
+        "__TYPE__": "GroupContentType",
+        "value": [
+          {
+            "__TYPE__": "GroupItemContent",
+            "value": [
+              [
+                "kind",
+                {
+                  "__TYPE__": "FieldContent",
+                  "value": "text",
+                  "type": "Select"
+                }
+              ],
+              [
+                "title",
+                {
+                  "__TYPE__": "StructuredTextContent",
+                  "value": [
+                    {
+                      "type": "paragraph",
+                      "content": {
+                        "text": "Nisi commodo ex consequat aliqua irure."
+                      }
+                    }
+                  ]
+                }
+              ],
+              [
+                "body_html",
+                {
+                  "__TYPE__": "FieldContent",
+                  "value": "cause",
+                  "type": "Text"
+                }
+              ],
+              [
+                "media",
+                {
+                  "__TYPE__": "ImageContent",
+                  "origin": {
+                    "id": "main",
+                    "url": "https://images.unsplash.com/photo-1591012911207-0dbac31f37da",
+                    "width": 4000,
+                    "height": 4000
+                  },
+                  "url": "https://images.unsplash.com/photo-1591012911207-0dbac31f37da",
+                  "width": 4000,
+                  "height": 4000,
+                  "edit": {
+                    "zoom": 1,
+                    "crop": {
+                      "x": 0,
+                      "y": 0
+                    },
+                    "background": "transparent"
+                  },
+                  "alt": "trouble",
+                  "thumbnails": {}
+                }
+              ],
+              [
+                "media_ratio",
+                {
+                  "__TYPE__": "FieldContent",
+                  "value": "duck",
+                  "type": "Text"
+                }
+              ],
+              [
+                "link",
+                {
+                  "__TYPE__": "LinkContent",
+                  "key": "183990a2-0f23-4868-93b7-87bf66a3f603",
+                  "value": {
+                    "__TYPE__": "ExternalLink",
+                    "url": "https://slicemachine.dev"
+                  }
+                }
+              ],
+              [
+                "link_label",
+                {
+                  "__TYPE__": "FieldContent",
+                  "value": "done",
+                  "type": "Text"
+                }
+              ],
+              [
+                "embed_html",
+                {
+                  "__TYPE__": "FieldContent",
+                  "value": "castle",
+                  "type": "Text"
+                }
+              ],
+              [
+                "width",
+                {
+                  "__TYPE__": "FieldContent",
+                  "value": "steady",
+                  "type": "Text"
+                }
+              ],
+              [
+                "spacing",
+                {
+                  "__TYPE__": "FieldContent",
+                  "value": "26",
+                  "type": "Number"
+                }
+              ],
+              [
+                "cover",
+                {
+                  "__TYPE__": "FieldContent",
+                  "value": "cell",
+                  "type": "Text"
+                }
+              ],
+              [
+                "valign",
+                {
+                  "__TYPE__": "FieldContent",
+                  "value": "managed",
+                  "type": "Text"
+                }
+              ],
+              [
+                "background_color",
+                {
+                  "__TYPE__": "FieldContent",
+                  "value": "open",
+                  "type": "Text"
+                }
+              ],
+              [
+                "content_padding",
+                {
+                  "__TYPE__": "FieldContent",
+                  "value": "least",
+                  "type": "Text"
+                }
+              ],
+              [
+                "title_role",
+                {
+                  "__TYPE__": "FieldContent",
+                  "value": "telephone",
+                  "type": "Text"
+                }
+              ],
+              [
+                "subgrid",
+                {
+                  "__TYPE__": "GroupContentType",
+                  "value": [
+                    {
+                      "__TYPE__": "GroupItemContent",
+                      "value": [
+                        [
+                          "kind",
+                          {
+                            "__TYPE__": "FieldContent",
+                            "value": "embed",
+                            "type": "Select"
+                          }
+                        ],
+                        [
+                          "title",
+                          {
+                            "__TYPE__": "StructuredTextContent",
+                            "value": [
+                              {
+                                "type": "paragraph",
+                                "content": {
+                                  "text": "Id veniam ipsum adipisicing consequat ut et nulla aliqua esse elit."
+                                }
+                              }
+                            ]
+                          }
+                        ],
+                        [
+                          "body_html",
+                          {
+                            "__TYPE__": "FieldContent",
+                            "value": "bite",
+                            "type": "Text"
+                          }
+                        ],
+                        [
+                          "media",
+                          {
+                            "__TYPE__": "ImageContent",
+                            "origin": {
+                              "id": "main",
+                              "url": "https://images.unsplash.com/photo-1547082299-de196ea013d6",
+                              "width": 4272,
+                              "height": 2848
+                            },
+                            "url": "https://images.unsplash.com/photo-1547082299-de196ea013d6",
+                            "width": 4272,
+                            "height": 2848,
+                            "edit": {
+                              "zoom": 1,
+                              "crop": {
+                                "x": 0,
+                                "y": 0
+                              },
+                              "background": "transparent"
+                            },
+                            "alt": "depend",
+                            "thumbnails": {}
+                          }
+                        ],
+                        [
+                          "media_ratio",
+                          {
+                            "__TYPE__": "FieldContent",
+                            "value": "rocket",
+                            "type": "Text"
+                          }
+                        ],
+                        [
+                          "link",
+                          {
+                            "__TYPE__": "LinkContent",
+                            "key": "8591b17b-a79e-421f-822a-d4acdbbfe86f",
+                            "value": {
+                              "__TYPE__": "ExternalLink",
+                              "url": "http://twitter.com"
+                            }
+                          }
+                        ],
+                        [
+                          "link_label",
+                          {
+                            "__TYPE__": "FieldContent",
+                            "value": "itself",
+                            "type": "Text"
+                          }
+                        ],
+                        [
+                          "embed_html",
+                          {
+                            "__TYPE__": "FieldContent",
+                            "value": "taken",
+                            "type": "Text"
+                          }
+                        ],
+                        [
+                          "width",
+                          {
+                            "__TYPE__": "FieldContent",
+                            "value": "above",
+                            "type": "Text"
+                          }
+                        ],
+                        [
+                          "spacing",
+                          {
+                            "__TYPE__": "FieldContent",
+                            "value": "60",
+                            "type": "Number"
+                          }
+                        ],
+                        [
+                          "cover",
+                          {
+                            "__TYPE__": "FieldContent",
+                            "value": "arrive",
+                            "type": "Text"
+                          }
+                        ],
+                        [
+                          "valign",
+                          {
+                            "__TYPE__": "FieldContent",
+                            "value": "vowel",
+                            "type": "Text"
+                          }
+                        ],
+                        [
+                          "background_color",
+                          {
+                            "__TYPE__": "FieldContent",
+                            "value": "canal",
+                            "type": "Text"
+                          }
+                        ],
+                        [
+                          "content_padding",
+                          {
+                            "__TYPE__": "FieldContent",
+                            "value": "brown",
+                            "type": "Text"
+                          }
+                        ],
+                        [
+                          "title_role",
+                          {
+                            "__TYPE__": "FieldContent",
+                            "value": "several",
+                            "type": "Text"
+                          }
+                        ]
+                      ]
+                    }
+                  ]
+                }
+              ]
+            ]
+          }
+        ]
+      }
+    },
+    "items": [
+      {
+        "__TYPE__": "GroupItemContent",
+        "value": []
+      }
+    ]
+  }
+]

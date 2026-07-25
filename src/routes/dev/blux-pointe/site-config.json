@@ -1,0 +1,92 @@
+{
+  "nav": {
+    "logo": {
+      "url": "https://d3syaxnfm3oj0e.cloudfront.net/ea3c0e4e-aa87-4d1b-adaa-cb250234ec3c/9b074e72-e854-4387-9891-365394f14867.png",
+      "maxWidth": "200px"
+    },
+    "items": [
+      {
+        "label": "Vision",
+        "href": "/#1"
+      },
+      {
+        "label": "Amenities",
+        "href": "/#5"
+      },
+      {
+        "label": "Burbank",
+        "href": "/#8"
+      },
+      {
+        "label": "Contact Us",
+        "href": "/#11"
+      }
+    ]
+  },
+  "footer": {
+    "columns": [
+      {
+        "items": [
+          {
+            "image": {
+              "url": "https://d3syaxnfm3oj0e.cloudfront.net/ea3c0e4e-aa87-4d1b-adaa-cb250234ec3c/9b074e72-e854-4387-9891-365394f14867.png",
+              "maxWidth": "150px",
+              "alt": "Logo"
+            }
+          }
+        ]
+      },
+      {
+        "items": [
+          {
+            "text": "Leasing Team"
+          },
+          {
+            "image": {
+              "url": "https://d3syaxnfm3oj0e.cloudfront.net/26c9ecb9-bc35-4562-8155-fadfee8df2b2/bf56be7d-863c-4f44-8247-6d92ea7762a9.png"
+            }
+          },
+          {
+            "text": "Todd Doney"
+          },
+          {
+            "text": "213.613.3330",
+            "href": "tel:213.593.1360"
+          },
+          {
+            "text": "Todd.Doney@cbre.com",
+            "href": "mailto:Todd.Doney@cbre.com"
+          },
+          {
+            "text": "Lic. 00852254"
+          },
+          {
+            "text": "Doug Marlow"
+          },
+          {
+            "text": "818.502.6707",
+            "href": "tel:818.502.6707"
+          },
+          {
+            "text": "Doug.Marlow@cbre.com",
+            "href": "mailto:Doug.Marlow@cbre.com"
+          },
+          {
+            "text": "Lic. 00950434"
+          },
+          {
+            "text": "A Property Within"
+          },
+          {
+            "image": {
+              "url": "https://d3syaxnfm3oj0e.cloudfront.net/ea3c0e4e-aa87-4d1b-adaa-cb250234ec3c/f4d5a5fe-fd7a-49f2-a4d9-4d5eceb6c3b9.png",
+              "maxWidth": "300px",
+              "alt": "TBP Logo"
+            },
+            "href": "https://www.theburbankportfolio.com/"
+          }
+        ]
+      }
+    ]
+  }
+}

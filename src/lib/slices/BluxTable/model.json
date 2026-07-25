@@ -1,0 +1,32 @@
+{
+  "id": "blux_table",
+  "type": "SharedSlice",
+  "name": "BluxTable",
+  "description": "Blux catalog: a tabular embed (raw table HTML).",
+  "variations": [
+    {
+      "id": "default",
+      "name": "Default",
+      "docURL": "...",
+      "version": "initial",
+      "description": "Table",
+      "imageUrl": "",
+      "primary": {
+        "caption": {
+          "type": "StructuredText",
+          "config": {
+            "label": "caption",
+            "single": "heading1,heading2,heading3,heading4,heading5,heading6,paragraph"
+          }
+        },
+        "table_html": {
+          "type": "Text",
+          "config": {
+            "label": "table_html"
+          }
+        }
+      },
+      "items": {}
+    }
+  ]
+}

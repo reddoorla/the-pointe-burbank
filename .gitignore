@@ -1,0 +1,22 @@
+node_modules
+.svelte-kit
+.netlify
+build
+
+# Env
+.env
+.env.*
+!.env.example
+
+# Local agent config — operator-specific, must not ship with the template
+.claude/
+
+# OS / editor / test output
+.DS_Store
+*.log
+coverage
+playwright-report
+test-results
+.lighthouseci
+.reddoor-a11y
+.reddoor-a11y-spec-*

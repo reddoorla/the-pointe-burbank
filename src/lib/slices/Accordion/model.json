@@ -1,0 +1,56 @@
+{
+  "id": "accordion",
+  "type": "SharedSlice",
+  "name": "Accordion",
+  "description": "Accordion",
+  "variations": [
+    {
+      "id": "default",
+      "name": "Default",
+      "docURL": "...",
+      "version": "initial",
+      "description": "A list of collapsible disclosure items",
+      "imageUrl": "",
+      "primary": {
+        "items": {
+          "type": "Group",
+          "config": {
+            "label": "items",
+            "fields": {
+              "title": {
+                "type": "Text",
+                "config": {
+                  "label": "title",
+                  "placeholder": "e.g. About the project"
+                }
+              },
+              "body": {
+                "type": "Text",
+                "config": {
+                  "label": "body",
+                  "placeholder": ""
+                }
+              }
+            }
+          }
+        },
+        "allowMultiple": {
+          "type": "Boolean",
+          "config": {
+            "label": "allowMultiple",
+            "placeholder_false": "one open at a time",
+            "placeholder_true": "multiple open",
+            "default_value": true
+          }
+        },
+        "band": {
+          "type": "Number",
+          "config": {
+            "label": "band (optional — wraps in the Blux SectionBand when set)"
+          }
+        }
+      },
+      "items": {}
+    }
+  ]
+}

@@ -1,0 +1,257 @@
+{
+  "id": "blux_carousel",
+  "type": "SharedSlice",
+  "name": "BluxCarousel",
+  "description": "Blux catalog: a slides/carousel of cells.",
+  "variations": [
+    {
+      "id": "default",
+      "name": "Default",
+      "docURL": "...",
+      "version": "initial",
+      "description": "Grid",
+      "imageUrl": "",
+      "primary": {
+        "heading": {
+          "type": "StructuredText",
+          "config": {
+            "label": "heading",
+            "single": "heading1,heading2,heading3,heading4,heading5,heading6,paragraph"
+          }
+        },
+        "background_image": {
+          "type": "Image",
+          "config": {
+            "label": "background_image",
+            "constraint": {},
+            "thumbnails": []
+          }
+        },
+        "background_color": {
+          "type": "Text",
+          "config": {
+            "label": "background_color"
+          }
+        },
+        "overlay": {
+          "type": "Text",
+          "config": {
+            "label": "overlay"
+          }
+        },
+        "max_content_width": {
+          "type": "Text",
+          "config": {
+            "label": "max_content_width"
+          }
+        },
+        "vertical_align": {
+          "type": "Select",
+          "config": {
+            "label": "vertical_align",
+            "options": ["top", "middle", "bottom"]
+          }
+        },
+        "min_height": {
+          "type": "Text",
+          "config": {
+            "label": "min_height"
+          }
+        },
+        "widget_kind": {
+          "type": "Text",
+          "config": {
+            "label": "widget_kind"
+          }
+        },
+        "widget_html": {
+          "type": "Text",
+          "config": {
+            "label": "widget_html"
+          }
+        },
+        "columns_visible": {
+          "type": "Number",
+          "config": {
+            "label": "columns_visible",
+            "placeholder": "1"
+          }
+        },
+        "arrows": {
+          "type": "Select",
+          "config": {
+            "label": "arrows",
+            "options": ["on", "off"]
+          }
+        },
+        "dots": {
+          "type": "Select",
+          "config": {
+            "label": "dots",
+            "options": ["on", "off"]
+          }
+        },
+        "dots_position": {
+          "type": "Text",
+          "config": {
+            "label": "dots_position"
+          }
+        },
+        "autoplay": {
+          "type": "Select",
+          "config": {
+            "label": "autoplay",
+            "options": ["off", "on"]
+          }
+        },
+        "transition": {
+          "type": "Text",
+          "config": {
+            "label": "transition"
+          }
+        },
+        "transition_speed": {
+          "type": "Number",
+          "config": {
+            "label": "transition_speed"
+          }
+        },
+        "cells": {
+          "type": "Group",
+          "config": {
+            "label": "cells",
+            "fields": {
+              "kind": {
+                "type": "Select",
+                "config": {
+                  "label": "kind",
+                  "options": ["text", "media", "embed", "button", "subgrid"]
+                }
+              },
+              "title": {
+                "type": "StructuredText",
+                "config": {
+                  "label": "title",
+                  "single": "heading1,heading2,heading3,heading4,heading5,heading6,paragraph"
+                }
+              },
+              "body_html": {
+                "type": "Text",
+                "config": {
+                  "label": "body_html"
+                }
+              },
+              "media": {
+                "type": "Image",
+                "config": {
+                  "label": "media",
+                  "constraint": {},
+                  "thumbnails": []
+                }
+              },
+              "media_ratio": {
+                "type": "Text",
+                "config": {
+                  "label": "media_ratio"
+                }
+              },
+              "link": {
+                "type": "Link",
+                "config": {
+                  "label": "link",
+                  "allowTargetBlank": true
+                }
+              },
+              "link_label": {
+                "type": "Text",
+                "config": {
+                  "label": "link_label"
+                }
+              },
+              "embed_html": {
+                "type": "Text",
+                "config": {
+                  "label": "embed_html"
+                }
+              },
+              "image_embed": {
+                "type": "Text",
+                "config": {
+                  "label": "image_embed"
+                }
+              },
+              "subgrid": {
+                "type": "Group",
+                "config": {
+                  "label": "subgrid",
+                  "fields": {
+                    "kind": {
+                      "type": "Select",
+                      "config": {
+                        "label": "kind",
+                        "options": ["text", "media", "embed"]
+                      }
+                    },
+                    "title": {
+                      "type": "StructuredText",
+                      "config": {
+                        "label": "title",
+                        "single": "heading1,heading2,heading3,heading4,heading5,heading6,paragraph"
+                      }
+                    },
+                    "body_html": {
+                      "type": "Text",
+                      "config": {
+                        "label": "body_html"
+                      }
+                    },
+                    "media": {
+                      "type": "Image",
+                      "config": {
+                        "label": "media",
+                        "constraint": {},
+                        "thumbnails": []
+                      }
+                    },
+                    "media_ratio": {
+                      "type": "Text",
+                      "config": {
+                        "label": "media_ratio"
+                      }
+                    },
+                    "link": {
+                      "type": "Link",
+                      "config": {
+                        "label": "link",
+                        "allowTargetBlank": true
+                      }
+                    },
+                    "link_label": {
+                      "type": "Text",
+                      "config": {
+                        "label": "link_label"
+                      }
+                    },
+                    "embed_html": {
+                      "type": "Text",
+                      "config": {
+                        "label": "embed_html"
+                      }
+                    },
+                    "image_embed": {
+                      "type": "Text",
+                      "config": {
+                        "label": "image_embed"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "items": {}
+    }
+  ]
+}

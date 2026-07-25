@@ -1,0 +1,51 @@
+{
+  "id": "section_grid",
+  "type": "SharedSlice",
+  "name": "SectionGrid",
+  "description": "N-column grid of card items",
+  "variations": [
+    {
+      "id": "default",
+      "name": "Default",
+      "docURL": "...",
+      "version": "initial",
+      "description": "Heading plus a grid of item cards",
+      "imageUrl": "",
+      "primary": {
+        "heading": {
+          "type": "StructuredText",
+          "config": { "label": "heading", "single": "heading2,heading3" }
+        },
+        "columns": {
+          "type": "Number",
+          "config": { "label": "columns", "placeholder": "3" }
+        }
+      },
+      "items": {
+        "item_heading": {
+          "type": "StructuredText",
+          "config": { "label": "item_heading", "single": "heading3,heading4" }
+        },
+        "item_body": {
+          "type": "StructuredText",
+          "config": {
+            "label": "item_body",
+            "multi": "paragraph,strong,em,hyperlink"
+          }
+        },
+        "item_media": {
+          "type": "Image",
+          "config": {
+            "label": "item_media",
+            "constraint": {},
+            "thumbnails": []
+          }
+        },
+        "item_link": {
+          "type": "Link",
+          "config": { "label": "item_link", "allowTargetBlank": true }
+        }
+      }
+    }
+  ]
+}

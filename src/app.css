@@ -1,0 +1,334 @@
+/* Tailwind CSS v4 configuration */
+@import "tailwindcss";
+
+/* The converted site's Blux theme — its @theme text/colour tokens plus the
+   `.txt-role-textN` utilities the slice components apply. A fresh starter ships
+   an empty placeholder; running `blux emit` and dropping its `theme.css` here
+   activates the site's real type roles. */
+@import "./blux-theme.css";
+@import "./blux-layout.css";
+
+@theme {
+  --screen-sm: 560px;
+  --screen-md: 768px;
+  --screen-lg: 1024px;
+  --screen-xl: 1340px;
+
+  --color-transparent: transparent;
+  --color-current: currentColor;
+  --color-black: black;
+  --color-white: white;
+  --color-background: white;
+
+  /* Neutral placeholder palette — replace per project */
+  --color-light: #e5e7eb;
+  --color-primary: #111827;
+  --color-dark: #111827;
+  --color-secondary: #6b7280;
+  --color-accent: #111827;
+
+  --transition-in-expo: cubic-bezier(0.95, 0.05, 0.795, 0.035);
+  --transition-out-expo: cubic-bezier(0.19, 1, 0.22, 1);
+  --transition-fast-slow: cubic-bezier(0.5, 0, 0, 1);
+
+  --height-screen-75: 75vh;
+  --height-screen-50: 50vh;
+  --height-screen-25: 25vh;
+  --height-screen-10: 10vh;
+  --height-screen-5: 5vh;
+  --height-112: 28rem;
+  --height-128: 32rem;
+  --height-144: 36rem;
+  --height-160: 40rem;
+  --height-192: 48rem;
+  --height-256: 64rem;
+  --height-384: 96rem;
+}
+
+/* Micro-interaction utilities — press/hover/idle nudges shared across sites.
+   All movement is gated behind `prefers-reduced-motion: no-preference`, so
+   reduced-motion users get a plain, static control. */
+
+@keyframes pos-y-wiggle {
+  0% {
+    transform: translateY(1px);
+  }
+  50% {
+    transform: translateY(-1px);
+  }
+  100% {
+    transform: translateY(1px);
+  }
+}
+
+@keyframes pulse-scale {
+  0% {
+    transform: scale(1.01);
+  }
+  50% {
+    transform: scale(0.99);
+  }
+  100% {
+    transform: scale(1.01);
+  }
+}
+
+@keyframes boop {
+  0% {
+    transform: rotate(0deg);
+  }
+  20% {
+    transform: rotate(-15deg);
+  }
+  40% {
+    transform: rotate(15deg);
+  }
+  60% {
+    transform: rotate(-7deg);
+  }
+  80% {
+    transform: rotate(7deg);
+  }
+  90% {
+    transform: rotate(-3deg);
+  }
+  95% {
+    transform: rotate(2deg);
+  }
+  100% {
+    transform: rotate(0deg);
+  }
+}
+
+/* Press feedback: the element hops up (or down) while held. Use INSTEAD of
+   Tailwind's `transition` utility, never alongside it — `transition` emits
+   later in the built CSS, so its longhands would override these timings. The
+   shorthand already covers the hover properties commonly animated with it. */
+@utility bump {
+  @media (prefers-reduced-motion: no-preference) {
+    transition:
+      transform 300ms ease-out,
+      color 400ms ease,
+      background-color 400ms ease,
+      filter 400ms ease,
+      gap 100ms ease;
+    &:active {
+      transform: translateY(-8px);
+    }
+  }
+}
+
+@utility negative-bump {
+  @media (prefers-reduced-motion: no-preference) {
+    transition:
+      transform 300ms ease-out,
+      color 400ms ease,
+      background-color 400ms ease,
+      filter 400ms ease,
+      gap 100ms ease;
+    &:active {
+      transform: translateY(8px);
+    }
+  }
+}
+
+/* Gentle vertical wiggle — on hover only, or continuously. */
+@utility bob-on-hover {
+  @media (prefers-reduced-motion: no-preference) {
+    &:hover {
+      animation: 1s infinite pos-y-wiggle ease-out;
+    }
+  }
+}
+
+@utility bob-always {
+  @media (prefers-reduced-motion: no-preference) {
+    animation: 1s infinite pos-y-wiggle ease-out;
+  }
+}
+
+/* Subtle continuous scale breathing — for standout CTAs. */
+@utility pulse-always {
+  @media (prefers-reduced-motion: no-preference) {
+    animation: 1.5s infinite pulse-scale ease-out;
+  }
+}
+
+/* One-shot rotational wiggle; re-apply the class to replay. */
+@utility boop {
+  @media (prefers-reduced-motion: no-preference) {
+    animation: boop 1s;
+  }
+}
+
+/* Generic Blux slice layout — support rules the manifest-driven slice
+   components rely on (the `.mt-media`/`.mt-copy`/`.hero-band`/`.richtext-block`
+   hooks they emit). Site-neutral, so they live in the starter unchanged;
+   per-slice type + band styling comes from the styles manifest, not here. */
+
+/* Editorial media_text rows alternate the image side down the page —
+   `nth-child(… of S)` counts only media_text sections among the slice zone's
+   children. Outside @layer base so it wins over the component's grid order. */
+main :nth-child(even of section[data-slice-type="media_text"]) .mt-media {
+  order: -1;
+}
+
+/* The opening hero gets the full-viewport treatment; interstitial heroes are
+   short bands. The manifest also sets this when it captures height: 100vh, so
+   this is a floor for the first hero when a site ships without a manifest. */
+main > section.hero-band:first-child {
+  min-height: 100vh;
+}
+
+/* Multi-paragraph rich_text wants vertical rhythm between paragraphs. */
+.richtext-block p + p {
+  margin-top: 1em;
+}
+
+/* Blur-up companion to $lib/components/Img.svelte. Outside @layer base so it
+   wins over utility resets without needing !important. */
+.progressive-img {
+  filter: blur(40px);
+  transition: filter 1500ms cubic-bezier(0.5, 0, 0, 1);
+}
+
+.progressive-img.progressive-img--loaded {
+  filter: blur(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .progressive-img {
+    filter: none;
+    transition: none;
+  }
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    scrollbar-gutter: stable;
+  }
+
+  body {
+    font-family: "helvetica", sans-serif;
+    max-width: 100vw;
+    overflow-x: clip;
+    overflow-y: auto;
+    margin: 0;
+    background-color: var(--color-background);
+  }
+
+  /* Opt-in: add `class="hide-scrollbars"` to <html> in app.html to hide scrollbars
+     globally (useful for landing-page styles). Default is system scrollbars for
+     accessibility and to avoid layout surprises on content-heavy pages. */
+  html.hide-scrollbars,
+  html.hide-scrollbars body {
+    scrollbar-width: none;
+  }
+
+  html.hide-scrollbars body::-webkit-scrollbar {
+    display: none;
+    width: 0;
+  }
+
+  /* Type scale — define per project (h1–h6, p, responsive variants). */
+
+  /* Respect users who ask for less motion: neutralize CSS transitions/animations
+     and smooth scrolling. Svelte's JS-driven transitions don't see this reset —
+     import fade/fly/slide from $lib/transitions instead of svelte/transition. */
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+
+  a,
+  button {
+    cursor: pointer;
+  }
+
+  span {
+    display: inline-block;
+  }
+
+  .add-noise::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: radial-gradient(
+      circle,
+      rgba(255, 255, 255, 0.05) 0.5px,
+      transparent 0.5px
+    );
+    background-size: 1px 1px;
+    opacity: 0.4;
+    pointer-events: none;
+    will-change: transform;
+    filter: blur(0.5px);
+  }
+}
+
+/* ── Blux text-role scale (convention) ──────────────────────────────────────
+   The Blux render (src/lib/blux/ — Grid.svelte, BandTitle, carousel captions)
+   tags every text run with `txt-role-text{N}`, the role id from the Blux
+   export. Each rule reproduces the source's typography for one role — font
+   family, size, leading, tracking, weight, case. The export carries NO font
+   data, so the values are measured per-site from the rendered ORIGINAL's
+   computed styles when converting. Keep the rules UNLAYERED so they win over
+   the base h1..h6/body defaults for whichever element a run lands on, while
+   staying at class specificity (a band's own inline color/align still
+   applies); put mobile overrides behind the source's own breakpoint. Example,
+   measured from a live original:
+
+   .txt-role-text5 {
+     font-family: var(--font-body);
+     font-weight: 500;
+     font-size: 15px;
+     line-height: 26px;
+     letter-spacing: 1.5px;
+     text-transform: uppercase;
+     margin: 10px 0;  <- the style's own block margin (site.json .textN)
+   }
+
+   Include the style's `margin` when the export declares one: Blux's vertical
+   rhythm between stacked blocks IS these margins, collapsing in normal flow —
+   Grid stacks render flush and rely on them (no synthetic gap).
+
+   The starter's placeholders below are empty on purpose — an unconverted site
+   keeps its base type. */
+
+/* Blux platform anchor base (site-agnostic): raw anchors in converted trees
+   carry `ib middle links` / `ib middle buttonsN` verbatim. `.ib` is the
+   platform's inline-block, and `.links` must declare its own underline — an
+   inline-block box does not inherit an ancestor's text-decoration. Per-site
+   `.buttonsN` skins come from `blux emit` (emitButtonsCss) like the roles. */
+.ib {
+  display: inline-block;
+}
+.links {
+  text-decoration: underline;
+}
+.txt-role-text1,
+.txt-role-text5,
+.txt-role-text11,
+.txt-role-text12 {
+  /* Per-site values measured from the live original go here. */
+}
+
+/* Band content padding with the export's mobile override (≤700px in source). */
+.band-pad {
+  padding: var(--band-pad);
+}
+@media (max-width: 700px) {
+  .band-pad {
+    padding: var(--band-pad-m, var(--band-pad));
+  }
+}

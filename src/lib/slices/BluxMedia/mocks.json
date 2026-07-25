@@ -1,0 +1,76 @@
+[
+  {
+    "__TYPE__": "SharedSliceContent",
+    "variation": "default",
+    "primary": {
+      "media": {
+        "origin": {
+          "id": "main",
+          "url": "https://images.unsplash.com/photo-1593642633279-1796119d5482",
+          "width": 4016,
+          "height": 6016
+        },
+        "url": "https://images.unsplash.com/photo-1593642633279-1796119d5482",
+        "width": 4016,
+        "height": 6016,
+        "edit": {
+          "zoom": 1,
+          "crop": {
+            "x": 0,
+            "y": 0
+          },
+          "background": "transparent"
+        },
+        "alt": "instead",
+        "credits": null,
+        "__TYPE__": "ImageContent",
+        "thumbnails": {}
+      },
+      "video_embed": {
+        "__TYPE__": "FieldContent",
+        "value": "greatly",
+        "type": "Text"
+      },
+      "ratio": {
+        "__TYPE__": "FieldContent",
+        "value": "needs",
+        "type": "Text"
+      },
+      "crop": {
+        "__TYPE__": "FieldContent",
+        "value": "unusual",
+        "type": "Text"
+      },
+      "caption": {
+        "__TYPE__": "StructuredTextContent",
+        "value": [
+          {
+            "type": "paragraph",
+            "content": {
+              "text": "Do adipisicing exercitation eu elit ea sunt magna mollit. Minim consectetur dolore eu duis consequat elit aute Lorem nostrud excepteur."
+            }
+          }
+        ]
+      },
+      "link": {
+        "__TYPE__": "LinkContent",
+        "key": "a86f74e8-baf5-4f64-9edf-bddcc0b7106c",
+        "value": {
+          "__TYPE__": "ExternalLink",
+          "url": "http://twitter.com"
+        }
+      },
+      "link_label": {
+        "__TYPE__": "FieldContent",
+        "value": "baseball",
+        "type": "Text"
+      }
+    },
+    "items": [
+      {
+        "__TYPE__": "GroupItemContent",
+        "value": []
+      }
+    ]
+  }
+]

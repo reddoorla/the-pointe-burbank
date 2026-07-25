@@ -1,0 +1,24 @@
+[
+  {
+    "__TYPE__": "SharedSliceContent",
+    "variation": "default",
+    "primary": {
+      "embed_kind": {
+        "__TYPE__": "FieldContent",
+        "value": "custom",
+        "type": "Select"
+      },
+      "embed_html": {
+        "__TYPE__": "FieldContent",
+        "value": "happened",
+        "type": "Text"
+      }
+    },
+    "items": [
+      {
+        "__TYPE__": "GroupItemContent",
+        "value": []
+      }
+    ]
+  }
+]

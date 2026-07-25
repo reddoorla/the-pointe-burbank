@@ -1,0 +1,951 @@
+{
+  "site": "the-pointe",
+  "uid": "home",
+  "title": "The Pointe - The Pointe",
+  "metaTitle": "The Pointe",
+  "metaImageUrl": "http://d3syaxnfm3oj0e.cloudfront.net/ea3c0e4e-aa87-4d1b-adaa-cb250234ec3c/w:1000/4dd6c119-e41e-43d8-afad-2cbf03068ff8.jpg",
+  "fontLinks": [
+    "https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined&text=%EE%97%8B%EE%97%8C&lang=en",
+    "https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Google+Sans:400,500,700|Google+Sans+Text:400,500,700&lang=en",
+    "https://fonts.googleapis.com/css?family=Google+Sans+Text:400&text=%E2%86%90%E2%86%92%E2%86%91%E2%86%93&lang=en",
+    "https://fonts.googleapis.com/css?family=Scope+One:regular%7CMontserrat:300,500,regular%7CMartel:200&display=swap"
+  ],
+  "slots": [
+    {
+      "key": "h.i0",
+      "kind": "image",
+      "url": "https://images.prismic.io/the-pointe-burbank/_3LVSBNd7JAdDZZh_9b074e72-e854-4387-9891-365394f14867.png?auto=format,compress",
+      "section": "h"
+    },
+    {
+      "key": "h.i1",
+      "kind": "image",
+      "url": "https://images.prismic.io/the-pointe-burbank/_3LVSBNd7JAdDZZh_9b074e72-e854-4387-9891-365394f14867.png?auto=format,compress",
+      "section": "h"
+    },
+    {
+      "key": "h.i2",
+      "kind": "image",
+      "url": "https://images.prismic.io/the-pointe-burbank/WRMRzixxDLnRXXc7_a37733d6-09cc-4c0c-be9f-e220770f2397.jpg?auto=format,compress",
+      "section": "h"
+    },
+    {
+      "key": "h.i3",
+      "kind": "image",
+      "url": "https://images.prismic.io/the-pointe-burbank/c001XfZ6xYJ2LU9o_b035b800-7ed3-479e-bb02-54a3eccfb27a.png?auto=format,compress",
+      "section": "h"
+    },
+    {
+      "key": "s0.i0",
+      "kind": "image",
+      "url": "https://images.prismic.io/the-pointe-burbank/Z-8weRh_8-ZILiC-_a732d1e4-59be-42ba-b87f-5acea9b3c4b9.png?auto=format,compress",
+      "section": "s0"
+    },
+    {
+      "key": "s0.i1",
+      "kind": "image",
+      "url": "https://images.prismic.io/the-pointe-burbank/bfIAxBxdqe-lkguB_ec0c6ec6-45b9-4ac8-84e5-0438c84629b9.png?auto=format,compress",
+      "section": "s0"
+    },
+    {
+      "key": "s0.i2",
+      "kind": "image",
+      "url": "https://images.prismic.io/the-pointe-burbank/psubnENEKZCiWuA-_e15eb8af-95eb-4aac-b03e-ca1990de534e.png?auto=format,compress",
+      "section": "s0"
+    },
+    {
+      "key": "s0.i3",
+      "kind": "image",
+      "url": "https://images.prismic.io/the-pointe-burbank/xasHgU_FtLTKYb7R_0c78a3e9-984b-4697-a025-2fb1055da37e.png?auto=format,compress",
+      "section": "s0"
+    },
+    {
+      "key": "s2.i0",
+      "kind": "image",
+      "url": "https://images.prismic.io/the-pointe-burbank/arWTiYytOvAXncUF_511a1d2e-2ad5-4d93-857e-463f15bc5b82.png?auto=format,compress",
+      "section": "s2"
+    },
+    {
+      "key": "s2.i1",
+      "kind": "image",
+      "url": "https://images.prismic.io/the-pointe-burbank/BGlTZGR61j1CMurs_43983b42-cd6d-42ba-b76d-9bce1931e581.png?auto=format,compress",
+      "section": "s2"
+    },
+    {
+      "key": "s2.i2",
+      "kind": "image",
+      "url": "https://images.prismic.io/the-pointe-burbank/qkWKRqRMocaeyHAv_449cb545-61ab-4faa-a1a2-5b802ae27982.png?auto=format,compress",
+      "section": "s2"
+    },
+    {
+      "key": "s2.i3",
+      "kind": "image",
+      "url": "https://images.prismic.io/the-pointe-burbank/3ujQ7rTR5_yNn4YS_56ceaf76-a802-47e2-9bfa-d48fff84642d.png?auto=format,compress",
+      "section": "s2"
+    },
+    {
+      "key": "s2.i4",
+      "kind": "image",
+      "url": "https://images.prismic.io/the-pointe-burbank/uKxmg0gIIjh3Wpna_39999486-c94a-47f9-9054-699d21955ec5.png?auto=format,compress",
+      "section": "s2"
+    },
+    {
+      "key": "s2.i5",
+      "kind": "image",
+      "url": "https://images.prismic.io/the-pointe-burbank/M1crLtBBDqW-mtmF_1083733e-b211-4e23-8a62-2c6db839a02c.png?auto=format,compress",
+      "section": "s2"
+    },
+    {
+      "key": "h.i4",
+      "kind": "image",
+      "url": "https://images.prismic.io/the-pointe-burbank/EIDWgeEuGiAAvhdP_8fc9d04c-543a-4ca9-8cf6-18cda24eb711.png?auto=format,compress",
+      "section": "h"
+    },
+    {
+      "key": "s3.i0",
+      "kind": "image",
+      "url": "https://images.prismic.io/the-pointe-burbank/bfIAxBxdqe-lkguB_ec0c6ec6-45b9-4ac8-84e5-0438c84629b9.png?auto=format,compress",
+      "section": "s3"
+    },
+    {
+      "key": "s4.i0",
+      "kind": "image",
+      "url": "https://images.prismic.io/the-pointe-burbank/68OhchsrKnjoY0Sk_7c52c8df-a506-4a7a-9a1d-91aa11e5d7c6.png?auto=format,compress",
+      "section": "s4"
+    },
+    {
+      "key": "s4.i1",
+      "kind": "image",
+      "url": "https://images.prismic.io/the-pointe-burbank/VnvFyMdTZ7DDUEK1_2c05f47c-cfee-4383-8955-5dea66b4df15.png?auto=format,compress",
+      "section": "s4"
+    },
+    {
+      "key": "s4.i2",
+      "kind": "image",
+      "url": "https://images.prismic.io/the-pointe-burbank/cHWP0p5v9eEhqWy__6fefaae2-82b2-4861-9efe-b491cc3d2af1.jpg?auto=format,compress",
+      "section": "s4"
+    },
+    {
+      "key": "s5.i0",
+      "kind": "image",
+      "url": "https://images.prismic.io/the-pointe-burbank/Fqm1DM9eyzmd-wqL_3852eddf-55e3-4f7d-b106-f58a5af214f6.png?auto=format,compress",
+      "section": "s5"
+    },
+    {
+      "key": "s6.i0",
+      "kind": "image",
+      "url": "https://images.prismic.io/the-pointe-burbank/7msEWtHjunGBwGKn_aefbd53c-205a-402a-ba88-6294a555b0aa.jpg?auto=format,compress",
+      "section": "s6"
+    },
+    {
+      "key": "s6.i1",
+      "kind": "image",
+      "url": "https://images.prismic.io/the-pointe-burbank/z5ImrnqIVVZhX4Jz_cb6f38b7-4ca7-4590-aeb9-11287fc942e4.jpg?auto=format,compress",
+      "section": "s6"
+    },
+    {
+      "key": "s6.i2",
+      "kind": "image",
+      "url": "https://images.prismic.io/the-pointe-burbank/gqNjYbR6Jptylmmd_88737f87-d643-4435-9eb7-839516e95b38.jpg?auto=format,compress",
+      "section": "s6"
+    },
+    {
+      "key": "s7.i0",
+      "kind": "image",
+      "url": "https://images.prismic.io/the-pointe-burbank/bUW0IIHoGY7Zty1r_673cb1d4-af95-4e81-a5dd-5018d4af5e86.png?auto=format,compress",
+      "section": "s7"
+    },
+    {
+      "key": "s7.i1",
+      "kind": "image",
+      "url": "https://images.prismic.io/the-pointe-burbank/JouF2kMRiCAhG39X_bf56be7d-863c-4f44-8247-6d92ea7762a9.png?auto=format,compress",
+      "section": "s7"
+    },
+    {
+      "key": "s7.i2",
+      "kind": "image",
+      "url": "https://images.prismic.io/the-pointe-burbank/DwoPH0o-iUeSO4VQ_b640649d-05cf-40c1-9edc-f3fc9d427c76.png?auto=format,compress",
+      "section": "s7"
+    },
+    {
+      "key": "s8.i0",
+      "kind": "image",
+      "url": "https://images.prismic.io/the-pointe-burbank/cYnqre2TXOWF7xXO_cfc17af2-ff1f-40a4-a5bf-4123cd5f355c.png?auto=format,compress",
+      "section": "s8"
+    },
+    {
+      "key": "s8.i1",
+      "kind": "image",
+      "url": "https://images.prismic.io/the-pointe-burbank/rQdqlYSLlFfTy53t_966adedb-0315-4afd-b070-8c89f8792267.png?auto=format,compress",
+      "section": "s8"
+    },
+    {
+      "key": "s9.i0",
+      "kind": "image",
+      "url": "https://images.prismic.io/the-pointe-burbank/8TRy12xVLlQRJGiR_6dd54dfc-b4d1-4ef2-8165-a1f2421668bf.png?auto=format,compress",
+      "section": "s9"
+    },
+    {
+      "key": "s9.i1",
+      "kind": "image",
+      "url": "https://images.prismic.io/the-pointe-burbank/bfIAxBxdqe-lkguB_ec0c6ec6-45b9-4ac8-84e5-0438c84629b9.png?auto=format,compress",
+      "section": "s9"
+    },
+    {
+      "key": "s10.i0",
+      "kind": "image",
+      "url": "https://images.prismic.io/the-pointe-burbank/q0gszJyb9YRFnMZ8_126045fb-2364-4d99-9d6f-5502674ecdc9.jpg?auto=format,compress",
+      "section": "s10"
+    },
+    {
+      "key": "s10.i1",
+      "kind": "image",
+      "url": "https://images.prismic.io/the-pointe-burbank/FHhFqR2GAIC1Ok13_da8e7a33-0929-4618-9044-4b2ac23041c0.jpg?auto=format,compress",
+      "section": "s10"
+    },
+    {
+      "key": "s10.i2",
+      "kind": "image",
+      "url": "https://images.prismic.io/the-pointe-burbank/57LnEjjdiEV9TO7g_122c1f54-872a-40af-8437-a6a226ad968a.jpg?auto=format,compress",
+      "section": "s10"
+    },
+    {
+      "key": "s12.i0",
+      "kind": "image",
+      "url": "https://images.prismic.io/the-pointe-burbank/pGVh44J15B87SOCZ_052e9b6f-6abe-4478-8a20-380f73d119ff.png?auto=format,compress",
+      "section": "s12"
+    },
+    {
+      "key": "s12.i1",
+      "kind": "image",
+      "url": "https://images.prismic.io/the-pointe-burbank/UvffRWLdppKP0Xjl_f0e78916-7572-4cb2-a931-47b994991ef8.png?auto=format,compress",
+      "section": "s12"
+    },
+    {
+      "key": "s12.i2",
+      "kind": "image",
+      "url": "https://images.prismic.io/the-pointe-burbank/TfbzLqPx9xg4YzcQ_b4dd73b4-a59a-426b-8908-a4407632d190.png?auto=format,compress",
+      "section": "s12"
+    },
+    {
+      "key": "s12.i3",
+      "kind": "image",
+      "url": "https://images.prismic.io/the-pointe-burbank/nSIFRoJlfkGjzFHf_050cf5e5-2d8b-4712-950e-ad6c353c3e5e.png?auto=format,compress",
+      "section": "s12"
+    },
+    {
+      "key": "s12.i4",
+      "kind": "image",
+      "url": "https://images.prismic.io/the-pointe-burbank/7dFcoWZgl2p4sjSL_4ea50f1e-25e9-4d60-a67c-2f1aa9410c55.png?auto=format,compress",
+      "section": "s12"
+    },
+    {
+      "key": "s12.i5",
+      "kind": "image",
+      "url": "https://images.prismic.io/the-pointe-burbank/m5LNSv7GAmlOvwx1_0cfa7062-d911-483c-94be-20e8e4e0f4bb.png?auto=format,compress",
+      "section": "s12"
+    },
+    {
+      "key": "s12.i6",
+      "kind": "image",
+      "url": "https://images.prismic.io/the-pointe-burbank/XgiUxDgIZYEvPxtn_63b7996d-fe0a-4f00-abcc-c3fb521638f5.png?auto=format,compress",
+      "section": "s12"
+    },
+    {
+      "key": "s12.i7",
+      "kind": "image",
+      "url": "https://images.prismic.io/the-pointe-burbank/hICPeYoUB1sgPxPE_3b966d54-aa06-4d81-ac7a-00a18a31da6f.png?auto=format,compress",
+      "section": "s12"
+    },
+    {
+      "key": "s12.i8",
+      "kind": "image",
+      "url": "https://images.prismic.io/the-pointe-burbank/tcsgXvxlrdwS9ASd_6e1b82f7-5bf9-48b1-b956-8d614a319176.png?auto=format,compress",
+      "section": "s12"
+    },
+    {
+      "key": "s12.i9",
+      "kind": "image",
+      "url": "https://images.prismic.io/the-pointe-burbank/iC16-hnOikAaHB9h_1d601436-8017-4dd1-a548-29b66dd10eab.png?auto=format,compress",
+      "section": "s12"
+    },
+    {
+      "key": "s12.i10",
+      "kind": "image",
+      "url": "https://images.prismic.io/the-pointe-burbank/5aPwmJHhnw0ytZ9w_fa1b07a4-1c8b-497c-9241-5c013a6e278c.png?auto=format,compress",
+      "section": "s12"
+    },
+    {
+      "key": "s12.i11",
+      "kind": "image",
+      "url": "https://images.prismic.io/the-pointe-burbank/kzMrTNj_2mfDFR1i_2116f17d-7cf0-4880-997d-bd3b5d9a08f1.png?auto=format,compress",
+      "section": "s12"
+    },
+    {
+      "key": "s12.i12",
+      "kind": "image",
+      "url": "https://images.prismic.io/the-pointe-burbank/Llr-YvkPqjHVTcf2_fd4d69f3-bb9e-4754-bebc-c2897a1bc1c8.png?auto=format,compress",
+      "section": "s12"
+    },
+    {
+      "key": "s12.i13",
+      "kind": "image",
+      "url": "https://images.prismic.io/the-pointe-burbank/S0eGi8yC4ZdjQYb4_ae55dfb4-2234-4188-899f-3fe9ee92682b.png?auto=format,compress",
+      "section": "s12"
+    },
+    {
+      "key": "s12.i14",
+      "kind": "image",
+      "url": "https://images.prismic.io/the-pointe-burbank/niDoYvA6e15nsxqt_ccdd3fcb-7361-4683-a5ff-5558b65746c0.png?auto=format,compress",
+      "section": "s12"
+    },
+    {
+      "key": "s12.i15",
+      "kind": "image",
+      "url": "https://images.prismic.io/the-pointe-burbank/QJ_nx5ZnyKjy1xx2_80180ff4-c26c-4c3f-8cc5-3ae8df7d64cb.png?auto=format,compress",
+      "section": "s12"
+    },
+    {
+      "key": "s12.i16",
+      "kind": "image",
+      "url": "https://images.prismic.io/the-pointe-burbank/IPClrzvzdrFAoLGp_ea5a8ac9-4bd3-4934-a38c-cf0a9cce6517.png?auto=format,compress",
+      "section": "s12"
+    },
+    {
+      "key": "s12.i17",
+      "kind": "image",
+      "url": "https://images.prismic.io/the-pointe-burbank/2cE_syperPqnve-K_998c3e5a-f177-4d0e-9e0e-d95f1b803976.png?auto=format,compress",
+      "section": "s12"
+    },
+    {
+      "key": "s12.i18",
+      "kind": "image",
+      "url": "https://images.prismic.io/the-pointe-burbank/X-q7iNU55YbNM8g4_865149e9-5e82-440f-93e0-6c5279d23e26.png?auto=format,compress",
+      "section": "s12"
+    },
+    {
+      "key": "s12.i19",
+      "kind": "image",
+      "url": "https://images.prismic.io/the-pointe-burbank/GzvoozfuoO7b-0oR_c9dffc4f-f371-4007-ba80-71233c827d79.png?auto=format,compress",
+      "section": "s12"
+    },
+    {
+      "key": "h.i5",
+      "kind": "image",
+      "url": "https://images.prismic.io/the-pointe-burbank/_3LVSBNd7JAdDZZh_9b074e72-e854-4387-9891-365394f14867.png?auto=format,compress",
+      "section": "h"
+    },
+    {
+      "key": "h.i6",
+      "kind": "image",
+      "url": "https://images.prismic.io/the-pointe-burbank/JouF2kMRiCAhG39X_bf56be7d-863c-4f44-8247-6d92ea7762a9.png?auto=format,compress",
+      "section": "h"
+    },
+    {
+      "key": "h.i7",
+      "kind": "image",
+      "url": "https://images.prismic.io/the-pointe-burbank/117SZQpfx7ohE16F_f4d5a5fe-fd7a-49f2-a4d9-4d5eceb6c3b9.png?auto=format,compress",
+      "section": "h"
+    },
+    {
+      "key": "h.i8",
+      "kind": "image",
+      "url": "https://images.prismic.io/the-pointe-burbank/aaPSNGleIzWy_Gb__67c26ae4-d786-47a9-a44c-60867d11a0e0.png?auto=format,compress",
+      "section": "h"
+    },
+    {
+      "key": "h.i9",
+      "kind": "image",
+      "url": "https://images.prismic.io/the-pointe-burbank/aaPSNGleIzWy_Gb__67c26ae4-d786-47a9-a44c-60867d11a0e0.png?auto=format,compress",
+      "section": "h"
+    },
+    {
+      "key": "h.i10",
+      "kind": "image",
+      "url": "https://images.prismic.io/the-pointe-burbank/aaPSNGleIzWy_Gb__67c26ae4-d786-47a9-a44c-60867d11a0e0.png?auto=format,compress",
+      "section": "h"
+    },
+    {
+      "key": "s8.i2",
+      "kind": "image",
+      "url": "https://the-pointe-burbank.cdn.prismic.io/the-pointe-burbank/9dALogg8SJuRRAFc_c023afe4-996f-4013-83ab-2634ea55355d.mp4",
+      "section": "s8"
+    },
+    {
+      "key": "s9.i2",
+      "kind": "image",
+      "url": "https://the-pointe-burbank.cdn.prismic.io/the-pointe-burbank/BWh5JO3cejcLboL9_1b5b96c1-16fb-4d8b-8cb0-f71938af22c0.pdf",
+      "section": "s9"
+    },
+    {
+      "key": "h.t0",
+      "kind": "text",
+      "text": "<!DOCTYPE html>",
+      "section": "h"
+    },
+    {
+      "key": "h.t1",
+      "kind": "text",
+      "text": "Vision",
+      "section": "h"
+    },
+    {
+      "key": "h.t2",
+      "kind": "text",
+      "text": "Amenities",
+      "section": "h"
+    },
+    {
+      "key": "h.t3",
+      "kind": "text",
+      "text": "Burbank",
+      "section": "h"
+    },
+    {
+      "key": "h.t4",
+      "kind": "text",
+      "text": "Contact Us",
+      "section": "h"
+    },
+    {
+      "key": "h.t5",
+      "kind": "text",
+      "text": "BURBANK",
+      "section": "h"
+    },
+    {
+      "key": "s0.t0",
+      "kind": "text",
+      "text": "The Pointe",
+      "section": "s0"
+    },
+    {
+      "key": "s0.t1",
+      "kind": "text",
+      "text": "a monument ",
+      "section": "s0"
+    },
+    {
+      "key": "s0.t2",
+      "kind": "text",
+      "text": "of excellence",
+      "section": "s0"
+    },
+    {
+      "key": "s0.t3",
+      "kind": "text",
+      "text": "Nestled among the biggest names in entertainment, The Pointe  is a modern and elegant haven for the finest tenants in Burbank.",
+      "section": "s0"
+    },
+    {
+      "key": "s1.t0",
+      "kind": "text",
+      "text": "the space",
+      "section": "s1"
+    },
+    {
+      "key": "s1.t1",
+      "kind": "text",
+      "text": "distinguished",
+      "section": "s1"
+    },
+    {
+      "key": "s1.t2",
+      "kind": "text",
+      "text": "design",
+      "section": "s1"
+    },
+    {
+      "key": "s2.t0",
+      "kind": "text",
+      "text": "480,000 SF of",
+      "section": "s2"
+    },
+    {
+      "key": "s2.t1",
+      "kind": "text",
+      "text": "Class A office space",
+      "section": "s2"
+    },
+    {
+      "key": "s2.t2",
+      "kind": "text",
+      "text": "Premier 14-Story",
+      "section": "s2"
+    },
+    {
+      "key": "s2.t3",
+      "kind": "text",
+      "text": "Office Tower",
+      "section": "s2"
+    },
+    {
+      "key": "s2.t4",
+      "kind": "text",
+      "text": "9.35 Acres in the",
+      "section": "s2"
+    },
+    {
+      "key": "s2.t5",
+      "kind": "text",
+      "text": "Media District",
+      "section": "s2"
+    },
+    {
+      "key": "s2.t6",
+      "kind": "text",
+      "text": "LEED Gold Certified",
+      "section": "s2"
+    },
+    {
+      "key": "s2.t7",
+      "kind": "text",
+      "text": "Energy Star Certified",
+      "section": "s2"
+    },
+    {
+      "key": "s3.t0",
+      "kind": "text",
+      "text": "on-site luxuries",
+      "section": "s3"
+    },
+    {
+      "key": "s3.t1",
+      "kind": "text",
+      "text": "premium ",
+      "section": "s3"
+    },
+    {
+      "key": "s3.t2",
+      "kind": "text",
+      "text": "amenities",
+      "section": "s3"
+    },
+    {
+      "key": "s3.t3",
+      "kind": "text",
+      "text": "A campus built for the modern worker, The Pointe offers amenities that enrich the every day.",
+      "section": "s3"
+    },
+    {
+      "key": "s4.t0",
+      "kind": "text",
+      "text": "Renew and recover with exclusive access to a state-of-the-art ",
+      "section": "s4"
+    },
+    {
+      "key": "s4.t1",
+      "kind": "text",
+      "text": "FIT Health Club",
+      "section": "s4"
+    },
+    {
+      "key": "s4.t2",
+      "kind": "text",
+      "text": " with full-service locker rooms in a spa-like atmosphere. ",
+      "section": "s4"
+    },
+    {
+      "key": "s4.t3",
+      "kind": "text",
+      "text": "Enjoy exclusive access to on-site production and filming studios.",
+      "section": "s4"
+    },
+    {
+      "key": "s4.t4",
+      "kind": "text",
+      "text": "Head to the MRKT for a quick bite on-the-go, or dine in for a filling meal.",
+      "section": "s4"
+    },
+    {
+      "key": "s5.t0",
+      "kind": "text",
+      "text": "the outdoors",
+      "section": "s5"
+    },
+    {
+      "key": "s5.t1",
+      "kind": "text",
+      "text": "an impeccably ",
+      "section": "s5"
+    },
+    {
+      "key": "s5.t2",
+      "kind": "text",
+      "text": "lush haven",
+      "section": "s5"
+    },
+    {
+      "key": "s6.t0",
+      "kind": "text",
+      "text": "a place to sit and breathe",
+      "section": "s6"
+    },
+    {
+      "key": "s6.t1",
+      "kind": "text",
+      "text": "a calm escape right outside your door",
+      "section": "s6"
+    },
+    {
+      "key": "s6.t2",
+      "kind": "text",
+      "text": "a building with a view",
+      "section": "s6"
+    },
+    {
+      "key": "s7.t0",
+      "kind": "text",
+      "text": "a property within",
+      "section": "s7"
+    },
+    {
+      "key": "s7.t1",
+      "kind": "text",
+      "text": "A collection of 13 buildings offering premier office space among the biggest names in entertainment. Explore 3,100,000 SF of endless possibilities.",
+      "section": "s7"
+    },
+    {
+      "key": "s8.t0",
+      "kind": "text",
+      "text": "presented by",
+      "section": "s8"
+    },
+    {
+      "key": "s9.t0",
+      "kind": "text",
+      "text": "local amenities",
+      "section": "s9"
+    },
+    {
+      "key": "s9.t1",
+      "kind": "text",
+      "text": "a city full of possibilities",
+      "section": "s9"
+    },
+    {
+      "key": "s9.t2",
+      "kind": "text",
+      "text": "Burbank offers a wide range of opportunities from its network of world-renowned studios, accessible airport, and recreational activities.",
+      "section": "s9"
+    },
+    {
+      "key": "s9.t3",
+      "kind": "text",
+      "text": "Burbank Incentives",
+      "section": "s9"
+    },
+    {
+      "key": "s10.t0",
+      "kind": "text",
+      "text": "Be part of the community among the biggest names in entertainment. ",
+      "section": "s10"
+    },
+    {
+      "key": "s10.t1",
+      "kind": "text",
+      "text": "Fly, surf, ski, all within an hour away. Plus every business partner is around the corner.",
+      "section": "s10"
+    },
+    {
+      "key": "s10.t2",
+      "kind": "text",
+      "text": "Day or night, Burbank delights with vibrant energy and one-of-a-kind character.",
+      "section": "s10"
+    },
+    {
+      "key": "s11.t0",
+      "kind": "text",
+      "text": "the location",
+      "section": "s11"
+    },
+    {
+      "key": "s11.t1",
+      "kind": "text",
+      "text": "everything ",
+      "section": "s11"
+    },
+    {
+      "key": "s11.t2",
+      "kind": "text",
+      "text": "within reach",
+      "section": "s11"
+    },
+    {
+      "key": "s12.t0",
+      "kind": "text",
+      "text": "The Burbank Portfolio",
+      "section": "s12"
+    },
+    {
+      "key": "s12.t1",
+      "kind": "text",
+      "text": "Studio And Offices",
+      "section": "s12"
+    },
+    {
+      "key": "s12.t2",
+      "kind": "text",
+      "text": "Retail And Dining",
+      "section": "s12"
+    },
+    {
+      "key": "s12.t3",
+      "kind": "text",
+      "text": "Hotel And Services",
+      "section": "s12"
+    },
+    {
+      "key": "s12.t4",
+      "kind": "text",
+      "text": "The Pointe",
+      "section": "s12"
+    },
+    {
+      "key": "s12.t5",
+      "kind": "text",
+      "text": "2900 West Alameda Ave",
+      "section": "s12"
+    },
+    {
+      "key": "s12.t6",
+      "kind": "text",
+      "text": "Burbank, CA 91505",
+      "section": "s12"
+    },
+    {
+      "key": "s12.t7",
+      "kind": "text",
+      "text": "Visit Website",
+      "section": "s12"
+    },
+    {
+      "key": "s12.t8",
+      "kind": "text",
+      "text": "The Tower",
+      "section": "s12"
+    },
+    {
+      "key": "s12.t9",
+      "kind": "text",
+      "text": "3900 West Alameda Ave",
+      "section": "s12"
+    },
+    {
+      "key": "s12.t10",
+      "kind": "text",
+      "text": "Burbank, CA 91505",
+      "section": "s12"
+    },
+    {
+      "key": "s12.t11",
+      "kind": "text",
+      "text": "Visit Website",
+      "section": "s12"
+    },
+    {
+      "key": "s12.t12",
+      "kind": "text",
+      "text": "The Pinnacle I",
+      "section": "s12"
+    },
+    {
+      "key": "s12.t13",
+      "kind": "text",
+      "text": "3400 West Olive Ave",
+      "section": "s12"
+    },
+    {
+      "key": "s12.t14",
+      "kind": "text",
+      "text": "Burbank, CA 91505",
+      "section": "s12"
+    },
+    {
+      "key": "s12.t15",
+      "kind": "text",
+      "text": "Visit Website",
+      "section": "s12"
+    },
+    {
+      "key": "s12.t16",
+      "kind": "text",
+      "text": "The Pinnacle II",
+      "section": "s12"
+    },
+    {
+      "key": "s12.t17",
+      "kind": "text",
+      "text": "3300 West Olive Ave",
+      "section": "s12"
+    },
+    {
+      "key": "s12.t18",
+      "kind": "text",
+      "text": "Burbank, CA 91505",
+      "section": "s12"
+    },
+    {
+      "key": "s12.t19",
+      "kind": "text",
+      "text": "Visit Website",
+      "section": "s12"
+    },
+    {
+      "key": "s12.t20",
+      "kind": "text",
+      "text": "3800 Alameda",
+      "section": "s12"
+    },
+    {
+      "key": "s12.t21",
+      "kind": "text",
+      "text": "3800 Alameda Ave",
+      "section": "s12"
+    },
+    {
+      "key": "s12.t22",
+      "kind": "text",
+      "text": "Burbank, CA 91505",
+      "section": "s12"
+    },
+    {
+      "key": "s12.t23",
+      "kind": "text",
+      "text": "Visit Website",
+      "section": "s12"
+    },
+    {
+      "key": "s12.t24",
+      "kind": "text",
+      "text": "Media Studios",
+      "section": "s12"
+    },
+    {
+      "key": "s12.t25",
+      "kind": "text",
+      "text": "3100 Thornton Ave",
+      "section": "s12"
+    },
+    {
+      "key": "s12.t26",
+      "kind": "text",
+      "text": "2255 &amp; 2233 Ontario Ave",
+      "section": "s12"
+    },
+    {
+      "key": "s12.t27",
+      "kind": "text",
+      "text": "3333 &amp; 3355 Empire Ave",
+      "section": "s12"
+    },
+    {
+      "key": "s12.t28",
+      "kind": "text",
+      "text": "Burbank, CA 91504",
+      "section": "s12"
+    },
+    {
+      "key": "s12.t29",
+      "kind": "text",
+      "text": "Visit Website",
+      "section": "s12"
+    },
+    {
+      "key": "s12.t30",
+      "kind": "text",
+      "text": "Central Park",
+      "section": "s12"
+    },
+    {
+      "key": "s12.t31",
+      "kind": "text",
+      "text": "3500 West Olive Ave",
+      "section": "s12"
+    },
+    {
+      "key": "s12.t32",
+      "kind": "text",
+      "text": "Burbank, CA 91505",
+      "section": "s12"
+    },
+    {
+      "key": "s12.t33",
+      "kind": "text",
+      "text": "Visit Website",
+      "section": "s12"
+    },
+    {
+      "key": "s13.t0",
+      "kind": "text",
+      "text": "Come Be A Part Of It.",
+      "section": "s13"
+    },
+    {
+      "key": "h.t6",
+      "kind": "text",
+      "text": "Leasing Team",
+      "section": "h"
+    },
+    {
+      "key": "h.t7",
+      "kind": "text",
+      "text": "Todd Doney",
+      "section": "h"
+    },
+    {
+      "key": "h.t8",
+      "kind": "text",
+      "text": "213.613.3330",
+      "section": "h"
+    },
+    {
+      "key": "h.t9",
+      "kind": "text",
+      "text": "[email&nbsp;protected]",
+      "section": "h"
+    },
+    {
+      "key": "h.t10",
+      "kind": "text",
+      "text": "Lic. 00852254",
+      "section": "h"
+    },
+    {
+      "key": "h.t11",
+      "kind": "text",
+      "text": " &nbsp;",
+      "section": "h"
+    },
+    {
+      "key": "h.t12",
+      "kind": "text",
+      "text": "Doug Marlow",
+      "section": "h"
+    },
+    {
+      "key": "h.t13",
+      "kind": "text",
+      "text": "818.502.6707",
+      "section": "h"
+    },
+    {
+      "key": "h.t14",
+      "kind": "text",
+      "text": "[email&nbsp;protected]",
+      "section": "h"
+    },
+    {
+      "key": "h.t15",
+      "kind": "text",
+      "text": "Lic. 00950434",
+      "section": "h"
+    },
+    {
+      "key": "h.t16",
+      "kind": "text",
+      "text": "A Property Within",
+      "section": "h"
+    }
+  ]
+}

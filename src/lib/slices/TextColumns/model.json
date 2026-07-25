@@ -1,0 +1,72 @@
+{
+  "id": "text_columns",
+  "type": "SharedSlice",
+  "name": "TextColumns",
+  "description": "TextColumns",
+  "variations": [
+    {
+      "id": "default",
+      "name": "Default",
+      "docURL": "...",
+      "version": "initial",
+      "description": "An eyebrow, an optional rule, and a row of text columns",
+      "imageUrl": "",
+      "primary": {
+        "eyebrow": {
+          "type": "Text",
+          "config": {
+            "label": "eyebrow",
+            "placeholder": "e.g. Our Solution"
+          }
+        },
+        "hasTopRule": {
+          "type": "Boolean",
+          "config": {
+            "label": "hasTopRule",
+            "placeholder_false": "no rule",
+            "placeholder_true": "rule",
+            "default_value": true
+          }
+        },
+        "desktopColumns": {
+          "type": "Select",
+          "config": {
+            "label": "desktopColumns",
+            "options": ["2", "3", "4"],
+            "default_value": "3"
+          }
+        },
+        "columns": {
+          "type": "Group",
+          "config": {
+            "label": "columns",
+            "fields": {
+              "title": {
+                "type": "Text",
+                "config": {
+                  "label": "title",
+                  "placeholder": ""
+                }
+              },
+              "body": {
+                "type": "StructuredText",
+                "config": {
+                  "label": "body",
+                  "allowTargetBlank": true,
+                  "multi": "paragraph,strong,em,hyperlink"
+                }
+              }
+            }
+          }
+        },
+        "band": {
+          "type": "Number",
+          "config": {
+            "label": "band (optional — wraps in the Blux SectionBand when set)"
+          }
+        }
+      },
+      "items": {}
+    }
+  ]
+}

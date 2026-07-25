@@ -1,0 +1,36 @@
+[
+  {
+    "__TYPE__": "SharedSliceContent",
+    "variation": "default",
+    "primary": {
+      "heading": {
+        "__TYPE__": "StructuredTextContent",
+        "value": [{ "type": "heading2", "content": { "text": "Features" } }]
+      },
+      "columns": { "__TYPE__": "FieldContent", "type": "Number", "value": 3 }
+    },
+    "items": [
+      {
+        "__TYPE__": "GroupItemContent",
+        "value": [
+          [
+            "item_heading",
+            {
+              "__TYPE__": "StructuredTextContent",
+              "value": [{ "type": "heading3", "content": { "text": "Pool" } }]
+            }
+          ],
+          [
+            "item_body",
+            {
+              "__TYPE__": "StructuredTextContent",
+              "value": [
+                { "type": "paragraph", "content": { "text": "Heated." } }
+              ]
+            }
+          ]
+        ]
+      }
+    ]
+  }
+]

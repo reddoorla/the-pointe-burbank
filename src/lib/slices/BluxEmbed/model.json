@@ -1,0 +1,32 @@
+{
+  "id": "blux_embed",
+  "type": "SharedSlice",
+  "name": "BluxEmbed",
+  "description": "Blux catalog: a standalone raw-HTML / form / social embed.",
+  "variations": [
+    {
+      "id": "default",
+      "name": "Default",
+      "docURL": "...",
+      "version": "initial",
+      "description": "Embed",
+      "imageUrl": "",
+      "primary": {
+        "embed_kind": {
+          "type": "Select",
+          "config": {
+            "label": "embed_kind",
+            "options": ["custom", "form", "social"]
+          }
+        },
+        "embed_html": {
+          "type": "Text",
+          "config": {
+            "label": "embed_html"
+          }
+        }
+      },
+      "items": {}
+    }
+  ]
+}

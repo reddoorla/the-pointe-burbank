@@ -1,0 +1,62 @@
+{
+  "name": "sveltekit-prismic-starter-t-lemos",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "concurrently \"pnpm:vite:dev\" \"pnpm:slicemachine\" --prefix-colors blue,magenta",
+    "vite:dev": "vite dev --host",
+    "build": "vite build",
+    "preview": "vite preview",
+    "check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
+    "check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
+    "lint": "prettier --check . --plugin prettier-plugin-svelte . && eslint .",
+    "format": "prettier --write . --plugin prettier-plugin-svelte .",
+    "test": "pnpm test:unit && pnpm test:smoke",
+    "test:unit": "vitest run",
+    "test:unit:watch": "vitest",
+    "test:smoke": "playwright install chromium && playwright test",
+    "slicemachine": "start-slicemachine"
+  },
+  "devDependencies": {
+    "@axe-core/playwright": "^4.11.3",
+    "@eslint/js": "^10.0.1",
+    "@playwright/test": "^1.60.0",
+    "@slicemachine/adapter-sveltekit": "^0.3.96",
+    "@sveltejs/adapter-netlify": "^6.0.4",
+    "@sveltejs/kit": "^2.61.1",
+    "@sveltejs/vite-plugin-svelte": "^7.1.2",
+    "@testing-library/svelte": "^5.3.1",
+    "concurrently": "^9.2.3",
+    "eslint": "^10.4.0",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-svelte": "^3.18.0",
+    "globals": "^17.6.0",
+    "jsdom": "^29.1.1",
+    "prettier": "^3.8.3",
+    "prettier-plugin-svelte": "^4.0.1",
+    "sharp": "^0.35.0",
+    "slice-machine-ui": "^2.21.3",
+    "svelte": "^5.55.10",
+    "svelte-check": "^4.4.8",
+    "tailwindcss": "^4.3.0",
+    "typescript": "^6.0.3",
+    "typescript-eslint": "^8.60.0",
+    "typescript-svelte-plugin": "^0.3.52",
+    "vite": "^8.0.14",
+    "vitest": "^4.1.7"
+  },
+  "type": "module",
+  "packageManager": "pnpm@11.8.0",
+  "engines": {
+    "node": ">=20"
+  },
+  "dependencies": {
+    "@lucide/svelte": "^1.17.0",
+    "@prismicio/client": "^7.21.8",
+    "@prismicio/svelte": "^2.2.1",
+    "@reddoorla/maintenance": "^0.74.0",
+    "@tailwindcss/vite": "^4.3.0",
+    "@zerodevx/svelte-img": "^2.1.2",
+    "svelte-gestures": "^5.2.2"
+  }
+}

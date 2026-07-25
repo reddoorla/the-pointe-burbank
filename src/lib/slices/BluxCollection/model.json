@@ -1,0 +1,102 @@
+{
+  "id": "blux_collection",
+  "type": "SharedSlice",
+  "name": "BluxCollection",
+  "description": "Blux catalog: a query-spec slice for feed-backed bands — no cells; the page load fetches the mapped entity documents and the component filters/sorts/limits them (spec §6 row 5, §8).",
+  "variations": [
+    {
+      "id": "default",
+      "name": "Default",
+      "docURL": "...",
+      "version": "initial",
+      "description": "Collection",
+      "imageUrl": "",
+      "primary": {
+        "heading": {
+          "type": "StructuredText",
+          "config": {
+            "label": "heading",
+            "single": "heading1,heading2,heading3,heading4,heading5,heading6,paragraph"
+          }
+        },
+        "background_image": {
+          "type": "Image",
+          "config": {
+            "label": "background_image",
+            "constraint": {},
+            "thumbnails": []
+          }
+        },
+        "background_color": {
+          "type": "Text",
+          "config": {
+            "label": "background_color"
+          }
+        },
+        "collection_type": {
+          "type": "Text",
+          "config": {
+            "label": "collection_type"
+          }
+        },
+        "feed_ids": {
+          "type": "Text",
+          "config": {
+            "label": "feed_ids"
+          }
+        },
+        "filter_tag": {
+          "type": "Text",
+          "config": {
+            "label": "filter_tag"
+          }
+        },
+        "sort": {
+          "type": "Text",
+          "config": {
+            "label": "sort"
+          }
+        },
+        "limit": {
+          "type": "Number",
+          "config": {
+            "label": "limit"
+          }
+        },
+        "media_ratio": {
+          "type": "Text",
+          "config": {
+            "label": "media_ratio"
+          }
+        },
+        "layout": {
+          "type": "Select",
+          "config": {
+            "label": "layout",
+            "options": ["grid", "carousel"]
+          }
+        },
+        "scroll_load_more": {
+          "type": "Select",
+          "config": {
+            "label": "scroll_load_more",
+            "options": ["off", "on"]
+          }
+        },
+        "widget_kind": {
+          "type": "Text",
+          "config": {
+            "label": "widget_kind"
+          }
+        },
+        "widget_html": {
+          "type": "Text",
+          "config": {
+            "label": "widget_html"
+          }
+        }
+      },
+      "items": {}
+    }
+  ]
+}

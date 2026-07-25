@@ -1,0 +1,30 @@
+{
+  "id": "split_feature",
+  "type": "SharedSlice",
+  "name": "SplitFeature",
+  "description": "Two-cell band: manifest media beside editable text",
+  "variations": [
+    {
+      "id": "default",
+      "name": "Default",
+      "docURL": "...",
+      "version": "initial",
+      "description": "Text + media split at the export's ratio",
+      "imageUrl": "",
+      "primary": {
+        "band": {
+          "type": "Number",
+          "config": { "label": "band (index from the Blux export)" }
+        },
+        "body": {
+          "type": "StructuredText",
+          "config": {
+            "label": "body (overrides the manifest text when filled)",
+            "multi": "paragraph,heading2,heading3,heading4,strong,em,hyperlink"
+          }
+        }
+      },
+      "items": {}
+    }
+  ]
+}

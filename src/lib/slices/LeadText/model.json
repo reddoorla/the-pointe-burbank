@@ -1,0 +1,40 @@
+{
+  "id": "lead_text",
+  "type": "SharedSlice",
+  "name": "LeadText",
+  "description": "LeadText",
+  "variations": [
+    {
+      "id": "default",
+      "name": "Default",
+      "docURL": "...",
+      "version": "initial",
+      "description": "An eyebrow label above a lead paragraph",
+      "imageUrl": "",
+      "primary": {
+        "eyebrow": {
+          "type": "Text",
+          "config": {
+            "label": "eyebrow",
+            "placeholder": "e.g. The Challenge"
+          }
+        },
+        "body": {
+          "type": "StructuredText",
+          "config": {
+            "label": "body",
+            "allowTargetBlank": true,
+            "multi": "paragraph,strong,em,hyperlink"
+          }
+        },
+        "band": {
+          "type": "Number",
+          "config": {
+            "label": "band (optional — wraps in the Blux SectionBand when set)"
+          }
+        }
+      },
+      "items": {}
+    }
+  ]
+}

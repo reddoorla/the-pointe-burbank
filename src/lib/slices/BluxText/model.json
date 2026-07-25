@@ -1,0 +1,68 @@
+{
+  "id": "blux_text",
+  "type": "SharedSlice",
+  "name": "BluxText",
+  "description": "Blux catalog: a text leaf — title/subtitle/body/subbody with optional buttons.",
+  "variations": [
+    {
+      "id": "default",
+      "name": "Default",
+      "docURL": "...",
+      "version": "initial",
+      "description": "Text",
+      "imageUrl": "",
+      "primary": {
+        "title": {
+          "type": "StructuredText",
+          "config": {
+            "label": "title",
+            "single": "heading1,heading2,heading3,heading4,heading5,heading6,paragraph"
+          }
+        },
+        "subtitle": {
+          "type": "StructuredText",
+          "config": {
+            "label": "subtitle",
+            "single": "heading1,heading2,heading3,heading4,heading5,heading6,paragraph"
+          }
+        },
+        "body": {
+          "type": "StructuredText",
+          "config": {
+            "label": "body",
+            "multi": "paragraph,heading1,heading2,heading3,heading4,heading5,heading6,strong,em,hyperlink,list-item,o-list-item,image,embed"
+          }
+        },
+        "subbody": {
+          "type": "StructuredText",
+          "config": {
+            "label": "subbody",
+            "multi": "paragraph,heading1,heading2,heading3,heading4,heading5,heading6,strong,em,hyperlink,list-item,o-list-item,image,embed"
+          }
+        },
+        "buttons": {
+          "type": "Group",
+          "config": {
+            "label": "buttons",
+            "fields": {
+              "label": {
+                "type": "Text",
+                "config": {
+                  "label": "label"
+                }
+              },
+              "link": {
+                "type": "Link",
+                "config": {
+                  "label": "link",
+                  "allowTargetBlank": true
+                }
+              }
+            }
+          }
+        }
+      },
+      "items": {}
+    }
+  ]
+}

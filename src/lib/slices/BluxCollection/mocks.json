@@ -1,0 +1,103 @@
+[
+  {
+    "__TYPE__": "SharedSliceContent",
+    "variation": "default",
+    "primary": {
+      "heading": {
+        "__TYPE__": "StructuredTextContent",
+        "value": [
+          {
+            "type": "heading2",
+            "content": {
+              "text": "Satellites"
+            }
+          }
+        ]
+      },
+      "background_image": {
+        "origin": {
+          "id": "main",
+          "url": "https://images.unsplash.com/photo-1551739440-5dd934d3a94a",
+          "width": 3456,
+          "height": 4320
+        },
+        "url": "https://images.unsplash.com/photo-1551739440-5dd934d3a94a",
+        "width": 3456,
+        "height": 4320,
+        "edit": {
+          "zoom": 1,
+          "crop": {
+            "x": 0,
+            "y": 0
+          },
+          "background": "transparent"
+        },
+        "alt": "owner",
+        "credits": null,
+        "__TYPE__": "ImageContent",
+        "thumbnails": {}
+      },
+      "background_color": {
+        "__TYPE__": "FieldContent",
+        "value": "path",
+        "type": "Text"
+      },
+      "collection_type": {
+        "__TYPE__": "FieldContent",
+        "value": "nearest",
+        "type": "Text"
+      },
+      "feed_ids": {
+        "__TYPE__": "FieldContent",
+        "value": "nest",
+        "type": "Text"
+      },
+      "filter_tag": {
+        "__TYPE__": "FieldContent",
+        "value": "strip",
+        "type": "Text"
+      },
+      "sort": {
+        "__TYPE__": "FieldContent",
+        "value": "anyone",
+        "type": "Text"
+      },
+      "limit": {
+        "__TYPE__": "FieldContent",
+        "value": "48",
+        "type": "Number"
+      },
+      "media_ratio": {
+        "__TYPE__": "FieldContent",
+        "value": "win",
+        "type": "Text"
+      },
+      "layout": {
+        "__TYPE__": "FieldContent",
+        "value": "grid",
+        "type": "Select"
+      },
+      "scroll_load_more": {
+        "__TYPE__": "FieldContent",
+        "value": "on",
+        "type": "Select"
+      },
+      "widget_kind": {
+        "__TYPE__": "FieldContent",
+        "value": "among",
+        "type": "Text"
+      },
+      "widget_html": {
+        "__TYPE__": "FieldContent",
+        "value": "local",
+        "type": "Text"
+      }
+    },
+    "items": [
+      {
+        "__TYPE__": "GroupItemContent",
+        "value": []
+      }
+    ]
+  }
+]

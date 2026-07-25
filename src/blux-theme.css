@@ -1,0 +1,11 @@
+/* Blux theme placeholder.
+ *
+ * REPLACE this file with your export's `blux emit` output — copy
+ * `blux-out/theme.css` over it. That file carries the site's `@theme` colour +
+ * text-role tokens and the `.txt-role-textN` utilities the slice components
+ * apply, so the converted site's type comes straight from the export.
+ *
+ * Empty until then: a fresh (unconverted) site renders the generic slice
+ * components on their own defaults, so the build works with this placeholder
+ * in place. See src/lib/blux/blux-presentation.json (the presentation
+ * manifest) for the companion per-band presentation data. */

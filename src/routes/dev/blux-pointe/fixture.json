@@ -1,0 +1,610 @@
+{
+  "documents": [
+    {
+      "type": "catalog_page",
+      "uid": "home",
+      "data": {
+        "title": [
+          {
+            "type": "heading1",
+            "text": "The Pointe",
+            "spans": [],
+            "direction": "ltr"
+          }
+        ],
+        "meta_title": "The Pointe",
+        "meta_image": {
+          "url": "https://d3syaxnfm3oj0e.cloudfront.net/ea3c0e4e-aa87-4d1b-adaa-cb250234ec3c/4dd6c119-e41e-43d8-afad-2cbf03068ff8.jpg",
+          "alt": "Pointe-Web-6.jpg",
+          "dimensions": {
+            "width": 1600,
+            "height": 1200
+          }
+        },
+        "slices": [
+          {
+            "slice_type": "blux_grid",
+            "variation": "default",
+            "items": [],
+            "primary": {
+              "background_image": {
+                "url": "https://d3syaxnfm3oj0e.cloudfront.net/ea3c0e4e-aa87-4d1b-adaa-cb250234ec3c/a37733d6-09cc-4c0c-be9f-e220770f2397.jpg",
+                "alt": "Pointe-Web-7.jpg",
+                "dimensions": {
+                  "width": 1600,
+                  "height": 1200
+                }
+              },
+              "content_padding": "40px 0",
+              "content_padding_mobile": "20px 0",
+              "max_content_width": "1280px",
+              "vertical_align": "middle",
+              "text_align": "center",
+              "cells": [
+                {
+                  "kind": "media",
+                  "media": {
+                    "url": "https://d3syaxnfm3oj0e.cloudfront.net/ea3c0e4e-aa87-4d1b-adaa-cb250234ec3c/b035b800-7ed3-479e-bb02-54a3eccfb27a.png",
+                    "alt": "Pointe-Reverse.png",
+                    "dimensions": {
+                      "width": 1600,
+                      "height": 1200
+                    }
+                  }
+                },
+                {
+                  "kind": "text",
+                  "body_html": "<div class=\"txt-role-text13\"><p>BURBANK</p></div>",
+                  "content_padding": "10px 0px 0px"
+                }
+              ]
+            }
+          },
+          {
+            "slice_type": "blux_grid",
+            "variation": "default",
+            "items": [],
+            "primary": {
+              "background_image": {
+                "url": "https://d3syaxnfm3oj0e.cloudfront.net/ea3c0e4e-aa87-4d1b-adaa-cb250234ec3c/a732d1e4-59be-42ba-b87f-5acea9b3c4b9.png",
+                "alt": "bg-lines-4.png",
+                "dimensions": {
+                  "width": 1600,
+                  "height": 1200
+                }
+              },
+              "content_padding": "120px 4% 120px 4%",
+              "content_padding_mobile": "80px 4% 80px 4%",
+              "max_content_width": "1280px",
+              "vertical_align": "middle",
+              "text_align": "center",
+              "columns": 2,
+              "cells": [
+                {
+                  "kind": "subgrid",
+                  "subgrid": [
+                    {
+                      "kind": "text",
+                      "title": [
+                        {
+                          "type": "heading3",
+                          "text": "The Pointe",
+                          "spans": [],
+                          "direction": "ltr"
+                        }
+                      ],
+                      "body_html": "<div class=\"txt-role-text11\"><h4>a monument <br>of excellence</h4></div>\n<div class=\"txt-role-text1\"><p>Nestled among the biggest names in entertainment, The Pointe  is a modern and elegant haven for the finest tenants in Burbank.</p></div>",
+                      "title_role": "text5"
+                    },
+                    {
+                      "kind": "media",
+                      "image_embed": "<img src=\"https://d3syaxnfm3oj0e.cloudfront.net/ea3c0e4e-aa87-4d1b-adaa-cb250234ec3c/ec0c6ec6-45b9-4ac8-84e5-0438c84629b9.png\" alt=\"lines-blue.png\">"
+                    },
+                    {
+                      "kind": "media",
+                      "image_embed": "<img src=\"https://d3syaxnfm3oj0e.cloudfront.net/ea3c0e4e-aa87-4d1b-adaa-cb250234ec3c/e15eb8af-95eb-4aac-b03e-ca1990de534e.png\" alt=\"pointe-placeholder-1.png\">"
+                    }
+                  ]
+                },
+                {
+                  "kind": "media",
+                  "media": {
+                    "url": "https://d3syaxnfm3oj0e.cloudfront.net/ea3c0e4e-aa87-4d1b-adaa-cb250234ec3c/0c78a3e9-984b-4697-a025-2fb1055da37e.png",
+                    "alt": "pointe-placeholder-2.png",
+                    "dimensions": {
+                      "width": 1600,
+                      "height": 1200
+                    }
+                  },
+                  "width": "40%"
+                }
+              ]
+            }
+          },
+          {
+            "slice_type": "blux_section",
+            "variation": "default",
+            "items": [],
+            "primary": {
+              "content_padding": "40px 0",
+              "content_padding_mobile": "20px 0",
+              "max_content_width": "1280px",
+              "vertical_align": "middle",
+              "text_align": "center",
+              "heading_role": "text5",
+              "heading": [
+                {
+                  "type": "heading2",
+                  "text": "the space",
+                  "spans": [],
+                  "direction": "ltr"
+                }
+              ],
+              "cells": [
+                {
+                  "kind": "text",
+                  "body_html": "<div class=\"txt-role-text12\"><p>distinguished\ndesign</p></div>"
+                }
+              ]
+            }
+          },
+          {
+            "slice_type": "blux_block",
+            "variation": "default",
+            "items": [],
+            "primary": {
+              "payload": "{\"tag\":\"div\",\"style\":{\"display\":\"grid\"},\"children\":[{\"tag\":\"div\",\"children\":[{\"tag\":\"figure\",\"image\":{\"url\":\"https://d3syaxnfm3oj0e.cloudfront.net/ea3c0e4e-aa87-4d1b-adaa-cb250234ec3c/511a1d2e-2ad5-4d93-857e-463f15bc5b82.png\",\"alt\":\"\"}},{\"tag\":\"div\",\"children\":[{\"tag\":\"figure\",\"image\":{\"url\":\"https://d3syaxnfm3oj0e.cloudfront.net/ea3c0e4e-aa87-4d1b-adaa-cb250234ec3c/43983b42-cd6d-42ba-b76d-9bce1931e581.png\",\"alt\":\"\"}}]}]},{\"tag\":\"div\",\"style\":{\"display\":\"grid\"},\"children\":[{\"tag\":\"div\",\"style\":{\"display\":\"grid\"},\"children\":[{\"tag\":\"figure\",\"image\":{\"url\":\"https://d3syaxnfm3oj0e.cloudfront.net/ea3c0e4e-aa87-4d1b-adaa-cb250234ec3c/449cb545-61ab-4faa-a1a2-5b802ae27982.png\",\"alt\":\"\"}},{\"tag\":\"div\",\"className\":\"txt-role-text5\",\"children\":[{\"tag\":\"h5\",\"html\":\"480,000 SF of<br>Class A office space<br>\"}]}]},{\"tag\":\"div\",\"style\":{\"display\":\"grid\"},\"children\":[{\"tag\":\"figure\",\"image\":{\"url\":\"https://d3syaxnfm3oj0e.cloudfront.net/ea3c0e4e-aa87-4d1b-adaa-cb250234ec3c/56ceaf76-a802-47e2-9bfa-d48fff84642d.png\",\"alt\":\"\"}},{\"tag\":\"div\",\"className\":\"txt-role-text5\",\"children\":[{\"tag\":\"h5\",\"html\":\"Premier 14-Story<br>Office Tower\"}]}]},{\"tag\":\"div\",\"style\":{\"display\":\"grid\"},\"children\":[{\"tag\":\"figure\",\"image\":{\"url\":\"https://d3syaxnfm3oj0e.cloudfront.net/ea3c0e4e-aa87-4d1b-adaa-cb250234ec3c/39999486-c94a-47f9-9054-699d21955ec5.png\",\"alt\":\"\"}},{\"tag\":\"div\",\"className\":\"txt-role-text5\",\"children\":[{\"tag\":\"h5\",\"html\":\"9.35 Acres in the<br>Media District\"}]}]},{\"tag\":\"div\",\"style\":{\"display\":\"grid\"},\"children\":[{\"tag\":\"figure\",\"image\":{\"url\":\"https://d3syaxnfm3oj0e.cloudfront.net/ea3c0e4e-aa87-4d1b-adaa-cb250234ec3c/1083733e-b211-4e23-8a62-2c6db839a02c.png\",\"alt\":\"\"}},{\"tag\":\"div\",\"className\":\"txt-role-text5\",\"children\":[{\"tag\":\"h5\",\"html\":\"LEED Gold Certified<br>Energy Star Certified\"}]}]}]}]}"
+            }
+          },
+          {
+            "slice_type": "blux_grid",
+            "variation": "default",
+            "items": [],
+            "primary": {
+              "background_image": {
+                "url": "https://d3syaxnfm3oj0e.cloudfront.net/ea3c0e4e-aa87-4d1b-adaa-cb250234ec3c/8fc9d04c-543a-4ca9-8cf6-18cda24eb711.png",
+                "alt": "pointe-placeholder-3.png",
+                "dimensions": {
+                  "width": 1600,
+                  "height": 1200
+                }
+              },
+              "background_color": "#ffffff",
+              "content_padding": "120px 4% 120px 4%",
+              "content_padding_mobile": "80px 4% 80px 4%",
+              "max_content_width": "1280px",
+              "vertical_align": "middle",
+              "text_align": "center",
+              "cells": []
+            }
+          },
+          {
+            "slice_type": "blux_grid",
+            "variation": "default",
+            "items": [],
+            "primary": {
+              "content_padding": "120px 4% 120px 4%",
+              "content_padding_mobile": "80px 4% 80px 4%",
+              "max_content_width": "1280px",
+              "vertical_align": "middle",
+              "text_align": "left",
+              "columns": 2,
+              "cells": [
+                {
+                  "kind": "text",
+                  "title": [
+                    {
+                      "type": "heading4",
+                      "text": "on-site luxuries",
+                      "spans": [],
+                      "direction": "ltr"
+                    }
+                  ],
+                  "body_html": "<div class=\"txt-role-text11\"><h4>premium <br>amenities</h4></div>\n<div class=\"txt-role-text1\"><p>A campus built for the modern worker, The Pointe offers amenities that enrich the every day.</p></div>",
+                  "media": {
+                    "url": "https://d3syaxnfm3oj0e.cloudfront.net/ea3c0e4e-aa87-4d1b-adaa-cb250234ec3c/ec0c6ec6-45b9-4ac8-84e5-0438c84629b9.png",
+                    "alt": "lines-blue.png",
+                    "dimensions": {
+                      "width": 1600,
+                      "height": 1200
+                    }
+                  },
+                  "width": "60%",
+                  "title_role": "text5"
+                }
+              ]
+            }
+          },
+          {
+            "slice_type": "blux_grid",
+            "variation": "default",
+            "items": [],
+            "primary": {
+              "content_padding": "120px 4% 120px 4%",
+              "content_padding_mobile": "80px 4% 80px 4%",
+              "max_content_width": "1280px",
+              "columns": 1,
+              "cells": [
+                {
+                  "kind": "subgrid",
+                  "subgrid": [
+                    {
+                      "kind": "media",
+                      "image_embed": "<img src=\"https://d3syaxnfm3oj0e.cloudfront.net/ea3c0e4e-aa87-4d1b-adaa-cb250234ec3c/7c52c8df-a506-4a7a-9a1d-91aa11e5d7c6.png\" alt=\"FIT HC.png\">",
+                      "width": "70%",
+                      "cover": "on"
+                    },
+                    {
+                      "kind": "text",
+                      "body_html": "<div class=\"txt-role-text14\"><p>Renew and recover with exclusive access to a state-of-the-art <a href=\"https://www.tbpfit.com/\" class=\"links\">FIT Health Club</a> with full-service locker rooms in a spa-like atmosphere. <br></p></div>",
+                      "width": "30%"
+                    }
+                  ]
+                },
+                {
+                  "kind": "subgrid",
+                  "subgrid": [
+                    {
+                      "kind": "text",
+                      "body_html": "<div class=\"txt-role-text14\"><p>Enjoy exclusive access to on-site production and filming studios.</p></div>",
+                      "width": "30%"
+                    },
+                    {
+                      "kind": "media",
+                      "image_embed": "<img src=\"https://d3syaxnfm3oj0e.cloudfront.net/ea3c0e4e-aa87-4d1b-adaa-cb250234ec3c/2c05f47c-cfee-4383-8955-5dea66b4df15.png\" alt=\"pointe-placeholder-4.png\">",
+                      "width": "70%",
+                      "cover": "on"
+                    }
+                  ]
+                },
+                {
+                  "kind": "subgrid",
+                  "subgrid": [
+                    {
+                      "kind": "media",
+                      "image_embed": "<img src=\"https://d3syaxnfm3oj0e.cloudfront.net/ea3c0e4e-aa87-4d1b-adaa-cb250234ec3c/6fefaae2-82b2-4861-9efe-b491cc3d2af1.jpg\" alt=\"mrkt-cafe-035-cliffwilliam-_CWF1375.jpg\">",
+                      "width": "70%"
+                    },
+                    {
+                      "kind": "text",
+                      "body_html": "<div class=\"txt-role-text14\"><p>Head to the MRKT for a quick bite on-the-go, or dine in for a filling meal.</p></div>",
+                      "width": "30%"
+                    }
+                  ]
+                }
+              ]
+            }
+          },
+          {
+            "slice_type": "blux_section",
+            "variation": "default",
+            "items": [],
+            "primary": {
+              "background_image": {
+                "url": "https://d3syaxnfm3oj0e.cloudfront.net/ea3c0e4e-aa87-4d1b-adaa-cb250234ec3c/3852eddf-55e3-4f7d-b106-f58a5af214f6.png",
+                "alt": "bg-lines-2.png",
+                "dimensions": {
+                  "width": 1600,
+                  "height": 1200
+                }
+              },
+              "content_padding": "40px 0",
+              "content_padding_mobile": "20px 0",
+              "max_content_width": "1280px",
+              "vertical_align": "middle",
+              "text_align": "center",
+              "heading_role": "text5",
+              "heading": [
+                {
+                  "type": "heading2",
+                  "text": "the outdoors",
+                  "spans": [],
+                  "direction": "ltr"
+                }
+              ],
+              "cells": [
+                {
+                  "kind": "text",
+                  "body_html": "<div class=\"txt-role-text12\"><p>an impeccably\nlush haven</p></div>"
+                }
+              ]
+            }
+          },
+          {
+            "slice_type": "blux_carousel",
+            "variation": "default",
+            "items": [],
+            "primary": {
+              "max_content_width": "1280px",
+              "columns_visible": 1,
+              "cells": [
+                {
+                  "kind": "media",
+                  "title": [
+                    {
+                      "type": "heading4",
+                      "text": "a place to sit and breathe",
+                      "spans": [],
+                      "direction": "ltr"
+                    }
+                  ],
+                  "media": {
+                    "url": "https://d3syaxnfm3oj0e.cloudfront.net/ea3c0e4e-aa87-4d1b-adaa-cb250234ec3c/aefbd53c-205a-402a-ba88-6294a555b0aa.jpg",
+                    "alt": "Oe-Ueda__13A5181-2.jpg",
+                    "dimensions": {
+                      "width": 1600,
+                      "height": 1200
+                    }
+                  }
+                },
+                {
+                  "kind": "media",
+                  "title": [
+                    {
+                      "type": "heading4",
+                      "text": "a calm escape right outside your door",
+                      "spans": [],
+                      "direction": "ltr"
+                    }
+                  ],
+                  "media": {
+                    "url": "https://d3syaxnfm3oj0e.cloudfront.net/ea3c0e4e-aa87-4d1b-adaa-cb250234ec3c/cb6f38b7-4ca7-4590-aeb9-11287fc942e4.jpg",
+                    "alt": "© Oe-Ueda _13A5260-2.jpg",
+                    "dimensions": {
+                      "width": 1600,
+                      "height": 1200
+                    }
+                  }
+                },
+                {
+                  "kind": "media",
+                  "title": [
+                    {
+                      "type": "heading4",
+                      "text": "a building with a view",
+                      "spans": [],
+                      "direction": "ltr"
+                    }
+                  ],
+                  "media": {
+                    "url": "https://d3syaxnfm3oj0e.cloudfront.net/ea3c0e4e-aa87-4d1b-adaa-cb250234ec3c/88737f87-d643-4435-9eb7-839516e95b38.jpg",
+                    "alt": "© Oe-Ueda _13A5357-2.jpg",
+                    "dimensions": {
+                      "width": 1600,
+                      "height": 1200
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "slice_type": "blux_grid",
+            "variation": "default",
+            "items": [],
+            "primary": {
+              "background_image": {
+                "url": "https://d3syaxnfm3oj0e.cloudfront.net/ea3c0e4e-aa87-4d1b-adaa-cb250234ec3c/673cb1d4-af95-4e81-a5dd-5018d4af5e86.png",
+                "alt": "bg-lines-5.png",
+                "dimensions": {
+                  "width": 1600,
+                  "height": 1200
+                }
+              },
+              "content_padding": "120px 4% 120px 4%",
+              "content_padding_mobile": "80px 4% 80px 4%",
+              "max_content_width": "1280px",
+              "vertical_align": "middle",
+              "text_align": "left",
+              "columns": 2,
+              "cells": [
+                {
+                  "kind": "subgrid",
+                  "subgrid": [
+                    {
+                      "kind": "text",
+                      "title": [
+                        {
+                          "type": "heading4",
+                          "text": "a property within",
+                          "spans": [],
+                          "direction": "ltr"
+                        }
+                      ],
+                      "body_html": "<div class=\"txt-role-text1\"><p>A collection of 13 buildings offering premier office space among the biggest names in entertainment. Explore 3,100,000 SF of endless possibilities.</p></div>",
+                      "title_role": "text5"
+                    },
+                    {
+                      "kind": "media",
+                      "image_embed": "<img src=\"https://d3syaxnfm3oj0e.cloudfront.net/26c9ecb9-bc35-4562-8155-fadfee8df2b2/bf56be7d-863c-4f44-8247-6d92ea7762a9.png\" alt=\"40px_lines.png\">"
+                    },
+                    {
+                      "kind": "media",
+                      "image_embed": "<img src=\"https://d3syaxnfm3oj0e.cloudfront.net/26c9ecb9-bc35-4562-8155-fadfee8df2b2/b640649d-05cf-40c1-9edc-f3fc9d427c76.png\" alt=\"TBP-Logo-Outline.png\">"
+                    }
+                  ]
+                }
+              ]
+            }
+          },
+          {
+            "slice_type": "blux_block",
+            "variation": "default",
+            "items": [],
+            "primary": {
+              "payload": "{\"tag\":\"div\",\"children\":[{\"tag\":\"div\",\"children\":[{\"tag\":\"figure\",\"html\":\"<video controls playsinline src=\\\"https://dv4tl7yyk1zlp.cloudfront.net/ea3c0e4e-aa87-4d1b-adaa-cb250234ec3c/c023afe4-996f-4013-83ab-2634ea55355d.mp4\\\"></video>\"}]},{\"tag\":\"div\",\"style\":{\"display\":\"grid\"},\"children\":[{\"html\":\"<div id=\\\"page-block-10-item-1-item-0\\\" class=\\\"blocks0\\\"><div class=\\\"blockcontainer blocks0container\\\" style=\\\"padding: 0px;\\\"><div class=\\\"block-content\\\"></div></div></div>\"},{\"tag\":\"div\",\"children\":[{\"tag\":\"div\",\"className\":\"txt-role-text5\",\"children\":[{\"tag\":\"h4\",\"html\":\"presented by\"}]},{\"tag\":\"div\",\"style\":{\"display\":\"grid\"},\"children\":[{\"tag\":\"div\",\"children\":[{\"tag\":\"figure\",\"image\":{\"url\":\"https://d3syaxnfm3oj0e.cloudfront.net/26c9ecb9-bc35-4562-8155-fadfee8df2b2/cfc17af2-ff1f-40a4-a5bf-4123cd5f355c.png\",\"alt\":\"\"}}]},{\"tag\":\"div\",\"children\":[{\"tag\":\"figure\",\"image\":{\"url\":\"https://d3syaxnfm3oj0e.cloudfront.net/26c9ecb9-bc35-4562-8155-fadfee8df2b2/966adedb-0315-4afd-b070-8c89f8792267.png\",\"alt\":\"\"}}]}]}]}]}]}"
+            }
+          },
+          {
+            "slice_type": "blux_grid",
+            "variation": "default",
+            "items": [],
+            "primary": {
+              "background_image": {
+                "url": "https://d3syaxnfm3oj0e.cloudfront.net/ea3c0e4e-aa87-4d1b-adaa-cb250234ec3c/6dd54dfc-b4d1-4ef2-8165-a1f2421668bf.png",
+                "alt": "bg-lines-3.png",
+                "dimensions": {
+                  "width": 1600,
+                  "height": 1200
+                }
+              },
+              "content_padding": "120px 4% 120px 4%",
+              "content_padding_mobile": "80px 4% 80px 4%",
+              "max_content_width": "1280px",
+              "vertical_align": "middle",
+              "text_align": "left",
+              "columns": 2,
+              "cells": [
+                {
+                  "kind": "text",
+                  "title": [
+                    {
+                      "type": "heading4",
+                      "text": "local amenities",
+                      "spans": [],
+                      "direction": "ltr"
+                    }
+                  ],
+                  "body_html": "<div class=\"txt-role-text11\"><h4>a city full of possibilities</h4></div>\n<div class=\"txt-role-text1\"><p>Burbank offers a wide range of opportunities from its network of world-renowned studios, accessible airport, and recreational activities.</p></div>",
+                  "media": {
+                    "url": "https://d3syaxnfm3oj0e.cloudfront.net/ea3c0e4e-aa87-4d1b-adaa-cb250234ec3c/ec0c6ec6-45b9-4ac8-84e5-0438c84629b9.png",
+                    "alt": "lines-blue.png",
+                    "dimensions": {
+                      "width": 1600,
+                      "height": 1200
+                    }
+                  },
+                  "width": "60%",
+                  "title_role": "text5",
+                  "embed_html": "<a class=\"ib middle buttons2\" href=\"https://dv4tl7yyk1zlp.cloudfront.net/ea3c0e4e-aa87-4d1b-adaa-cb250234ec3c/1b5b96c1-16fb-4d8b-8cb0-f71938af22c0.pdf\">Burbank Incentives</a>"
+                }
+              ]
+            }
+          },
+          {
+            "slice_type": "blux_grid",
+            "variation": "default",
+            "items": [],
+            "primary": {
+              "content_padding": "120px 4% 120px 4%",
+              "content_padding_mobile": "80px 4% 80px 4%",
+              "max_content_width": "1280px",
+              "columns": 1,
+              "cells": [
+                {
+                  "kind": "subgrid",
+                  "subgrid": [
+                    {
+                      "kind": "text",
+                      "body_html": "<div class=\"txt-role-text14\"><p>Be part of the community among the biggest names in entertainment. <br></p></div>",
+                      "width": "30%"
+                    },
+                    {
+                      "kind": "media",
+                      "image_embed": "<img src=\"https://d3syaxnfm3oj0e.cloudfront.net/ea3c0e4e-aa87-4d1b-adaa-cb250234ec3c/126045fb-2364-4d99-9d6f-5502674ecdc9.jpg\" alt=\"TBP_Studio_img_Getty_200417679-web.jpg\">",
+                      "width": "70%",
+                      "cover": "on"
+                    }
+                  ]
+                },
+                {
+                  "kind": "subgrid",
+                  "subgrid": [
+                    {
+                      "kind": "media",
+                      "image_embed": "<img src=\"https://d3syaxnfm3oj0e.cloudfront.net/ea3c0e4e-aa87-4d1b-adaa-cb250234ec3c/da8e7a33-0929-4618-9044-4b2ac23041c0.jpg\" alt=\"eva-darron-oCdVtGFeDC0-unsplash.jpg\">",
+                      "width": "70%",
+                      "cover": "on"
+                    },
+                    {
+                      "kind": "text",
+                      "body_html": "<div class=\"txt-role-text14\"><p>Fly, surf, ski, all within an hour away. Plus every business partner is around the corner.<br></p></div>",
+                      "width": "30%"
+                    }
+                  ]
+                },
+                {
+                  "kind": "subgrid",
+                  "subgrid": [
+                    {
+                      "kind": "text",
+                      "body_html": "<div class=\"txt-role-text14\"><p>Day or night, Burbank delights with vibrant energy and one-of-a-kind character.</p></div>",
+                      "width": "30%"
+                    },
+                    {
+                      "kind": "media",
+                      "image_embed": "<img src=\"https://d3syaxnfm3oj0e.cloudfront.net/ea3c0e4e-aa87-4d1b-adaa-cb250234ec3c/122c1f54-872a-40af-8437-a6a226ad968a.jpg\" alt=\"TBP_Burbank_women_coffee-web.jpg\">",
+                      "width": "70%",
+                      "cover": "on"
+                    }
+                  ]
+                }
+              ]
+            }
+          },
+          {
+            "slice_type": "blux_section",
+            "variation": "default",
+            "items": [],
+            "primary": {
+              "content_padding": "40px 0",
+              "content_padding_mobile": "20px 0",
+              "max_content_width": "1280px",
+              "vertical_align": "middle",
+              "text_align": "center",
+              "heading_role": "text5",
+              "heading": [
+                {
+                  "type": "heading2",
+                  "text": "the location",
+                  "spans": [],
+                  "direction": "ltr"
+                }
+              ],
+              "cells": [
+                {
+                  "kind": "text",
+                  "body_html": "<div class=\"txt-role-text12\"><p>everything\nwithin reach</p></div>"
+                }
+              ]
+            }
+          },
+          {
+            "slice_type": "blux_block",
+            "variation": "default",
+            "items": [],
+            "primary": {
+              "widget_kind": "map",
+              "widget_html": "<div class=\"blux-map\" data-map-config='{\"mountId\":\"burbank_map\",\"mid\":\"1KwcmcCf1kd-8jN7lLt36kQ9lFjLab0bz\",\"layers\":[{\"name\":\"Hotels\",\"lid\":\"8rJ0fKhImbs\",\"initiallyVisible\":false,\"preserveViewport\":true},{\"name\":\"Food_And_Drink\",\"lid\":\"dqcWdasb9-8\",\"initiallyVisible\":false,\"preserveViewport\":true},{\"name\":\"Retail\",\"lid\":\"58NHVxQwLlc\",\"initiallyVisible\":false,\"preserveViewport\":true},{\"name\":\"Services\",\"lid\":\"Sv_E02Q8vjc\",\"initiallyVisible\":false,\"preserveViewport\":true},{\"name\":\"Entertainment\",\"lid\":\"5Exqy6xPvW4\",\"initiallyVisible\":false,\"preserveViewport\":true},{\"name\":\"Office_Tenants\",\"lid\":\"Xf3l8pFzy4s\",\"initiallyVisible\":false,\"preserveViewport\":true},{\"name\":\"Studios\",\"lid\":\"avheVKZTvpo\",\"initiallyVisible\":false,\"preserveViewport\":true},{\"name\":\"The_Burbank_Portfolio\",\"lid\":\"lq--xeECBoM\",\"initiallyVisible\":true,\"preserveViewport\":false}],\"toggles\":[{\"label\":\"The Burbank Portfolio\",\"layers\":[\"The_Burbank_Portfolio\"],\"panelIndex\":0},{\"label\":\"Studio And Offices\",\"layers\":[\"Studios\",\"Office_Tenants\"],\"panelIndex\":1},{\"label\":\"Retail And Dining\",\"layers\":[\"Food_And_Drink\",\"Retail\",\"Entertainment\"],\"panelIndex\":2},{\"label\":\"Hotel And Services\",\"layers\":[\"Hotels\",\"Services\"],\"panelIndex\":3}],\"styles\":[{\"elementType\":\"geometry\",\"stylers\":[{\"color\":\"#f5f5f5\"},{\"weight\":1}]},{\"elementType\":\"geometry.fill\",\"stylers\":[{\"weight\":1.5}]},{\"elementType\":\"geometry.stroke\",\"stylers\":[{\"weight\":1}]},{\"elementType\":\"labels.icon\",\"stylers\":[{\"visibility\":\"off\"}]},{\"elementType\":\"labels.text.fill\",\"stylers\":[{\"color\":\"#616161\"},{\"weight\":1.5}]},{\"elementType\":\"labels.text.stroke\",\"stylers\":[{\"color\":\"#f5f5f5\"}]},{\"featureType\":\"administrative\",\"elementType\":\"geometry\",\"stylers\":[{\"visibility\":\"off\"}]},{\"featureType\":\"administrative.land_parcel\",\"elementType\":\"labels\",\"stylers\":[{\"color\":\"#9e9e9e\"},{\"visibility\":\"off\"},{\"weight\":1}]},{\"featureType\":\"administrative.land_parcel\",\"elementType\":\"labels.text.fill\",\"stylers\":[{\"color\":\"#bdbdbd\"},{\"visibility\":\"off\"}]},{\"featureType\":\"poi\",\"stylers\":[{\"visibility\":\"off\"}]},{\"featureType\":\"poi\",\"elementType\":\"geometry\",\"stylers\":[{\"color\":\"#eeeeee\"}]},{\"featureType\":\"poi\",\"elementType\":\"labels.text\",\"stylers\":[{\"visibility\":\"off\"}]},{\"featureType\":\"poi\",\"elementType\":\"labels.text.fill\",\"stylers\":[{\"color\":\"#757575\"}]},{\"featureType\":\"poi.park\",\"elementType\":\"geometry\",\"stylers\":[{\"color\":\"#e5e5e5\"}]},{\"featureType\":\"poi.park\",\"elementType\":\"labels.text.fill\",\"stylers\":[{\"color\":\"#9e9e9e\"}]},{\"featureType\":\"road\",\"elementType\":\"geometry\",\"stylers\":[{\"color\":\"#ffffff\"}]},{\"featureType\":\"road\",\"elementType\":\"labels.icon\",\"stylers\":[{\"visibility\":\"off\"}]},{\"featureType\":\"road.arterial\",\"elementType\":\"labels.text.fill\",\"stylers\":[{\"color\":\"#757575\"}]},{\"featureType\":\"road.highway\",\"elementType\":\"geometry\",\"stylers\":[{\"color\":\"#dadada\"}]},{\"featureType\":\"road.highway\",\"elementType\":\"labels.text.fill\",\"stylers\":[{\"color\":\"#616161\"}]},{\"featureType\":\"road.local\",\"elementType\":\"labels\",\"stylers\":[{\"visibility\":\"off\"}]},{\"featureType\":\"road.local\",\"elementType\":\"labels.text.fill\",\"stylers\":[{\"color\":\"#9e9e9e\"}]},{\"featureType\":\"transit\",\"stylers\":[{\"visibility\":\"off\"}]},{\"featureType\":\"transit.line\",\"elementType\":\"geometry\",\"stylers\":[{\"color\":\"#e5e5e5\"}]},{\"featureType\":\"transit.station\",\"elementType\":\"geometry\",\"stylers\":[{\"color\":\"#eeeeee\"}]},{\"featureType\":\"water\",\"elementType\":\"geometry\",\"stylers\":[{\"color\":\"#c9c9c9\"}]},{\"featureType\":\"water\",\"elementType\":\"labels.text.fill\",\"stylers\":[{\"color\":\"#9e9e9e\"}]}],\"center\":{\"lat\":-34.397,\"lng\":150.644},\"zoom\":8,\"height\":\"600px\",\"defaultToggle\":0}'><div id=\"custom-element0\" data-exec=\"custom_bdb7da85_5af5_4c58_8aeb_f7841279c1fe\"><div id=\"burbank_map\" style=\"height:600px\">map loading...</div>\n<div style=\"margin-top:40px;font-size:0\">\n    <span class=\"map_icon\"><span class=\"map_icon_text\">The Burbank Portfolio</span><span class=\"map_icon_plusm\"></span></span>\n    <span class=\"map_icon\"><span class=\"map_icon_text\">Studio And Offices</span><span class=\"map_icon_plusm\"></span></span>\n    <span class=\"map_icon\"><span class=\"map_icon_text\">Retail And Dining</span><span class=\"map_icon_plusm\"></span></span>\n    <span class=\"map_icon\"><span class=\"map_icon_text\">Hotel And Services</span><span class=\"map_icon_plusm\"></span></span>\n</div>\n\n\n    </div></div>",
+              "payload": "{\"tag\":\"div\",\"children\":[{\"tag\":\"div\",\"html\":\"\"},{\"tag\":\"div\",\"style\":{\"display\":\"grid\"},\"children\":[{\"tag\":\"div\",\"style\":{\"display\":\"grid\"},\"children\":[{\"tag\":\"div\",\"children\":[{\"tag\":\"div\",\"className\":\"txt-role-text5\",\"children\":[{\"tag\":\"h4\",\"html\":\"The Pointe\"}]},{\"tag\":\"div\",\"className\":\"txt-role-text8\",\"children\":[{\"tag\":\"div\",\"html\":\"2900 West Alameda Ave<br>Burbank, CA 91505\"}]},{\"html\":\"<a class=\\\"ib middle links\\\" href=\\\"http://www.thepointeburbank.com/\\\" target=\\\"_blank\\\">Visit Website</a>\"}]},{\"tag\":\"div\",\"children\":[{\"tag\":\"div\",\"className\":\"txt-role-text5\",\"children\":[{\"tag\":\"h4\",\"html\":\"The Tower\"}]},{\"tag\":\"div\",\"className\":\"txt-role-text8\",\"children\":[{\"tag\":\"div\",\"html\":\"3900 West Alameda Ave<br>Burbank, CA 91505\"}]},{\"html\":\"<a class=\\\"ib middle links\\\" href=\\\"http://www.thetowerburbank.com/\\\" target=\\\"_blank\\\">Visit Website</a>\"}]},{\"tag\":\"div\",\"children\":[{\"tag\":\"div\",\"className\":\"txt-role-text5\",\"children\":[{\"tag\":\"h4\",\"html\":\"The Pinnacle I\"}]},{\"tag\":\"div\",\"className\":\"txt-role-text8\",\"children\":[{\"tag\":\"div\",\"html\":\"3400 West Olive Ave<br>Burbank, CA 91505\"}]},{\"html\":\"<a class=\\\"ib middle links\\\" href=\\\"https://www.thepinnacleburbank.com/\\\" target=\\\"_blank\\\">Visit Website</a>\"}]},{\"tag\":\"div\",\"children\":[{\"tag\":\"div\",\"className\":\"txt-role-text5\",\"children\":[{\"tag\":\"h4\",\"html\":\"The Pinnacle II\"}]},{\"tag\":\"div\",\"className\":\"txt-role-text8\",\"children\":[{\"tag\":\"div\",\"html\":\"3300 West Olive Ave<br>Burbank, CA 91505\"}]},{\"html\":\"<a class=\\\"ib middle links\\\" href=\\\"https://www.thepinnacleburbank.com/\\\" target=\\\"_blank\\\">Visit Website</a>\"}]},{\"tag\":\"div\",\"children\":[{\"tag\":\"div\",\"className\":\"txt-role-text5\",\"children\":[{\"tag\":\"h4\",\"html\":\"3800 Alameda\"}]},{\"tag\":\"div\",\"className\":\"txt-role-text8\",\"children\":[{\"tag\":\"div\",\"html\":\"3800 Alameda Ave<br>Burbank, CA 91505\"}]},{\"html\":\"<a class=\\\"ib middle links\\\" href=\\\"https://www.theburbankportfolio.com/3800-alameda\\\" target=\\\"_blank\\\">Visit Website</a>\"}]},{\"tag\":\"div\",\"children\":[{\"tag\":\"div\",\"className\":\"txt-role-text5\",\"children\":[{\"tag\":\"h4\",\"html\":\"Media Studios\"}]},{\"tag\":\"div\",\"className\":\"txt-role-text8\",\"children\":[{\"tag\":\"div\",\"html\":\"3100 Thornton Ave<br>2255 &amp; 2233 Ontario Ave<br>3333 &amp; 3355 Empire Ave<br>Burbank, CA 91504\"}]},{\"html\":\"<a class=\\\"ib middle links\\\" href=\\\"https://www.mediastudiosburbank.com/\\\" target=\\\"_blank\\\">Visit Website</a>\"}]},{\"tag\":\"div\",\"children\":[{\"tag\":\"div\",\"className\":\"txt-role-text5\",\"children\":[{\"tag\":\"h4\",\"html\":\"Central Park\"}]},{\"tag\":\"div\",\"className\":\"txt-role-text8\",\"children\":[{\"tag\":\"div\",\"html\":\"3500 West Olive Ave<br>Burbank, CA 91505\"}]},{\"html\":\"<a class=\\\"ib middle links\\\" href=\\\"https://www.theburbankportfolio.com/central-park\\\" target=\\\"_blank\\\">Visit Website</a>\"}]}]},{\"tag\":\"div\",\"style\":{\"display\":\"grid\"},\"children\":[{\"tag\":\"figure\",\"image\":{\"url\":\"https://d3syaxnfm3oj0e.cloudfront.net/ea3c0e4e-aa87-4d1b-adaa-cb250234ec3c/052e9b6f-6abe-4478-8a20-380f73d119ff.png\",\"alt\":\"\"}},{\"tag\":\"figure\",\"image\":{\"url\":\"https://d3syaxnfm3oj0e.cloudfront.net/ea3c0e4e-aa87-4d1b-adaa-cb250234ec3c/f0e78916-7572-4cb2-a931-47b994991ef8.png\",\"alt\":\"\"}},{\"tag\":\"figure\",\"image\":{\"url\":\"https://d3syaxnfm3oj0e.cloudfront.net/ea3c0e4e-aa87-4d1b-adaa-cb250234ec3c/b4dd73b4-a59a-426b-8908-a4407632d190.png\",\"alt\":\"\"}},{\"tag\":\"figure\",\"image\":{\"url\":\"https://d3syaxnfm3oj0e.cloudfront.net/ea3c0e4e-aa87-4d1b-adaa-cb250234ec3c/050cf5e5-2d8b-4712-950e-ad6c353c3e5e.png\",\"alt\":\"\"}},{\"tag\":\"figure\",\"image\":{\"url\":\"https://d3syaxnfm3oj0e.cloudfront.net/ea3c0e4e-aa87-4d1b-adaa-cb250234ec3c/4ea50f1e-25e9-4d60-a67c-2f1aa9410c55.png\",\"alt\":\"\"}},{\"tag\":\"figure\",\"image\":{\"url\":\"https://d3syaxnfm3oj0e.cloudfront.net/ea3c0e4e-aa87-4d1b-adaa-cb250234ec3c/0cfa7062-d911-483c-94be-20e8e4e0f4bb.png\",\"alt\":\"\"}},{\"tag\":\"figure\",\"image\":{\"url\":\"https://d3syaxnfm3oj0e.cloudfront.net/ea3c0e4e-aa87-4d1b-adaa-cb250234ec3c/63b7996d-fe0a-4f00-abcc-c3fb521638f5.png\",\"alt\":\"\"}}]},{\"tag\":\"div\",\"style\":{\"display\":\"grid\"},\"children\":[{\"tag\":\"figure\",\"image\":{\"url\":\"https://d3syaxnfm3oj0e.cloudfront.net/ea3c0e4e-aa87-4d1b-adaa-cb250234ec3c/3b966d54-aa06-4d81-ac7a-00a18a31da6f.png\",\"alt\":\"\"}},{\"tag\":\"figure\",\"image\":{\"url\":\"https://d3syaxnfm3oj0e.cloudfront.net/ea3c0e4e-aa87-4d1b-adaa-cb250234ec3c/6e1b82f7-5bf9-48b1-b956-8d614a319176.png\",\"alt\":\"\"}},{\"tag\":\"figure\",\"image\":{\"url\":\"https://d3syaxnfm3oj0e.cloudfront.net/ea3c0e4e-aa87-4d1b-adaa-cb250234ec3c/1d601436-8017-4dd1-a548-29b66dd10eab.png\",\"alt\":\"\"}},{\"tag\":\"figure\",\"image\":{\"url\":\"https://d3syaxnfm3oj0e.cloudfront.net/ea3c0e4e-aa87-4d1b-adaa-cb250234ec3c/fa1b07a4-1c8b-497c-9241-5c013a6e278c.png\",\"alt\":\"\"}},{\"tag\":\"figure\",\"image\":{\"url\":\"https://d3syaxnfm3oj0e.cloudfront.net/ea3c0e4e-aa87-4d1b-adaa-cb250234ec3c/2116f17d-7cf0-4880-997d-bd3b5d9a08f1.png\",\"alt\":\"\"}},{\"tag\":\"figure\",\"image\":{\"url\":\"https://d3syaxnfm3oj0e.cloudfront.net/ea3c0e4e-aa87-4d1b-adaa-cb250234ec3c/fd4d69f3-bb9e-4754-bebc-c2897a1bc1c8.png\",\"alt\":\"\"}},{\"tag\":\"figure\",\"image\":{\"url\":\"https://d3syaxnfm3oj0e.cloudfront.net/ea3c0e4e-aa87-4d1b-adaa-cb250234ec3c/ae55dfb4-2234-4188-899f-3fe9ee92682b.png\",\"alt\":\"\"}},{\"tag\":\"figure\",\"image\":{\"url\":\"https://d3syaxnfm3oj0e.cloudfront.net/ea3c0e4e-aa87-4d1b-adaa-cb250234ec3c/ccdd3fcb-7361-4683-a5ff-5558b65746c0.png\",\"alt\":\"\"}}]},{\"tag\":\"div\",\"style\":{\"display\":\"grid\"},\"children\":[{\"tag\":\"figure\",\"image\":{\"url\":\"https://d3syaxnfm3oj0e.cloudfront.net/ea3c0e4e-aa87-4d1b-adaa-cb250234ec3c/80180ff4-c26c-4c3f-8cc5-3ae8df7d64cb.png\",\"alt\":\"\"}},{\"tag\":\"figure\",\"image\":{\"url\":\"https://d3syaxnfm3oj0e.cloudfront.net/ea3c0e4e-aa87-4d1b-adaa-cb250234ec3c/ea5a8ac9-4bd3-4934-a38c-cf0a9cce6517.png\",\"alt\":\"\"}},{\"tag\":\"figure\",\"image\":{\"url\":\"https://d3syaxnfm3oj0e.cloudfront.net/ea3c0e4e-aa87-4d1b-adaa-cb250234ec3c/998c3e5a-f177-4d0e-9e0e-d95f1b803976.png\",\"alt\":\"\"}},{\"tag\":\"figure\",\"image\":{\"url\":\"https://d3syaxnfm3oj0e.cloudfront.net/ea3c0e4e-aa87-4d1b-adaa-cb250234ec3c/865149e9-5e82-440f-93e0-6c5279d23e26.png\",\"alt\":\"\"}},{\"tag\":\"figure\",\"image\":{\"url\":\"https://d3syaxnfm3oj0e.cloudfront.net/ea3c0e4e-aa87-4d1b-adaa-cb250234ec3c/c9dffc4f-f371-4007-ba80-71233c827d79.png\",\"alt\":\"\"}}]}]}]}"
+            }
+          },
+          {
+            "slice_type": "blux_section",
+            "variation": "default",
+            "items": [],
+            "primary": {
+              "content_padding": "120px 4% 120px 4%",
+              "content_padding_mobile": "80px 4% 80px 4%",
+              "max_content_width": "1280px",
+              "vertical_align": "middle",
+              "text_align": "center",
+              "heading_role": "text11",
+              "heading": [
+                {
+                  "type": "heading2",
+                  "text": "Come Be A Part Of It.",
+                  "spans": [],
+                  "direction": "ltr"
+                }
+              ],
+              "cells": []
+            }
+          }
+        ]
+      }
+    }
+  ],
+  "collections": {},
+  "missingAssets": []
+}

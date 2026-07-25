@@ -1,0 +1,2 @@
+# Frozen build artifacts live here per site (<uid>.html/.style.css/.fonts.json).
+# The starter template ships this directory empty — a frozen site commits its own.

@@ -1,0 +1,37 @@
+{
+  "id": "blux_block",
+  "type": "SharedSlice",
+  "name": "BluxBlock",
+  "description": "Blux catalog fallback: an opaque serialized-JSON block tree for bands too deep/irregular for the catalog. Content-preserving, rendered recursively.",
+  "variations": [
+    {
+      "id": "default",
+      "name": "Default",
+      "docURL": "...",
+      "version": "initial",
+      "description": "Fallback",
+      "imageUrl": "",
+      "primary": {
+        "payload": {
+          "type": "Text",
+          "config": {
+            "label": "payload (serialized JSON tree)"
+          }
+        },
+        "widget_kind": {
+          "type": "Text",
+          "config": {
+            "label": "widget_kind"
+          }
+        },
+        "widget_html": {
+          "type": "Text",
+          "config": {
+            "label": "widget_html"
+          }
+        }
+      },
+      "items": {}
+    }
+  ]
+}
