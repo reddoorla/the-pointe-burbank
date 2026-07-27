@@ -1,0 +1,347 @@
+{
+  "mountId": "burbank_map",
+  "mid": "1KwcmcCf1kd-8jN7lLt36kQ9lFjLab0bz",
+  "layers": [
+    {
+      "name": "Hotels",
+      "lid": "8rJ0fKhImbs",
+      "initiallyVisible": false,
+      "preserveViewport": true
+    },
+    {
+      "name": "Food_And_Drink",
+      "lid": "dqcWdasb9-8",
+      "initiallyVisible": false,
+      "preserveViewport": true
+    },
+    {
+      "name": "Retail",
+      "lid": "58NHVxQwLlc",
+      "initiallyVisible": false,
+      "preserveViewport": true
+    },
+    {
+      "name": "Services",
+      "lid": "Sv_E02Q8vjc",
+      "initiallyVisible": false,
+      "preserveViewport": true
+    },
+    {
+      "name": "Entertainment",
+      "lid": "5Exqy6xPvW4",
+      "initiallyVisible": false,
+      "preserveViewport": true
+    },
+    {
+      "name": "Office_Tenants",
+      "lid": "Xf3l8pFzy4s",
+      "initiallyVisible": false,
+      "preserveViewport": true
+    },
+    {
+      "name": "Studios",
+      "lid": "avheVKZTvpo",
+      "initiallyVisible": false,
+      "preserveViewport": true
+    },
+    {
+      "name": "The_Burbank_Portfolio",
+      "lid": "lq--xeECBoM",
+      "initiallyVisible": true,
+      "preserveViewport": false
+    }
+  ],
+  "toggles": [
+    {
+      "label": "The Burbank Portfolio",
+      "layers": [
+        "The_Burbank_Portfolio"
+      ],
+      "panelIndex": 0
+    },
+    {
+      "label": "Studio And Offices",
+      "layers": [
+        "Studios",
+        "Office_Tenants"
+      ],
+      "panelIndex": 1
+    },
+    {
+      "label": "Retail And Dining",
+      "layers": [
+        "Food_And_Drink",
+        "Retail",
+        "Entertainment"
+      ],
+      "panelIndex": 2
+    },
+    {
+      "label": "Hotel And Services",
+      "layers": [
+        "Hotels",
+        "Services"
+      ],
+      "panelIndex": 3
+    }
+  ],
+  "styles": [
+    {
+      "elementType": "geometry",
+      "stylers": [
+        {
+          "color": "#f5f5f5"
+        },
+        {
+          "weight": 1
+        }
+      ]
+    },
+    {
+      "elementType": "geometry.fill",
+      "stylers": [
+        {
+          "weight": 1.5
+        }
+      ]
+    },
+    {
+      "elementType": "geometry.stroke",
+      "stylers": [
+        {
+          "weight": 1
+        }
+      ]
+    },
+    {
+      "elementType": "labels.icon",
+      "stylers": [
+        {
+          "visibility": "off"
+        }
+      ]
+    },
+    {
+      "elementType": "labels.text.fill",
+      "stylers": [
+        {
+          "color": "#616161"
+        },
+        {
+          "weight": 1.5
+        }
+      ]
+    },
+    {
+      "elementType": "labels.text.stroke",
+      "stylers": [
+        {
+          "color": "#f5f5f5"
+        }
+      ]
+    },
+    {
+      "featureType": "administrative",
+      "elementType": "geometry",
+      "stylers": [
+        {
+          "visibility": "off"
+        }
+      ]
+    },
+    {
+      "featureType": "administrative.land_parcel",
+      "elementType": "labels",
+      "stylers": [
+        {
+          "color": "#9e9e9e"
+        },
+        {
+          "visibility": "off"
+        },
+        {
+          "weight": 1
+        }
+      ]
+    },
+    {
+      "featureType": "administrative.land_parcel",
+      "elementType": "labels.text.fill",
+      "stylers": [
+        {
+          "color": "#bdbdbd"
+        },
+        {
+          "visibility": "off"
+        }
+      ]
+    },
+    {
+      "featureType": "poi",
+      "stylers": [
+        {
+          "visibility": "off"
+        }
+      ]
+    },
+    {
+      "featureType": "poi",
+      "elementType": "geometry",
+      "stylers": [
+        {
+          "color": "#eeeeee"
+        }
+      ]
+    },
+    {
+      "featureType": "poi",
+      "elementType": "labels.text",
+      "stylers": [
+        {
+          "visibility": "off"
+        }
+      ]
+    },
+    {
+      "featureType": "poi",
+      "elementType": "labels.text.fill",
+      "stylers": [
+        {
+          "color": "#757575"
+        }
+      ]
+    },
+    {
+      "featureType": "poi.park",
+      "elementType": "geometry",
+      "stylers": [
+        {
+          "color": "#e5e5e5"
+        }
+      ]
+    },
+    {
+      "featureType": "poi.park",
+      "elementType": "labels.text.fill",
+      "stylers": [
+        {
+          "color": "#9e9e9e"
+        }
+      ]
+    },
+    {
+      "featureType": "road",
+      "elementType": "geometry",
+      "stylers": [
+        {
+          "color": "#ffffff"
+        }
+      ]
+    },
+    {
+      "featureType": "road",
+      "elementType": "labels.icon",
+      "stylers": [
+        {
+          "visibility": "off"
+        }
+      ]
+    },
+    {
+      "featureType": "road.arterial",
+      "elementType": "labels.text.fill",
+      "stylers": [
+        {
+          "color": "#757575"
+        }
+      ]
+    },
+    {
+      "featureType": "road.highway",
+      "elementType": "geometry",
+      "stylers": [
+        {
+          "color": "#dadada"
+        }
+      ]
+    },
+    {
+      "featureType": "road.highway",
+      "elementType": "labels.text.fill",
+      "stylers": [
+        {
+          "color": "#616161"
+        }
+      ]
+    },
+    {
+      "featureType": "road.local",
+      "elementType": "labels",
+      "stylers": [
+        {
+          "visibility": "off"
+        }
+      ]
+    },
+    {
+      "featureType": "road.local",
+      "elementType": "labels.text.fill",
+      "stylers": [
+        {
+          "color": "#9e9e9e"
+        }
+      ]
+    },
+    {
+      "featureType": "transit",
+      "stylers": [
+        {
+          "visibility": "off"
+        }
+      ]
+    },
+    {
+      "featureType": "transit.line",
+      "elementType": "geometry",
+      "stylers": [
+        {
+          "color": "#e5e5e5"
+        }
+      ]
+    },
+    {
+      "featureType": "transit.station",
+      "elementType": "geometry",
+      "stylers": [
+        {
+          "color": "#eeeeee"
+        }
+      ]
+    },
+    {
+      "featureType": "water",
+      "elementType": "geometry",
+      "stylers": [
+        {
+          "color": "#c9c9c9"
+        }
+      ]
+    },
+    {
+      "featureType": "water",
+      "elementType": "labels.text.fill",
+      "stylers": [
+        {
+          "color": "#9e9e9e"
+        }
+      ]
+    }
+  ],
+  "center": {
+    "lat": -34.397,
+    "lng": 150.644
+  },
+  "zoom": 8,
+  "height": "600px",
+  "defaultToggle": 0
+}

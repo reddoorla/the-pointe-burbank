@@ -6,11 +6,21 @@
     FROZEN_ENHANCE_CSS,
   } from "$lib/blux-frozen/enhance";
   import {
+    hydrateFrozenMap,
+    type FrozenMapConfig,
+  } from "$lib/blux-frozen/frozen-map";
+  import {
     substitute,
     styleTag,
     type SlotValue,
   } from "$lib/blux-frozen/substitute";
-  import { loadMapsApi } from "$lib/blux/maps-loader";
+
+  // Committed map artifacts (`frozen/<uid>.map.json`): one per hydratable map,
+  // keyed by its mountId — only configs whose mount exists in this page's DOM
+  // take effect, so the glob needs no uid plumbing.
+  const frozenMapConfigs = import.meta.glob("./frozen/*.map.json", {
+    eager: true,
+  }) as Record<string, { default: FrozenMapConfig }>;
 
   // A frozen page = the Blux export's own settled markup (byte-faithful layout,
   // 316 inline styles) with editable leaves tokenized. We inject the extracted
@@ -126,30 +136,12 @@
       cleanups.push(() => io.disconnect());
     }
 
-    const mapEl = document.querySelector<HTMLElement>(
-      ".blux-frozen-map[data-kml-mid]",
-    );
+    // Maps: hydrate each committed map artifact whose mount is in this page's
+    // DOM — the full Blux location-map widget (lid-scoped KML layers + the
+    // frozen legend chips), not a bare KML dump. See frozen-map.ts.
     const mapsKey = import.meta.env.VITE_GOOGLE_MAPS_KEY as string | undefined;
-    if (mapEl && mapsKey) {
-      loadMapsApi(mapsKey)
-        .then((maps) => {
-          const map = new maps.Map(mapEl, {
-            // Fallback viewport (Burbank); the KmlLayer re-fits to its bounds.
-            center: { lat: 34.1808, lng: -118.309 },
-            zoom: 14,
-            mapTypeControl: false,
-            streetViewControl: false,
-            fullscreenControl: false,
-          });
-          new maps.KmlLayer({
-            url: `https://www.google.com/maps/d/kml?mid=${encodeURIComponent(mapEl.dataset.kmlMid ?? "")}`,
-            map,
-            preserveViewport: false,
-          });
-        })
-        .catch(() => {
-          // Placeholder stays — a failed Maps load must never break the page.
-        });
+    for (const mod of Object.values(frozenMapConfigs)) {
+      cleanups.push(hydrateFrozenMap(mod.default, mapsKey));
     }
 
     return () => {
