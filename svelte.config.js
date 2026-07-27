@@ -86,7 +86,19 @@ const config = {
           "https://player.vimeo.com",
           // Cloudflare Turnstile contact-form widget (enable via PUBLIC_TURNSTILE_SITE_KEY).
           "https://challenges.cloudflare.com",
+          // Google Maps JS API — frozen-page map hydration (VITE_GOOGLE_MAPS_KEY).
+          // Hosts + blob: per Google's documented Maps-JS CSP requirements.
+          "blob:",
+          "https://*.googleapis.com",
+          "https://*.gstatic.com",
+          "https://*.google.com",
+          "https://*.ggpht.com",
+          "https://*.googleusercontent.com",
         ],
+        // Modern Maps JS spawns blob: workers; without this directive the
+        // worker-src→script-src→default-src fallback lands on 'self' and
+        // blocks them.
+        "worker-src": ["self", "blob:"],
         // Google Fonts stylesheet host — frozen Blux sites load their type from
         // fonts.googleapis.com (paired with fonts.gstatic.com under font-src).
         "style-src": ["self", "unsafe-inline", "https://fonts.googleapis.com"],
@@ -95,6 +107,13 @@ const config = {
           "data:",
           "https://images.prismic.io",
           "https://*.prismic.io",
+          // Google Maps tiles, markers, and My-Maps KML pin sprites (pins are
+          // served from mt.google.com / maps.google.com, not maps.gstatic).
+          "https://*.googleapis.com",
+          "https://*.gstatic.com",
+          "https://*.google.com",
+          "https://*.ggpht.com",
+          "https://*.googleusercontent.com",
         ],
         // Prismic hosts non-image media (e.g. migrated .mp4 assets) on
         // <repo>.cdn.prismic.io — first-party content, same origin family as
@@ -105,11 +124,19 @@ const config = {
           "https://player.vimeo.com",
           // Cloudflare Turnstile renders its challenge in an iframe from this host.
           "https://challenges.cloudflare.com",
+          // Google Maps JS may frame google.com surfaces (per its CSP doc).
+          "https://*.google.com",
         ],
         "connect-src": [
           "self",
           "https://*.prismic.io",
           "https://static.cdn.prismic.io",
+          // Google Maps JS API telemetry, tile and KML fetches.
+          "https://*.googleapis.com",
+          "https://*.google.com",
+          "https://*.gstatic.com",
+          "data:",
+          "blob:",
         ],
         "font-src": ["self", "data:", "https://fonts.gstatic.com"],
         "base-uri": ["self"],
