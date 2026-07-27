@@ -87,4 +87,11 @@ export const FROZEN_ENHANCE_CSS = [
   ".block-effects.rd-fx-run{opacity:1!important;transform:none!important;transition:opacity .65s cubic-bezier(.2,.55,.88,.95),transform .65s cubic-bezier(.2,.55,.88,.95)!important}",
   '[id^="page-block-"]{scroll-margin-top:100px}',
   "@media (prefers-reduced-motion:no-preference){html{scroll-behavior:smooth}}",
+  // Map legend plus/minus glyph: the Blux CSS centers the horizontal bar at
+  // 50% of the chip but hardcodes the vertical bar at top:10px (and the active
+  // collapse at 17px) — correct only for a 34px chip, so the cross sits
+  // off-center under our font metrics. Center both bars relatively; the
+  // original .25s transition still animates the plus→minus collapse.
+  ".map_icon_plusm:before{top:calc(50% - 7px);height:14px}",
+  '.map_icon[data-clicked="1"] .map_icon_plusm:before{top:50%;height:0}',
 ].join("");

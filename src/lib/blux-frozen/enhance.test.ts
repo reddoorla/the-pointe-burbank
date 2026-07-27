@@ -68,4 +68,13 @@ describe("enhanceFrozenHtml + css", () => {
     expect(FROZEN_ENHANCE_CSS).toContain("scroll-margin-top");
     expect(FROZEN_ENHANCE_CSS).toContain("prefers-reduced-motion");
   });
+
+  it("re-centers the map plus/minus glyph relatively (both states)", () => {
+    expect(FROZEN_ENHANCE_CSS).toContain(
+      ".map_icon_plusm:before{top:calc(50% - 7px)",
+    );
+    expect(FROZEN_ENHANCE_CSS).toContain(
+      '.map_icon[data-clicked="1"] .map_icon_plusm:before{top:50%;height:0}',
+    );
+  });
 });
