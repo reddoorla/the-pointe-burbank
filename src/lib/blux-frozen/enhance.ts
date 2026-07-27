@@ -8,10 +8,30 @@
  * scrolled to the band with id `page-block-N`. Without that JS, `#N` matches
  * nothing. Rewrite to the real ids so native anchor navigation works.
  * (Digit-only fragments — real named anchors like `#site-icon-left` untouched.)
+ *
+ * `overrides` maps a Blux hash index to a different target id — measured
+ * against the ORIGINAL site's runtime, which does not always resolve `#N` to
+ * `page-block-N` (the-pointe's Contact Us `#11` scrolls to the page bottom /
+ * footer, not to page-block-11).
  */
-export function rewriteHashlinks(html: string): string {
-  return html.replace(/href="\/#(\d+)"/g, 'href="#page-block-$1"');
+export function rewriteHashlinks(
+  html: string,
+  overrides: Record<string, string> = HASHLINK_OVERRIDES,
+): string {
+  return html.replace(
+    /href="\/#(\d+)"/g,
+    (_, n: string) => `href="#${overrides[n] ?? `page-block-${n}`}"`,
+  );
 }
+
+/**
+ * Site-verified hashlink targets (vs the live original, 2026-07-27): Contact
+ * Us (`/#11`) scrolls to the bottom contact strip/footer on the original —
+ * `#footer0` reproduces that landing (clamped to max scroll, same as native).
+ */
+export const HASHLINK_OVERRIDES: Record<string, string> = {
+  "11": "footer0",
+};
 
 /**
  * Decode one Cloudflare email-protection payload: first hex byte is the XOR
@@ -58,12 +78,13 @@ export function enhanceFrozenHtml(html: string): string {
  *   elements — FrozenPage's hydration adds `wait` only to elements below the
  *   viewport (above-fold content never flashes) and swaps to `run` on
  *   intersection. No-JS and reduced-motion users keep the force-visible page.
- * - `scroll-margin-top`: anchor targets clear the (~100px) fixed Blux nav.
+ * - `scroll-margin-top`: anchor targets clear the fixed Blux nav — 100px,
+ *   matching the original's measured landing gap exactly.
  * - `scroll-behavior`: smooth native anchor scrolling, motion-gated.
  */
 export const FROZEN_ENHANCE_CSS = [
   ".block-effects.rd-fx-wait{opacity:0!important;transform:translateY(18px)!important;transition:none!important}",
   ".block-effects.rd-fx-run{opacity:1!important;transform:none!important;transition:opacity .65s cubic-bezier(.2,.55,.88,.95),transform .65s cubic-bezier(.2,.55,.88,.95)!important}",
-  '[id^="page-block-"]{scroll-margin-top:110px}',
+  '[id^="page-block-"]{scroll-margin-top:100px}',
   "@media (prefers-reduced-motion:no-preference){html{scroll-behavior:smooth}}",
 ].join("");

@@ -62,6 +62,37 @@
   onMount(() => {
     const cleanups: (() => void)[] = [];
 
+    // Sticky nav: Blux's runtime flips the `data-type="sticky"` nav from its
+    // settled position:absolute to fixed once the page scrolls (measured on
+    // the original: absolute at top, fixed + same white background after
+    // scroll). The nav is out of flow either way, so the flip never shifts
+    // layout.
+    const stickyNav = document.querySelector<HTMLElement>(
+      'nav[data-type="sticky"]',
+    );
+    if (stickyNav) {
+      const pin = () => {
+        stickyNav.style.position = window.scrollY > 0 ? "fixed" : "absolute";
+      };
+      pin();
+      window.addEventListener("scroll", pin, { passive: true });
+      cleanups.push(() => window.removeEventListener("scroll", pin));
+    }
+
+    // Mobile menu: the hamburger is a pure-CSS checkbox hack, so without
+    // Blux's JS the overlay stays open after tapping an anchor. Close it on
+    // any nav-link click.
+    const menuToggle = document.querySelector<HTMLInputElement>(
+      'input[id$="-menuicon"]',
+    );
+    if (menuToggle) {
+      const closeMenu = (e: Event) => {
+        if ((e.target as HTMLElement).closest("a")) menuToggle.checked = false;
+      };
+      document.addEventListener("click", closeMenu);
+      cleanups.push(() => document.removeEventListener("click", closeMenu));
+    }
+
     const reduced =
       typeof matchMedia !== "undefined" &&
       matchMedia("(prefers-reduced-motion: reduce)").matches;

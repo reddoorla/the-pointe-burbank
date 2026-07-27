@@ -11,11 +11,16 @@ describe("rewriteHashlinks", () => {
   it("maps Blux digit hashlinks to their page-block ids", () => {
     const html =
       '<a class="navigation0ullia data-hashlink" href="/#1">A</a>' +
-      '<a class="navigation0ullia data-hashlink" href="/#11">B</a>';
+      '<a class="navigation0ullia data-hashlink" href="/#5">B</a>';
     const out = rewriteHashlinks(html);
     expect(out).toContain('href="#page-block-1"');
-    expect(out).toContain('href="#page-block-11"');
+    expect(out).toContain('href="#page-block-5"');
     expect(out).not.toContain('href="/#');
+  });
+
+  it("applies site-verified overrides — Contact Us (#11) targets the footer, matching the original runtime", () => {
+    const html = '<a class="navigation0ullia data-hashlink" href="/#11">C</a>';
+    expect(rewriteHashlinks(html)).toContain('href="#footer0"');
   });
 
   it("leaves named anchors, plain roots, and external urls alone", () => {
