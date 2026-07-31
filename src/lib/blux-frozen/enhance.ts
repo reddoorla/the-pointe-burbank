@@ -11,7 +11,6 @@ import {
   restyleCarouselCaptions,
   CAROUSEL_CAPTION_CSS,
 } from "./carousel-caption";
-import type { SlotValue } from "./substitute";
 
 // Render-time enhancements for frozen Blux markup. The freeze strips Blux's
 // runtime JS, which leaves two kinds of dead links in the settled DOM; both are
@@ -30,90 +29,43 @@ const availabilityData = assertAvailabilityData(
 export const AVAILABILITY_ANCHOR = availabilityData.anchorId;
 
 /**
- * Blux nav anchors are JS-driven: `<a class="… data-hashlink" href="/#N">`
- * scrolled to the band with id `page-block-N`. Without that JS, `#N` matches
- * nothing. Rewrite to the real ids so native anchor navigation works.
- * (Digit-only fragments — real named anchors like `#site-icon-left` untouched.)
+ * Retarget a nav anchor the design review repointed.
  *
- * `overrides` maps a Blux hash index to a different target id — measured
- * against the ORIGINAL site's runtime, which does not always resolve `#N` to
- * `page-block-N` (the-pointe's Contact Us `#11` scrolls to the page bottom /
- * footer, not to page-block-11).
+ * Blux nav anchors used to be JS-driven — `href="/#N"`, meaningless without the
+ * runtime — and this function resolved them to real ids. The freeze does that
+ * itself now (it watches the export's own runtime during settle and bakes the
+ * measured target), so the template arrives with working anchors and all that
+ * is left here is the review's own change of destination.
+ *
+ * Keyed from-id → to-id. Anything not listed is left alone, so a re-freeze that
+ * resolves an anchor differently shows up as a nav that goes somewhere
+ * unexpected rather than as markup this function silently rewrote.
  */
 export function rewriteHashlinks(
   html: string,
   overrides: Record<string, string> = HASHLINK_OVERRIDES,
 ): string {
-  return html.replace(
-    /href="\/#(\d+)"/g,
-    (_, n: string) => `href="#${overrides[n] ?? `page-block-${n}`}"`,
+  return html.replace(/href="#([A-Za-z0-9_-]+)"/g, (whole, id: string) =>
+    overrides[id] ? `href="#${overrides[id]}"` : whole,
   );
 }
 
 /**
- * Site-verified hashlink targets. `/#11` was the original's Contact Us link,
- * which scrolled to the bottom contact strip. The design review (2026-07-30)
- * repurposed that nav slot as "Availability", so it now targets the suite
- * availability panel instead — see `AVAILABILITY_ANCHOR` / `rewriteNavLabels`.
+ * Site-verified hashlink targets. The original's Contact Us nav item scrolled to
+ * the bottom contact strip — the freeze measures that and bakes `#footer0`. The
+ * design review (2026-07-30) repurposed that nav slot as "Availability", so it
+ * now targets the suite availability panel instead — see `AVAILABILITY_ANCHOR` /
+ * `rewriteNavLabels`.
+ *
+ * The artifact carries exactly one `#footer0` link — the nav item — so this
+ * retargets that and nothing else. `enhance.test.ts` asserts the count against
+ * the real artifact rather than trusting this note, since a re-freeze could
+ * introduce a second one (the footer's own Contact link, say) that would then
+ * be silently redirected too.
  */
 export const HASHLINK_OVERRIDES: Record<string, string> = {
-  "11": "availability",
+  footer0: "availability",
 };
-
-/**
- * Slots the export uses as LAYOUT, not content: a footer list item whose only
- * job is to hold a blank line, which the freeze captured as the value `" &nbsp;"`.
- *
- * Prismic Rich Text cannot hold a whitespace-only value. The migration wrote
- * `" &nbsp;"`, Prismic stored `""`, and the row collapsed from 32px to its 8px
- * of padding — closing the gap between "Lic. 00852254" and the next contact
- * block, and shortening the page by exactly 24px.
- *
- * Repaired on the VALUE rather than with CSS on the empty element, because
- * precision matters here: three OTHER items in the same list are legitimately
- * empty divs that take their height from padding (74/44/100px), so the obvious
- * `.footer0ullia:empty::before{content:"\00a0"}` would wrongly grow all three.
- * Refilling the one slot restores the one row.
- *
- * Only an EMPTY value is filled, so typing any real character into the slot in
- * Prismic takes over — the same self-healing shape as `NAV_LABEL_OVERRIDES`.
- * Deliberately not in `CMS_DIVERGENCES`: that manifest lists overrides an
- * editor can resolve in Prismic, and this one is not resolvable there.
- *
- * `enhance.test.ts` derives the true key list from the committed freeze
- * manifest, so a re-freeze that introduces another spacer fails the suite
- * instead of silently collapsing another row.
- *
- * TEMPORARY. reddoor-maintenance#475 fixes this upstream: the freeze no longer
- * tokenizes a whitespace-only leaf at all, so it stays literal in the template
- * and no CMS field can blank it. Once that lands AND this site is re-frozen,
- * `h.t11` disappears from the manifest, the derived-list test above fails, and
- * this whole constant plus `restoreSpacerSlots` should be deleted rather than
- * updated. (Re-freezing is its own exercise — the new template resolves nav
- * anchors to `#page-block-N`, which `dropNavLinks` keys on the raw `/#N` form.)
- */
-export const SPACER_SLOTS: readonly string[] = ["h.t11"];
-
-/**
- * Refill any spacer slot Prismic blanked. Returns `values` untouched when there
- * is nothing to repair, and never mutates the caller's map (it is a `$derived`
- * in `FrozenPage`).
- */
-export function restoreSpacerSlots(
-  values: Map<string, SlotValue>,
-  keys: readonly string[] = SPACER_SLOTS,
-): Map<string, SlotValue> {
-  let out = values;
-  for (const key of keys) {
-    if ((out.get(key)?.text ?? "") !== "") continue;
-    if (out === values) out = new Map(values);
-    // Written as an escape, not the literal character: an invisible U+00A0 in
-    // source is one careless reformat away from becoming a plain space, which
-    // collapses and puts the row back at 8px.
-    out.set(key, { text: "\u00A0" });
-  }
-  return out;
-}
 
 /**
  * Slot key for the video cover. Carries the freeze's reserved `x.` prefix: it
@@ -146,18 +98,21 @@ export interface CmsDivergence {
 export const CMS_DIVERGENCES: CmsDivergence[] = [
   {
     slot: "h.t1",
-    what: 'Nav "Vision" (/#1) — dropped, renders nothing',
-    resolve: "remove '1' from NAV_LINKS_DROPPED to bring the item back",
+    what: 'Nav "Vision" (#page-block-1) — dropped, renders nothing',
+    resolve:
+      "remove 'page-block-1' from NAV_LINKS_DROPPED to bring the item back",
   },
   {
     slot: "h.t2",
-    what: 'Nav "Amenities" (/#5) — dropped, renders nothing',
-    resolve: "remove '5' from NAV_LINKS_DROPPED to bring the item back",
+    what: 'Nav "Amenities" (#page-block-5) — dropped, renders nothing',
+    resolve:
+      "remove 'page-block-5' from NAV_LINKS_DROPPED to bring the item back",
   },
   {
     slot: "h.t3",
-    what: 'Nav "Burbank" (/#8) — dropped, renders nothing',
-    resolve: "remove '8' from NAV_LINKS_DROPPED to bring the item back",
+    what: 'Nav "Burbank" (#page-block-8) — dropped, renders nothing',
+    resolve:
+      "remove 'page-block-8' from NAV_LINKS_DROPPED to bring the item back",
   },
   {
     slot: "h.t4",
@@ -192,23 +147,34 @@ export function rewriteNavLabels(
 }
 
 /**
- * Blux hash indexes for the nav items the design review dropped — Vision (`1`),
- * Amenities (`5`) and Burbank (`8`), leaving Availability as the only item.
- * Keyed on the hash rather than the label because the labels are CMS content;
- * this runs BEFORE `rewriteHashlinks`, while the hrefs are still `/#N`.
+ * Anchor targets of the nav items the design review dropped — Vision, Amenities
+ * and Burbank — leaving Availability as the only item. Keyed on the target
+ * rather than the label because the labels are CMS content, and a label can be
+ * renamed in Prismic without this silently ceasing to match.
+ *
+ * These are the ids the freeze resolved from the export's own runtime. They were
+ * Blux hash indexes (`/#1`, `/#5`, `/#8`) until the freeze started baking real
+ * anchors; the ids happen to correspond, but this keys on what is actually in
+ * the markup. `enhance.test.ts` asserts all three exist in the artifact, so a
+ * re-freeze that resolves them differently fails rather than quietly restoring
+ * three nav items nobody wanted back.
  */
-export const NAV_LINKS_DROPPED = ["1", "5", "8"];
+export const NAV_LINKS_DROPPED = [
+  "page-block-1",
+  "page-block-5",
+  "page-block-8",
+];
 
 export function dropNavLinks(
   html: string,
-  hashes: string[] = NAV_LINKS_DROPPED,
+  targets: string[] = NAV_LINKS_DROPPED,
 ): string {
   let out = html;
-  for (const n of hashes) {
+  for (const id of targets) {
     out = out.replace(
       new RegExp(
         `<li class="navigation0ulli">\\s*` +
-          `<a class="navigation0ullia data-hashlink" href="/#${n}">` +
+          `<a class="navigation0ullia data-hashlink" href="#${id}">` +
           `[^<]*</a>\\s*</li>`,
         "g",
       ),
@@ -431,8 +397,13 @@ export function liftHeadingLevels(html: string): string {
 
 /**
  * All render-time markup work, applied in order after token substitution.
- * `dropNavLinks` MUST come first — it keys on the raw `/#N` hrefs that
- * `rewriteHashlinks` then rewrites away.
+ *
+ * `dropNavLinks` and `rewriteHashlinks` used to be order-coupled: both keyed on
+ * the raw `/#N` hrefs, so dropping had to happen before rewriting resolved them
+ * away. The freeze bakes real anchors now, and the two key on disjoint targets
+ * (`#page-block-{1,5,8}` vs `#footer0`), so that coupling is gone. The order
+ * that still matters is `liftHeadingLevels` LAST — it must see the headings the
+ * caption transform produces, not the ones it replaced.
  *
  * `values` is the page's Prismic slot map. It is optional so every caller that
  * only cares about markup repair (and the whole existing test suite) can keep

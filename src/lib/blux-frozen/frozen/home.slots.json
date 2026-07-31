@@ -1,11 +1,11 @@
 {
-  "site": "the-pointe",
+  "site": "home",
   "uid": "home",
   "title": "The Pointe - The Pointe",
   "metaTitle": "The Pointe",
   "metaImageUrl": "http://d3syaxnfm3oj0e.cloudfront.net/ea3c0e4e-aa87-4d1b-adaa-cb250234ec3c/w:1000/4dd6c119-e41e-43d8-afad-2cbf03068ff8.jpg",
   "fontLinks": [
-    "https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined&text=%EE%97%8B%EE%97%8C&lang=en",
+    "https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined&text=%EE%97%8C%EE%94%AF%EE%BF%B7%EE%94%B6%EE%A7%B9&lang=en",
     "https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Google+Sans:400,500,700|Google+Sans+Text:400,500,700&lang=en",
     "https://fonts.googleapis.com/css?family=Google+Sans+Text:400&text=%E2%86%90%E2%86%92%E2%86%91%E2%86%93&lang=en",
     "https://fonts.googleapis.com/css?family=Scope+One:regular%7CMontserrat:300,500,regular%7CMartel:200&display=swap"
@@ -14,367 +14,367 @@
     {
       "key": "h.i0",
       "kind": "image",
-      "url": "https://images.prismic.io/the-pointe-burbank/_3LVSBNd7JAdDZZh_9b074e72-e854-4387-9891-365394f14867.png?auto=format,compress",
+      "url": "https://d3syaxnfm3oj0e.cloudfront.net/ea3c0e4e-aa87-4d1b-adaa-cb250234ec3c/w:475/9b074e72-e854-4387-9891-365394f14867.png",
       "section": "h"
     },
     {
       "key": "h.i1",
       "kind": "image",
-      "url": "https://images.prismic.io/the-pointe-burbank/_3LVSBNd7JAdDZZh_9b074e72-e854-4387-9891-365394f14867.png?auto=format,compress",
+      "url": "https://d3syaxnfm3oj0e.cloudfront.net/ea3c0e4e-aa87-4d1b-adaa-cb250234ec3c/w:475/9b074e72-e854-4387-9891-365394f14867.png",
       "section": "h"
     },
     {
       "key": "h.i2",
       "kind": "image",
-      "url": "https://images.prismic.io/the-pointe-burbank/WRMRzixxDLnRXXc7_a37733d6-09cc-4c0c-be9f-e220770f2397.jpg?auto=format,compress",
+      "url": "https://d3syaxnfm3oj0e.cloudfront.net/ea3c0e4e-aa87-4d1b-adaa-cb250234ec3c/w:1920/a37733d6-09cc-4c0c-be9f-e220770f2397.jpg",
       "section": "h"
     },
     {
       "key": "h.i3",
       "kind": "image",
-      "url": "https://images.prismic.io/the-pointe-burbank/c001XfZ6xYJ2LU9o_b035b800-7ed3-479e-bb02-54a3eccfb27a.png?auto=format,compress",
+      "url": "https://d3syaxnfm3oj0e.cloudfront.net/ea3c0e4e-aa87-4d1b-adaa-cb250234ec3c/w:990/b035b800-7ed3-479e-bb02-54a3eccfb27a.png",
       "section": "h"
     },
     {
       "key": "s0.i0",
       "kind": "image",
-      "url": "https://images.prismic.io/the-pointe-burbank/Z-8weRh_8-ZILiC-_a732d1e4-59be-42ba-b87f-5acea9b3c4b9.png?auto=format,compress",
+      "url": "https://d3syaxnfm3oj0e.cloudfront.net/ea3c0e4e-aa87-4d1b-adaa-cb250234ec3c/w:5336/a732d1e4-59be-42ba-b87f-5acea9b3c4b9.png",
       "section": "s0"
     },
     {
       "key": "s0.i1",
       "kind": "image",
-      "url": "https://images.prismic.io/the-pointe-burbank/bfIAxBxdqe-lkguB_ec0c6ec6-45b9-4ac8-84e5-0438c84629b9.png?auto=format,compress",
+      "url": "https://d3syaxnfm3oj0e.cloudfront.net/ea3c0e4e-aa87-4d1b-adaa-cb250234ec3c/w:137/ec0c6ec6-45b9-4ac8-84e5-0438c84629b9.png",
       "section": "s0"
     },
     {
       "key": "s0.i2",
       "kind": "image",
-      "url": "https://images.prismic.io/the-pointe-burbank/psubnENEKZCiWuA-_e15eb8af-95eb-4aac-b03e-ca1990de534e.png?auto=format,compress",
+      "url": "https://d3syaxnfm3oj0e.cloudfront.net/ea3c0e4e-aa87-4d1b-adaa-cb250234ec3c/w:1334/e15eb8af-95eb-4aac-b03e-ca1990de534e.png",
       "section": "s0"
     },
     {
       "key": "s0.i3",
       "kind": "image",
-      "url": "https://images.prismic.io/the-pointe-burbank/xasHgU_FtLTKYb7R_0c78a3e9-984b-4697-a025-2fb1055da37e.png?auto=format,compress",
+      "url": "https://d3syaxnfm3oj0e.cloudfront.net/ea3c0e4e-aa87-4d1b-adaa-cb250234ec3c/w:779/0c78a3e9-984b-4697-a025-2fb1055da37e.png",
       "section": "s0"
     },
     {
       "key": "s2.i0",
       "kind": "image",
-      "url": "https://images.prismic.io/the-pointe-burbank/arWTiYytOvAXncUF_511a1d2e-2ad5-4d93-857e-463f15bc5b82.png?auto=format,compress",
+      "url": "https://d3syaxnfm3oj0e.cloudfront.net/ea3c0e4e-aa87-4d1b-adaa-cb250234ec3c/w:971/511a1d2e-2ad5-4d93-857e-463f15bc5b82.png",
       "section": "s2"
     },
     {
       "key": "s2.i1",
       "kind": "image",
-      "url": "https://images.prismic.io/the-pointe-burbank/BGlTZGR61j1CMurs_43983b42-cd6d-42ba-b76d-9bce1931e581.png?auto=format,compress",
+      "url": "https://d3syaxnfm3oj0e.cloudfront.net/ea3c0e4e-aa87-4d1b-adaa-cb250234ec3c/w:1645/43983b42-cd6d-42ba-b76d-9bce1931e581.png",
       "section": "s2"
     },
     {
       "key": "s2.i2",
       "kind": "image",
-      "url": "https://images.prismic.io/the-pointe-burbank/qkWKRqRMocaeyHAv_449cb545-61ab-4faa-a1a2-5b802ae27982.png?auto=format,compress",
+      "url": "https://d3syaxnfm3oj0e.cloudfront.net/ea3c0e4e-aa87-4d1b-adaa-cb250234ec3c/w:240/449cb545-61ab-4faa-a1a2-5b802ae27982.png",
       "section": "s2"
     },
     {
       "key": "s2.i3",
       "kind": "image",
-      "url": "https://images.prismic.io/the-pointe-burbank/3ujQ7rTR5_yNn4YS_56ceaf76-a802-47e2-9bfa-d48fff84642d.png?auto=format,compress",
+      "url": "https://d3syaxnfm3oj0e.cloudfront.net/ea3c0e4e-aa87-4d1b-adaa-cb250234ec3c/w:240/56ceaf76-a802-47e2-9bfa-d48fff84642d.png",
       "section": "s2"
     },
     {
       "key": "s2.i4",
       "kind": "image",
-      "url": "https://images.prismic.io/the-pointe-burbank/uKxmg0gIIjh3Wpna_39999486-c94a-47f9-9054-699d21955ec5.png?auto=format,compress",
+      "url": "https://d3syaxnfm3oj0e.cloudfront.net/ea3c0e4e-aa87-4d1b-adaa-cb250234ec3c/w:242/39999486-c94a-47f9-9054-699d21955ec5.png",
       "section": "s2"
     },
     {
       "key": "s2.i5",
       "kind": "image",
-      "url": "https://images.prismic.io/the-pointe-burbank/M1crLtBBDqW-mtmF_1083733e-b211-4e23-8a62-2c6db839a02c.png?auto=format,compress",
+      "url": "https://d3syaxnfm3oj0e.cloudfront.net/ea3c0e4e-aa87-4d1b-adaa-cb250234ec3c/w:123/1083733e-b211-4e23-8a62-2c6db839a02c.png",
       "section": "s2"
     },
     {
       "key": "h.i4",
       "kind": "image",
-      "url": "https://images.prismic.io/the-pointe-burbank/EIDWgeEuGiAAvhdP_8fc9d04c-543a-4ca9-8cf6-18cda24eb711.png?auto=format,compress",
+      "url": "https://d3syaxnfm3oj0e.cloudfront.net/ea3c0e4e-aa87-4d1b-adaa-cb250234ec3c/w:2566/8fc9d04c-543a-4ca9-8cf6-18cda24eb711.png",
       "section": "h"
     },
     {
       "key": "s3.i0",
       "kind": "image",
-      "url": "https://images.prismic.io/the-pointe-burbank/bfIAxBxdqe-lkguB_ec0c6ec6-45b9-4ac8-84e5-0438c84629b9.png?auto=format,compress",
+      "url": "https://d3syaxnfm3oj0e.cloudfront.net/ea3c0e4e-aa87-4d1b-adaa-cb250234ec3c/w:137/ec0c6ec6-45b9-4ac8-84e5-0438c84629b9.png",
       "section": "s3"
     },
     {
       "key": "s4.i0",
       "kind": "image",
-      "url": "https://images.prismic.io/the-pointe-burbank/68OhchsrKnjoY0Sk_7c52c8df-a506-4a7a-9a1d-91aa11e5d7c6.png?auto=format,compress",
+      "url": "https://d3syaxnfm3oj0e.cloudfront.net/ea3c0e4e-aa87-4d1b-adaa-cb250234ec3c/w:1334/7c52c8df-a506-4a7a-9a1d-91aa11e5d7c6.png",
       "section": "s4"
     },
     {
       "key": "s4.i1",
       "kind": "image",
-      "url": "https://images.prismic.io/the-pointe-burbank/VnvFyMdTZ7DDUEK1_2c05f47c-cfee-4383-8955-5dea66b4df15.png?auto=format,compress",
+      "url": "https://d3syaxnfm3oj0e.cloudfront.net/ea3c0e4e-aa87-4d1b-adaa-cb250234ec3c/w:2563/2c05f47c-cfee-4383-8955-5dea66b4df15.png",
       "section": "s4"
     },
     {
       "key": "s4.i2",
       "kind": "image",
-      "url": "https://images.prismic.io/the-pointe-burbank/cHWP0p5v9eEhqWy__6fefaae2-82b2-4861-9efe-b491cc3d2af1.jpg?auto=format,compress",
+      "url": "https://d3syaxnfm3oj0e.cloudfront.net/ea3c0e4e-aa87-4d1b-adaa-cb250234ec3c/w:3800/6fefaae2-82b2-4861-9efe-b491cc3d2af1.jpg",
       "section": "s4"
     },
     {
       "key": "s5.i0",
       "kind": "image",
-      "url": "https://images.prismic.io/the-pointe-burbank/Fqm1DM9eyzmd-wqL_3852eddf-55e3-4f7d-b106-f58a5af214f6.png?auto=format,compress",
+      "url": "https://d3syaxnfm3oj0e.cloudfront.net/ea3c0e4e-aa87-4d1b-adaa-cb250234ec3c/w:5339/3852eddf-55e3-4f7d-b106-f58a5af214f6.png",
       "section": "s5"
     },
     {
       "key": "s6.i0",
       "kind": "image",
-      "url": "https://images.prismic.io/the-pointe-burbank/7msEWtHjunGBwGKn_aefbd53c-205a-402a-ba88-6294a555b0aa.jpg?auto=format,compress",
+      "url": "https://d3syaxnfm3oj0e.cloudfront.net/ea3c0e4e-aa87-4d1b-adaa-cb250234ec3c/w:3600/aefbd53c-205a-402a-ba88-6294a555b0aa.jpg",
       "section": "s6"
     },
     {
       "key": "s6.i1",
       "kind": "image",
-      "url": "https://images.prismic.io/the-pointe-burbank/z5ImrnqIVVZhX4Jz_cb6f38b7-4ca7-4590-aeb9-11287fc942e4.jpg?auto=format,compress",
+      "url": "https://d3syaxnfm3oj0e.cloudfront.net/ea3c0e4e-aa87-4d1b-adaa-cb250234ec3c/w:3960/cb6f38b7-4ca7-4590-aeb9-11287fc942e4.jpg",
       "section": "s6"
     },
     {
       "key": "s6.i2",
       "kind": "image",
-      "url": "https://images.prismic.io/the-pointe-burbank/gqNjYbR6Jptylmmd_88737f87-d643-4435-9eb7-839516e95b38.jpg?auto=format,compress",
+      "url": "https://d3syaxnfm3oj0e.cloudfront.net/ea3c0e4e-aa87-4d1b-adaa-cb250234ec3c/w:3960/88737f87-d643-4435-9eb7-839516e95b38.jpg",
       "section": "s6"
     },
     {
       "key": "s7.i0",
       "kind": "image",
-      "url": "https://images.prismic.io/the-pointe-burbank/bUW0IIHoGY7Zty1r_673cb1d4-af95-4e81-a5dd-5018d4af5e86.png?auto=format,compress",
+      "url": "https://d3syaxnfm3oj0e.cloudfront.net/ea3c0e4e-aa87-4d1b-adaa-cb250234ec3c/w:5335/673cb1d4-af95-4e81-a5dd-5018d4af5e86.png",
       "section": "s7"
     },
     {
       "key": "s7.i1",
       "kind": "image",
-      "url": "https://images.prismic.io/the-pointe-burbank/JouF2kMRiCAhG39X_bf56be7d-863c-4f44-8247-6d92ea7762a9.png?auto=format,compress",
+      "url": "https://d3syaxnfm3oj0e.cloudfront.net/26c9ecb9-bc35-4562-8155-fadfee8df2b2/w:40/bf56be7d-863c-4f44-8247-6d92ea7762a9.png",
       "section": "s7"
     },
     {
       "key": "s7.i2",
       "kind": "image",
-      "url": "https://images.prismic.io/the-pointe-burbank/DwoPH0o-iUeSO4VQ_b640649d-05cf-40c1-9edc-f3fc9d427c76.png?auto=format,compress",
+      "url": "https://d3syaxnfm3oj0e.cloudfront.net/26c9ecb9-bc35-4562-8155-fadfee8df2b2/w:996/b640649d-05cf-40c1-9edc-f3fc9d427c76.png",
       "section": "s7"
     },
     {
       "key": "s8.i0",
       "kind": "image",
-      "url": "https://images.prismic.io/the-pointe-burbank/cYnqre2TXOWF7xXO_cfc17af2-ff1f-40a4-a5bf-4123cd5f355c.png?auto=format,compress",
+      "url": "https://d3syaxnfm3oj0e.cloudfront.net/26c9ecb9-bc35-4562-8155-fadfee8df2b2/w:223/cfc17af2-ff1f-40a4-a5bf-4123cd5f355c.png",
       "section": "s8"
     },
     {
       "key": "s8.i1",
       "kind": "image",
-      "url": "https://images.prismic.io/the-pointe-burbank/rQdqlYSLlFfTy53t_966adedb-0315-4afd-b070-8c89f8792267.png?auto=format,compress",
+      "url": "https://d3syaxnfm3oj0e.cloudfront.net/26c9ecb9-bc35-4562-8155-fadfee8df2b2/w:283/966adedb-0315-4afd-b070-8c89f8792267.png",
       "section": "s8"
     },
     {
       "key": "s9.i0",
       "kind": "image",
-      "url": "https://images.prismic.io/the-pointe-burbank/8TRy12xVLlQRJGiR_6dd54dfc-b4d1-4ef2-8165-a1f2421668bf.png?auto=format,compress",
+      "url": "https://d3syaxnfm3oj0e.cloudfront.net/ea3c0e4e-aa87-4d1b-adaa-cb250234ec3c/w:5341/6dd54dfc-b4d1-4ef2-8165-a1f2421668bf.png",
       "section": "s9"
     },
     {
       "key": "s9.i1",
       "kind": "image",
-      "url": "https://images.prismic.io/the-pointe-burbank/bfIAxBxdqe-lkguB_ec0c6ec6-45b9-4ac8-84e5-0438c84629b9.png?auto=format,compress",
+      "url": "https://d3syaxnfm3oj0e.cloudfront.net/ea3c0e4e-aa87-4d1b-adaa-cb250234ec3c/w:137/ec0c6ec6-45b9-4ac8-84e5-0438c84629b9.png",
       "section": "s9"
     },
     {
       "key": "s10.i0",
       "kind": "image",
-      "url": "https://images.prismic.io/the-pointe-burbank/q0gszJyb9YRFnMZ8_126045fb-2364-4d99-9d6f-5502674ecdc9.jpg?auto=format,compress",
+      "url": "https://d3syaxnfm3oj0e.cloudfront.net/ea3c0e4e-aa87-4d1b-adaa-cb250234ec3c/w:1078/126045fb-2364-4d99-9d6f-5502674ecdc9.jpg",
       "section": "s10"
     },
     {
       "key": "s10.i1",
       "kind": "image",
-      "url": "https://images.prismic.io/the-pointe-burbank/FHhFqR2GAIC1Ok13_da8e7a33-0929-4618-9044-4b2ac23041c0.jpg?auto=format,compress",
+      "url": "https://d3syaxnfm3oj0e.cloudfront.net/ea3c0e4e-aa87-4d1b-adaa-cb250234ec3c/w:5774/da8e7a33-0929-4618-9044-4b2ac23041c0.jpg",
       "section": "s10"
     },
     {
       "key": "s10.i2",
       "kind": "image",
-      "url": "https://images.prismic.io/the-pointe-burbank/57LnEjjdiEV9TO7g_122c1f54-872a-40af-8437-a6a226ad968a.jpg?auto=format,compress",
+      "url": "https://d3syaxnfm3oj0e.cloudfront.net/ea3c0e4e-aa87-4d1b-adaa-cb250234ec3c/w:1080/122c1f54-872a-40af-8437-a6a226ad968a.jpg",
       "section": "s10"
     },
     {
       "key": "s12.i0",
       "kind": "image",
-      "url": "https://images.prismic.io/the-pointe-burbank/pGVh44J15B87SOCZ_052e9b6f-6abe-4478-8a20-380f73d119ff.png?auto=format,compress",
+      "url": "https://d3syaxnfm3oj0e.cloudfront.net/ea3c0e4e-aa87-4d1b-adaa-cb250234ec3c/w:1701/052e9b6f-6abe-4478-8a20-380f73d119ff.png",
       "section": "s12"
     },
     {
       "key": "s12.i1",
       "kind": "image",
-      "url": "https://images.prismic.io/the-pointe-burbank/UvffRWLdppKP0Xjl_f0e78916-7572-4cb2-a931-47b994991ef8.png?auto=format,compress",
+      "url": "https://d3syaxnfm3oj0e.cloudfront.net/ea3c0e4e-aa87-4d1b-adaa-cb250234ec3c/w:1701/f0e78916-7572-4cb2-a931-47b994991ef8.png",
       "section": "s12"
     },
     {
       "key": "s12.i2",
       "kind": "image",
-      "url": "https://images.prismic.io/the-pointe-burbank/TfbzLqPx9xg4YzcQ_b4dd73b4-a59a-426b-8908-a4407632d190.png?auto=format,compress",
+      "url": "https://d3syaxnfm3oj0e.cloudfront.net/ea3c0e4e-aa87-4d1b-adaa-cb250234ec3c/w:851/b4dd73b4-a59a-426b-8908-a4407632d190.png",
       "section": "s12"
     },
     {
       "key": "s12.i3",
       "kind": "image",
-      "url": "https://images.prismic.io/the-pointe-burbank/nSIFRoJlfkGjzFHf_050cf5e5-2d8b-4712-950e-ad6c353c3e5e.png?auto=format,compress",
+      "url": "https://d3syaxnfm3oj0e.cloudfront.net/ea3c0e4e-aa87-4d1b-adaa-cb250234ec3c/w:1701/050cf5e5-2d8b-4712-950e-ad6c353c3e5e.png",
       "section": "s12"
     },
     {
       "key": "s12.i4",
       "kind": "image",
-      "url": "https://images.prismic.io/the-pointe-burbank/7dFcoWZgl2p4sjSL_4ea50f1e-25e9-4d60-a67c-2f1aa9410c55.png?auto=format,compress",
+      "url": "https://d3syaxnfm3oj0e.cloudfront.net/ea3c0e4e-aa87-4d1b-adaa-cb250234ec3c/w:852/4ea50f1e-25e9-4d60-a67c-2f1aa9410c55.png",
       "section": "s12"
     },
     {
       "key": "s12.i5",
       "kind": "image",
-      "url": "https://images.prismic.io/the-pointe-burbank/m5LNSv7GAmlOvwx1_0cfa7062-d911-483c-94be-20e8e4e0f4bb.png?auto=format,compress",
+      "url": "https://d3syaxnfm3oj0e.cloudfront.net/ea3c0e4e-aa87-4d1b-adaa-cb250234ec3c/w:1702/0cfa7062-d911-483c-94be-20e8e4e0f4bb.png",
       "section": "s12"
     },
     {
       "key": "s12.i6",
       "kind": "image",
-      "url": "https://images.prismic.io/the-pointe-burbank/XgiUxDgIZYEvPxtn_63b7996d-fe0a-4f00-abcc-c3fb521638f5.png?auto=format,compress",
+      "url": "https://d3syaxnfm3oj0e.cloudfront.net/ea3c0e4e-aa87-4d1b-adaa-cb250234ec3c/w:1702/63b7996d-fe0a-4f00-abcc-c3fb521638f5.png",
       "section": "s12"
     },
     {
       "key": "s12.i7",
       "kind": "image",
-      "url": "https://images.prismic.io/the-pointe-burbank/hICPeYoUB1sgPxPE_3b966d54-aa06-4d81-ac7a-00a18a31da6f.png?auto=format,compress",
+      "url": "https://d3syaxnfm3oj0e.cloudfront.net/ea3c0e4e-aa87-4d1b-adaa-cb250234ec3c/w:851/3b966d54-aa06-4d81-ac7a-00a18a31da6f.png",
       "section": "s12"
     },
     {
       "key": "s12.i8",
       "kind": "image",
-      "url": "https://images.prismic.io/the-pointe-burbank/tcsgXvxlrdwS9ASd_6e1b82f7-5bf9-48b1-b956-8d614a319176.png?auto=format,compress",
+      "url": "https://d3syaxnfm3oj0e.cloudfront.net/ea3c0e4e-aa87-4d1b-adaa-cb250234ec3c/w:1702/6e1b82f7-5bf9-48b1-b956-8d614a319176.png",
       "section": "s12"
     },
     {
       "key": "s12.i9",
       "kind": "image",
-      "url": "https://images.prismic.io/the-pointe-burbank/iC16-hnOikAaHB9h_1d601436-8017-4dd1-a548-29b66dd10eab.png?auto=format,compress",
+      "url": "https://d3syaxnfm3oj0e.cloudfront.net/ea3c0e4e-aa87-4d1b-adaa-cb250234ec3c/w:851/1d601436-8017-4dd1-a548-29b66dd10eab.png",
       "section": "s12"
     },
     {
       "key": "s12.i10",
       "kind": "image",
-      "url": "https://images.prismic.io/the-pointe-burbank/5aPwmJHhnw0ytZ9w_fa1b07a4-1c8b-497c-9241-5c013a6e278c.png?auto=format,compress",
+      "url": "https://d3syaxnfm3oj0e.cloudfront.net/ea3c0e4e-aa87-4d1b-adaa-cb250234ec3c/w:852/fa1b07a4-1c8b-497c-9241-5c013a6e278c.png",
       "section": "s12"
     },
     {
       "key": "s12.i11",
       "kind": "image",
-      "url": "https://images.prismic.io/the-pointe-burbank/kzMrTNj_2mfDFR1i_2116f17d-7cf0-4880-997d-bd3b5d9a08f1.png?auto=format,compress",
+      "url": "https://d3syaxnfm3oj0e.cloudfront.net/ea3c0e4e-aa87-4d1b-adaa-cb250234ec3c/w:851/2116f17d-7cf0-4880-997d-bd3b5d9a08f1.png",
       "section": "s12"
     },
     {
       "key": "s12.i12",
       "kind": "image",
-      "url": "https://images.prismic.io/the-pointe-burbank/Llr-YvkPqjHVTcf2_fd4d69f3-bb9e-4754-bebc-c2897a1bc1c8.png?auto=format,compress",
+      "url": "https://d3syaxnfm3oj0e.cloudfront.net/ea3c0e4e-aa87-4d1b-adaa-cb250234ec3c/w:852/fd4d69f3-bb9e-4754-bebc-c2897a1bc1c8.png",
       "section": "s12"
     },
     {
       "key": "s12.i13",
       "kind": "image",
-      "url": "https://images.prismic.io/the-pointe-burbank/S0eGi8yC4ZdjQYb4_ae55dfb4-2234-4188-899f-3fe9ee92682b.png?auto=format,compress",
+      "url": "https://d3syaxnfm3oj0e.cloudfront.net/ea3c0e4e-aa87-4d1b-adaa-cb250234ec3c/w:1701/ae55dfb4-2234-4188-899f-3fe9ee92682b.png",
       "section": "s12"
     },
     {
       "key": "s12.i14",
       "kind": "image",
-      "url": "https://images.prismic.io/the-pointe-burbank/niDoYvA6e15nsxqt_ccdd3fcb-7361-4683-a5ff-5558b65746c0.png?auto=format,compress",
+      "url": "https://d3syaxnfm3oj0e.cloudfront.net/ea3c0e4e-aa87-4d1b-adaa-cb250234ec3c/w:1702/ccdd3fcb-7361-4683-a5ff-5558b65746c0.png",
       "section": "s12"
     },
     {
       "key": "s12.i15",
       "kind": "image",
-      "url": "https://images.prismic.io/the-pointe-burbank/QJ_nx5ZnyKjy1xx2_80180ff4-c26c-4c3f-8cc5-3ae8df7d64cb.png?auto=format,compress",
+      "url": "https://d3syaxnfm3oj0e.cloudfront.net/ea3c0e4e-aa87-4d1b-adaa-cb250234ec3c/w:851/80180ff4-c26c-4c3f-8cc5-3ae8df7d64cb.png",
       "section": "s12"
     },
     {
       "key": "s12.i16",
       "kind": "image",
-      "url": "https://images.prismic.io/the-pointe-burbank/IPClrzvzdrFAoLGp_ea5a8ac9-4bd3-4934-a38c-cf0a9cce6517.png?auto=format,compress",
+      "url": "https://d3syaxnfm3oj0e.cloudfront.net/ea3c0e4e-aa87-4d1b-adaa-cb250234ec3c/w:1702/ea5a8ac9-4bd3-4934-a38c-cf0a9cce6517.png",
       "section": "s12"
     },
     {
       "key": "s12.i17",
       "kind": "image",
-      "url": "https://images.prismic.io/the-pointe-burbank/2cE_syperPqnve-K_998c3e5a-f177-4d0e-9e0e-d95f1b803976.png?auto=format,compress",
+      "url": "https://d3syaxnfm3oj0e.cloudfront.net/ea3c0e4e-aa87-4d1b-adaa-cb250234ec3c/w:851/998c3e5a-f177-4d0e-9e0e-d95f1b803976.png",
       "section": "s12"
     },
     {
       "key": "s12.i18",
       "kind": "image",
-      "url": "https://images.prismic.io/the-pointe-burbank/X-q7iNU55YbNM8g4_865149e9-5e82-440f-93e0-6c5279d23e26.png?auto=format,compress",
+      "url": "https://d3syaxnfm3oj0e.cloudfront.net/ea3c0e4e-aa87-4d1b-adaa-cb250234ec3c/w:1702/865149e9-5e82-440f-93e0-6c5279d23e26.png",
       "section": "s12"
     },
     {
       "key": "s12.i19",
       "kind": "image",
-      "url": "https://images.prismic.io/the-pointe-burbank/GzvoozfuoO7b-0oR_c9dffc4f-f371-4007-ba80-71233c827d79.png?auto=format,compress",
+      "url": "https://d3syaxnfm3oj0e.cloudfront.net/ea3c0e4e-aa87-4d1b-adaa-cb250234ec3c/w:851/c9dffc4f-f371-4007-ba80-71233c827d79.png",
       "section": "s12"
     },
     {
       "key": "h.i5",
       "kind": "image",
-      "url": "https://images.prismic.io/the-pointe-burbank/_3LVSBNd7JAdDZZh_9b074e72-e854-4387-9891-365394f14867.png?auto=format,compress",
+      "url": "https://d3syaxnfm3oj0e.cloudfront.net/ea3c0e4e-aa87-4d1b-adaa-cb250234ec3c/w:475/9b074e72-e854-4387-9891-365394f14867.png",
       "section": "h"
     },
     {
       "key": "h.i6",
       "kind": "image",
-      "url": "https://images.prismic.io/the-pointe-burbank/JouF2kMRiCAhG39X_bf56be7d-863c-4f44-8247-6d92ea7762a9.png?auto=format,compress",
+      "url": "https://d3syaxnfm3oj0e.cloudfront.net/26c9ecb9-bc35-4562-8155-fadfee8df2b2/w:40/bf56be7d-863c-4f44-8247-6d92ea7762a9.png",
       "section": "h"
     },
     {
       "key": "h.i7",
       "kind": "image",
-      "url": "https://images.prismic.io/the-pointe-burbank/117SZQpfx7ohE16F_f4d5a5fe-fd7a-49f2-a4d9-4d5eceb6c3b9.png?auto=format,compress",
+      "url": "https://d3syaxnfm3oj0e.cloudfront.net/26c9ecb9-bc35-4562-8155-fadfee8df2b2/w:1183/f4d5a5fe-fd7a-49f2-a4d9-4d5eceb6c3b9.png",
       "section": "h"
     },
     {
       "key": "h.i8",
       "kind": "image",
-      "url": "https://images.prismic.io/the-pointe-burbank/aaPSNGleIzWy_Gb__67c26ae4-d786-47a9-a44c-60867d11a0e0.png?auto=format,compress",
+      "url": "https://d3syaxnfm3oj0e.cloudfront.net/ea3c0e4e-aa87-4d1b-adaa-cb250234ec3c/w:96/from:jpg/67c26ae4-d786-47a9-a44c-60867d11a0e0.png",
       "section": "h"
     },
     {
       "key": "h.i9",
       "kind": "image",
-      "url": "https://images.prismic.io/the-pointe-burbank/aaPSNGleIzWy_Gb__67c26ae4-d786-47a9-a44c-60867d11a0e0.png?auto=format,compress",
+      "url": "https://d3syaxnfm3oj0e.cloudfront.net/ea3c0e4e-aa87-4d1b-adaa-cb250234ec3c/w:192/from:jpg/67c26ae4-d786-47a9-a44c-60867d11a0e0.png",
       "section": "h"
     },
     {
       "key": "h.i10",
       "kind": "image",
-      "url": "https://images.prismic.io/the-pointe-burbank/aaPSNGleIzWy_Gb__67c26ae4-d786-47a9-a44c-60867d11a0e0.png?auto=format,compress",
+      "url": "https://d3syaxnfm3oj0e.cloudfront.net/ea3c0e4e-aa87-4d1b-adaa-cb250234ec3c/w:192/from:jpg/67c26ae4-d786-47a9-a44c-60867d11a0e0.png",
       "section": "h"
     },
     {
       "key": "s8.i2",
       "kind": "image",
-      "url": "https://the-pointe-burbank.cdn.prismic.io/the-pointe-burbank/9dALogg8SJuRRAFc_c023afe4-996f-4013-83ab-2634ea55355d.mp4",
+      "url": "https://dv4tl7yyk1zlp.cloudfront.net/ea3c0e4e-aa87-4d1b-adaa-cb250234ec3c/c023afe4-996f-4013-83ab-2634ea55355d.mp4",
       "section": "s8"
     },
     {
       "key": "s9.i2",
       "kind": "image",
-      "url": "https://the-pointe-burbank.cdn.prismic.io/the-pointe-burbank/BWh5JO3cejcLboL9_1b5b96c1-16fb-4d8b-8cb0-f71938af22c0.pdf",
+      "url": "https://dv4tl7yyk1zlp.cloudfront.net/ea3c0e4e-aa87-4d1b-adaa-cb250234ec3c/1b5b96c1-16fb-4d8b-8cb0-f71938af22c0.pdf",
       "section": "s9"
     },
     {
@@ -914,38 +914,122 @@
     {
       "key": "h.t11",
       "kind": "text",
-      "text": " &nbsp;",
+      "text": "Doug Marlow",
       "section": "h"
     },
     {
       "key": "h.t12",
       "kind": "text",
-      "text": "Doug Marlow",
+      "text": "818.502.6707",
       "section": "h"
     },
     {
       "key": "h.t13",
       "kind": "text",
-      "text": "818.502.6707",
+      "text": "[email&nbsp;protected]",
       "section": "h"
     },
     {
       "key": "h.t14",
       "kind": "text",
-      "text": "[email&nbsp;protected]",
+      "text": "Lic. 00950434",
       "section": "h"
     },
     {
       "key": "h.t15",
       "kind": "text",
-      "text": "Lic. 00950434",
+      "text": "A Property Within",
       "section": "h"
     },
     {
-      "key": "h.t16",
+      "key": "x.poster",
+      "kind": "image",
+      "url": "https://images.prismic.io/the-pointe-burbank/Xg7miZ8IAoezoXdQ_worthe-aerial-labelled.jpg?auto=format,compress",
+      "section": "x"
+    },
+    {
+      "key": "x.avail.caption",
       "kind": "text",
-      "text": "A Property Within",
-      "section": "h"
+      "text": "Suite availability",
+      "section": "avail"
+    },
+    {
+      "key": "x.avail.totalLabel",
+      "kind": "text",
+      "text": "Total",
+      "section": "avail"
+    },
+    {
+      "key": "x.avail.total",
+      "kind": "text",
+      "text": "480,000 SF",
+      "section": "avail"
+    },
+    {
+      "key": "x.avail.availableLabel",
+      "kind": "text",
+      "text": "Availability",
+      "section": "avail"
+    },
+    {
+      "key": "x.avail.suite1.name",
+      "kind": "text",
+      "text": "Suite 300",
+      "section": "avail"
+    },
+    {
+      "key": "x.avail.suite1.area",
+      "kind": "text",
+      "text": "18,000 SF",
+      "section": "avail"
+    },
+    {
+      "key": "x.avail.suite2.name",
+      "kind": "text",
+      "text": "Suite 400",
+      "section": "avail"
+    },
+    {
+      "key": "x.avail.suite2.area",
+      "kind": "text",
+      "text": "37,000 SF",
+      "section": "avail"
+    },
+    {
+      "key": "x.avail.suite3.name",
+      "kind": "text",
+      "text": "Suite 600",
+      "section": "avail"
+    },
+    {
+      "key": "x.avail.suite3.area",
+      "kind": "text",
+      "text": "10,800 SF",
+      "section": "avail"
+    },
+    {
+      "key": "x.avail.suite4.name",
+      "kind": "text",
+      "text": "Suite 620",
+      "section": "avail"
+    },
+    {
+      "key": "x.avail.suite4.area",
+      "kind": "text",
+      "text": "8,500 SF",
+      "section": "avail"
+    },
+    {
+      "key": "x.avail.suite5.name",
+      "kind": "text",
+      "text": "Suite 990",
+      "section": "avail"
+    },
+    {
+      "key": "x.avail.suite5.area",
+      "kind": "text",
+      "text": "24,500 SF",
+      "section": "avail"
     }
   ]
 }

@@ -18,20 +18,21 @@ import {
   CMS_DIVERGENCES,
   NAV_LINKS_DROPPED,
   NAV_LABEL_OVERRIDES,
-  SPACER_SLOTS,
-  restoreSpacerSlots,
+  HASHLINK_OVERRIDES,
 } from "./enhance";
 import extra from "./frozen/home.extra-slots.json";
 import template from "./frozen/home.html?raw";
 import freezeDefaults from "./frozen/home.slots.json";
 
 describe("CMS_DIVERGENCES", () => {
-  // Slot keys read from the REAL committed artifact, so the manifest is checked
-  // against the markup rather than against a hand-copied note.
+  // Anchor target -> label slot, read from the REAL committed artifact so the
+  // manifest is checked against the markup rather than a hand-copied note. The
+  // freeze resolves these targets from the export's own runtime, so they are
+  // real ids (`#page-block-1`, `#footer0`) rather than Blux's old `/#N` form.
   const navSlots = new Map(
     [
       ...template.matchAll(
-        /<a class="navigation0ullia data-hashlink" href="\/#(\d+)">⟦t:([^⟧]+)⟧<\/a>/g,
+        /<a class="navigation0ullia data-hashlink" href="#([A-Za-z0-9_-]+)">⟦t:([^⟧]+)⟧<\/a>/g,
       ),
     ].map((m) => [m[1], m[2]]),
   );
@@ -39,17 +40,17 @@ describe("CMS_DIVERGENCES", () => {
 
   it("reads four nav label slots out of the artifact", () => {
     expect([...navSlots.entries()]).toEqual([
-      ["1", "h.t1"],
-      ["5", "h.t2"],
-      ["8", "h.t3"],
-      ["11", "h.t4"],
+      ["page-block-1", "h.t1"],
+      ["page-block-5", "h.t2"],
+      ["page-block-8", "h.t3"],
+      ["footer0", "h.t4"],
     ]);
   });
 
   it("names the true slot behind every dropped nav link", () => {
-    for (const hash of NAV_LINKS_DROPPED) {
-      const slot = navSlots.get(hash);
-      expect(slot, `no nav item for /#${hash}`).toBeDefined();
+    for (const target of NAV_LINKS_DROPPED) {
+      const slot = navSlots.get(target);
+      expect(slot, `no nav item targeting #${target}`).toBeDefined();
       // Editing this slot in Prismic does nothing until the drop is undone,
       // so it has to be listed.
       expect(listed).toContain(slot);
@@ -58,7 +59,14 @@ describe("CMS_DIVERGENCES", () => {
 
   it("covers the overridden nav label too", () => {
     expect(Object.keys(NAV_LABEL_OVERRIDES)).toHaveLength(1);
-    expect(listed).toContain(navSlots.get("11"));
+    expect(listed).toContain(navSlots.get("footer0"));
+  });
+
+  it("retargets exactly one link, so nothing else is silently redirected", () => {
+    for (const from of Object.keys(HASHLINK_OVERRIDES)) {
+      const hits = [...template.matchAll(new RegExp(`href="#${from}"`, "g"))];
+      expect(hits, `#${from} links in the artifact`).toHaveLength(1);
+    }
   });
 
   it("tells you what to do about each one", () => {
@@ -87,93 +95,64 @@ describe("CMS_DIVERGENCES", () => {
   });
 });
 
-describe("SPACER_SLOTS", () => {
-  // The freeze's own default values, so the list is derived from the artifact
-  // rather than hand-copied. A whitespace-only default means the export used
-  // that leaf as layout — a row that exists only to hold a blank line — and
-  // Prismic Rich Text cannot store it, so it comes back "" and the row
-  // collapses. Any re-freeze that introduces another one fails here.
-  const blank = (
-    freezeDefaults.slots as { key: string; kind: string; text?: string }[]
-  )
-    .filter(
+describe("freeze invariants the render depends on", () => {
+  // The export encodes some blank rows as content — a footer list item holding
+  // `&nbsp;` purely to occupy a line. Those must stay LITERAL in the template.
+  // Tokenizing one makes a Prismic Rich Text field that cannot hold the value:
+  // it round-trips to "" and the row collapses to its padding, silently
+  // shortening the page. reddoor-maintenance 0.76.0 stopped tokenizing them;
+  // this is the site-side guard that a future re-freeze does not undo it.
+  it("tokenizes no whitespace-only leaf", () => {
+    const blank = (
+      freezeDefaults.slots as { key: string; kind: string; text?: string }[]
+    ).filter(
       (s) =>
         s.kind === "text" &&
         (s.text ?? "") !== "" &&
         (s.text ?? "").replace(/&nbsp;/g, " ").trim() === "",
-    )
-    .map((s) => s.key);
-
-  it("names exactly the whitespace-only slots the freeze captured", () => {
-    expect(blank).toEqual([...SPACER_SLOTS]);
-  });
-
-  it("carries a token in the artifact, so refilling it lands somewhere", () => {
-    for (const key of SPACER_SLOTS) expect(template).toContain(`⟦t:${key}⟧`);
-  });
-
-  it("refills a slot Prismic blanked", () => {
-    const out = restoreSpacerSlots(new Map([["h.t11", { text: "" }]]));
-    expect(out.get("h.t11")).toEqual({ text: "\u00A0" });
-  });
-
-  it("refills a slot that is missing altogether", () => {
-    expect(restoreSpacerSlots(new Map()).get("h.t11")).toEqual({
-      text: "\u00A0",
-    });
-  });
-
-  it("leaves a real edit alone, so Prismic can win", () => {
-    const values = new Map([["h.t11", { text: "Suite 700" }]]);
-    const out = restoreSpacerSlots(values);
-    expect(out.get("h.t11")).toEqual({ text: "Suite 700" });
-    // Nothing to repair → the very same map, not a copy.
-    expect(out).toBe(values);
-  });
-
-  it("never mutates the map it was handed", () => {
-    const values = new Map<string, { text?: string }>([
-      ["h.t11", { text: "" }],
-    ]);
-    restoreSpacerSlots(values);
-    expect(values.get("h.t11")).toEqual({ text: "" });
-  });
-
-  it("keeps the freeze's own defaults untouched (the offline gate path)", () => {
-    // /dev/blux-frozen feeds the freeze defaults straight in, where the value is
-    // still " &nbsp;" — non-empty, so the repair must no-op and both render
-    // paths converge on the same 32px row.
-    const values = new Map(
-      (freezeDefaults.slots as { key: string; text?: string }[]).map((s) => [
-        s.key,
-        { text: s.text },
-      ]),
     );
-    expect(restoreSpacerSlots(values)).toBe(values);
+    expect(blank).toEqual([]);
+  });
+
+  it("keeps the footer spacer as markup instead", () => {
+    expect(template).toMatch(/<div class="footer0ullia">\s*&nbsp;\s*<\/div>/);
+  });
+
+  // The freeze resolves nav anchors against the export's own runtime. If a
+  // re-freeze ever emits the old JS-driven form again, dropNavLinks and
+  // rewriteHashlinks would both silently match nothing.
+  it("ships resolved anchors, not Blux's JS-driven /#N form", () => {
+    expect(template).not.toContain('href="/#');
   });
 });
 
 describe("rewriteHashlinks", () => {
-  it("maps Blux digit hashlinks to their page-block ids", () => {
+  it("retargets the repurposed Contact link at the availability panel", () => {
     const html =
-      '<a class="navigation0ullia data-hashlink" href="/#1">A</a>' +
-      '<a class="navigation0ullia data-hashlink" href="/#5">B</a>';
-    const out = rewriteHashlinks(html);
-    expect(out).toContain('href="#page-block-1"');
-    expect(out).toContain('href="#page-block-5"');
-    expect(out).not.toContain('href="/#');
-  });
-
-  it("points the repurposed #11 slot at the availability panel", () => {
-    const html = '<a class="navigation0ullia data-hashlink" href="/#11">C</a>';
+      '<a class="navigation0ullia data-hashlink" href="#footer0">C</a>';
     expect(rewriteHashlinks(html)).toContain('href="#availability"');
   });
 
-  it("leaves named anchors, plain roots, and external urls alone", () => {
+  it("leaves every anchor it was not told about alone", () => {
+    // Including the three surviving band targets — the freeze already resolved
+    // those correctly, so touching them could only make things worse.
     const html =
-      '<a href="#site-icon-left">x</a><a href="/">y</a>' +
-      '<a href="https://example.com/#5">z</a><a href="/#about">w</a>';
+      '<a href="#page-block-1">a</a><a href="#page-block-5">b</a>' +
+      '<a href="#page-block-8">c</a><a href="#site-icon-left">x</a>' +
+      '<a href="/">y</a><a href="https://example.com/#footer0">z</a>';
     expect(rewriteHashlinks(html)).toBe(html);
+  });
+
+  it("is a no-op with an empty override map", () => {
+    const html = '<a href="#footer0">C</a>';
+    expect(rewriteHashlinks(html, {})).toBe(html);
+  });
+
+  it("rewrites only the fragment, not a same-named path", () => {
+    const html = '<a href="/footer0">p</a><a href="#footer0">f</a>';
+    expect(rewriteHashlinks(html)).toBe(
+      '<a href="/footer0">p</a><a href="#availability">f</a>',
+    );
   });
 });
 
@@ -263,18 +242,18 @@ describe("rewriteNavLabels", () => {
 });
 
 describe("dropNavLinks", () => {
-  const li = (n: string, label: string) =>
+  const li = (id: string, label: string) =>
     '<li class="navigation0ulli">' +
-    `<a class="navigation0ullia data-hashlink" href="/#${n}">${label}</a></li>`;
+    `<a class="navigation0ullia data-hashlink" href="#${id}">${label}</a></li>`;
   const nav =
-    li("1", "Vision") +
-    li("5", "Amenities") +
-    li("8", "Burbank") +
-    li("11", "Contact Us");
+    li("page-block-1", "Vision") +
+    li("page-block-5", "Amenities") +
+    li("page-block-8", "Burbank") +
+    li("footer0", "Contact Us");
 
   it("leaves only the Availability item", () => {
     const out = dropNavLinks(nav);
-    expect(out).toBe(li("11", "Contact Us"));
+    expect(out).toBe(li("footer0", "Contact Us"));
   });
 
   it("removes the whole list item, not just the anchor", () => {
@@ -453,10 +432,10 @@ describe("addVideoPoster", () => {
 describe("enhanceFrozenHtml + css", () => {
   it("applies both repairs", () => {
     const html =
-      '<a class="data-hashlink" href="/#5">Nav</a>' +
+      '<a class="data-hashlink" href="#footer0">Nav</a>' +
       '<a href="/cdn-cgi/l/email-protection#7e2a111a1a503a11101b073e1d1c0c1b501d1113">mail</a>';
     const out = enhanceFrozenHtml(html);
-    expect(out).toContain('href="#page-block-5"');
+    expect(out).toContain(`href="#${AVAILABILITY_ANCHOR}"`);
     expect(out).toContain('href="mailto:Todd.Doney@cbre.com"');
   });
 
@@ -464,7 +443,7 @@ describe("enhanceFrozenHtml + css", () => {
     const html =
       'state-of-the-art<a class="links" href="/f">FIT Health Club</a>with ' +
       '<video src="x.mp4"></video>' +
-      '<a class="navigation0ullia data-hashlink" href="/#11">Contact Us</a>';
+      '<a class="navigation0ullia data-hashlink" href="#footer0">Contact Us</a>';
     const out = enhanceFrozenHtml(html);
     expect(out).toContain("state-of-the-art <a");
     expect(out).toContain("FIT Health Club</a> with");
