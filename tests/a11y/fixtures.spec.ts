@@ -5,6 +5,13 @@ const pages = [
   { path: "/dev/a11y-fixtures", name: "a11y fixtures" },
   { path: "/dev/animate-in", name: "animate-in demo" },
   { path: "/dev/blux-page", name: "blux band fixture" },
+  // The frozen the-pointe render. It joined this suite once the export's own
+  // a11y defects were repaired at render time (2026-07-31): the missing <main>
+  // landmark, the h1→h4/h2→h5 heading skips, the unnamed logo links and menu
+  // checkbox, and the 2.7:1 map-legend chips. Guarding the whole page here
+  // beats asserting those five individually — anything the freeze regresses,
+  // or any new markup that arrives without a name, fails on this line.
+  { path: "/dev/blux-frozen", name: "frozen the-pointe page" },
 ];
 
 for (const { path, name } of pages) {

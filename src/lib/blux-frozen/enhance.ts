@@ -1,16 +1,221 @@
+import rawAvailability from "./frozen/home.availability.json";
+import {
+  replaceAvailabilityImage,
+  assertAvailabilityData,
+  availabilityFromSlots,
+  AVAILABILITY_CSS,
+  type SlotLookup,
+} from "./availability";
+import { replaceRuleMarks, RULE_MARK_CSS } from "./rule-mark";
+import {
+  restyleCarouselCaptions,
+  CAROUSEL_CAPTION_CSS,
+} from "./carousel-caption";
+import type { SlotValue } from "./substitute";
+
 // Render-time enhancements for frozen Blux markup. The freeze strips Blux's
 // runtime JS, which leaves two kinds of dead links in the settled DOM; both are
 // deterministically repairable from the markup itself, so we fix them at render
-// (the committed artifact stays byte-faithful to the freeze output).
+// (the committed artifact stays byte-faithful to the freeze output). The design
+// review's markup changes ride the same path.
+
+// Validated at module load, so a bad hand-edit fails the build rather than
+// shipping a panel with a blank row.
+const availabilityData = assertAvailabilityData(
+  rawAvailability,
+  "frozen/home.availability.json",
+);
+
+/** Nav deep-link target for the suite availability panel. */
+export const AVAILABILITY_ANCHOR = availabilityData.anchorId;
 
 /**
  * Blux nav anchors are JS-driven: `<a class="… data-hashlink" href="/#N">`
  * scrolled to the band with id `page-block-N`. Without that JS, `#N` matches
  * nothing. Rewrite to the real ids so native anchor navigation works.
  * (Digit-only fragments — real named anchors like `#site-icon-left` untouched.)
+ *
+ * `overrides` maps a Blux hash index to a different target id — measured
+ * against the ORIGINAL site's runtime, which does not always resolve `#N` to
+ * `page-block-N` (the-pointe's Contact Us `#11` scrolls to the page bottom /
+ * footer, not to page-block-11).
  */
-export function rewriteHashlinks(html: string): string {
-  return html.replace(/href="\/#(\d+)"/g, 'href="#page-block-$1"');
+export function rewriteHashlinks(
+  html: string,
+  overrides: Record<string, string> = HASHLINK_OVERRIDES,
+): string {
+  return html.replace(
+    /href="\/#(\d+)"/g,
+    (_, n: string) => `href="#${overrides[n] ?? `page-block-${n}`}"`,
+  );
+}
+
+/**
+ * Site-verified hashlink targets. `/#11` was the original's Contact Us link,
+ * which scrolled to the bottom contact strip. The design review (2026-07-30)
+ * repurposed that nav slot as "Availability", so it now targets the suite
+ * availability panel instead — see `AVAILABILITY_ANCHOR` / `rewriteNavLabels`.
+ */
+export const HASHLINK_OVERRIDES: Record<string, string> = {
+  "11": "availability",
+};
+
+/**
+ * Slots the export uses as LAYOUT, not content: a footer list item whose only
+ * job is to hold a blank line, which the freeze captured as the value `" &nbsp;"`.
+ *
+ * Prismic Rich Text cannot hold a whitespace-only value. The migration wrote
+ * `" &nbsp;"`, Prismic stored `""`, and the row collapsed from 32px to its 8px
+ * of padding — closing the gap between "Lic. 00852254" and the next contact
+ * block, and shortening the page by exactly 24px.
+ *
+ * Repaired on the VALUE rather than with CSS on the empty element, because
+ * precision matters here: three OTHER items in the same list are legitimately
+ * empty divs that take their height from padding (74/44/100px), so the obvious
+ * `.footer0ullia:empty::before{content:"\00a0"}` would wrongly grow all three.
+ * Refilling the one slot restores the one row.
+ *
+ * Only an EMPTY value is filled, so typing any real character into the slot in
+ * Prismic takes over — the same self-healing shape as `NAV_LABEL_OVERRIDES`.
+ * Deliberately not in `CMS_DIVERGENCES`: that manifest lists overrides an
+ * editor can resolve in Prismic, and this one is not resolvable there.
+ *
+ * `enhance.test.ts` derives the true key list from the committed freeze
+ * manifest, so a re-freeze that introduces another spacer fails the suite
+ * instead of silently collapsing another row.
+ *
+ * TEMPORARY. reddoor-maintenance#475 fixes this upstream: the freeze no longer
+ * tokenizes a whitespace-only leaf at all, so it stays literal in the template
+ * and no CMS field can blank it. Once that lands AND this site is re-frozen,
+ * `h.t11` disappears from the manifest, the derived-list test above fails, and
+ * this whole constant plus `restoreSpacerSlots` should be deleted rather than
+ * updated. (Re-freezing is its own exercise — the new template resolves nav
+ * anchors to `#page-block-N`, which `dropNavLinks` keys on the raw `/#N` form.)
+ */
+export const SPACER_SLOTS: readonly string[] = ["h.t11"];
+
+/**
+ * Refill any spacer slot Prismic blanked. Returns `values` untouched when there
+ * is nothing to repair, and never mutates the caller's map (it is a `$derived`
+ * in `FrozenPage`).
+ */
+export function restoreSpacerSlots(
+  values: Map<string, SlotValue>,
+  keys: readonly string[] = SPACER_SLOTS,
+): Map<string, SlotValue> {
+  let out = values;
+  for (const key of keys) {
+    if ((out.get(key)?.text ?? "") !== "") continue;
+    if (out === values) out = new Map(values);
+    // Written as an escape, not the literal character: an invisible U+00A0 in
+    // source is one careless reformat away from becoming a plain space, which
+    // collapses and puts the row back at 8px.
+    out.set(key, { text: "\u00A0" });
+  }
+  return out;
+}
+
+/**
+ * Slot key for the video cover. Carries the freeze's reserved `x.` prefix: it
+ * is a site-declared slot, not one derived from a template token — the export
+ * ships no `poster` attribute, so there is nothing to tokenize.
+ */
+export const POSTER_SLOT = "x.poster";
+
+export interface CmsDivergence {
+  /** `frozen_page` slot key, or null where no slot exists yet. */
+  slot: string | null;
+  what: string;
+  /** What to do in Prismic, and what to delete here afterwards. */
+  resolve: string;
+}
+
+/**
+ * Every place the rendered page deliberately ignores or overrides the
+ * `frozen_page` Prismic doc, after the 2026-07-30 design review.
+ *
+ * This exists because the divergences are otherwise invisible from the CMS
+ * side: the four nav slots are all still live, editable fields in Prismic, and
+ * three of them now render nothing at all. Without this list, an editor who
+ * renames "Vision" sees no change on the site and has no way to find out why.
+ *
+ * Slot keys verified against the committed artifact's nav markup.
+ * `enhance.test.ts` holds it in lockstep with the code below, so an entry
+ * cannot rot as the overrides change.
+ */
+export const CMS_DIVERGENCES: CmsDivergence[] = [
+  {
+    slot: "h.t1",
+    what: 'Nav "Vision" (/#1) — dropped, renders nothing',
+    resolve: "remove '1' from NAV_LINKS_DROPPED to bring the item back",
+  },
+  {
+    slot: "h.t2",
+    what: 'Nav "Amenities" (/#5) — dropped, renders nothing',
+    resolve: "remove '5' from NAV_LINKS_DROPPED to bring the item back",
+  },
+  {
+    slot: "h.t3",
+    what: 'Nav "Burbank" (/#8) — dropped, renders nothing',
+    resolve: "remove '8' from NAV_LINKS_DROPPED to bring the item back",
+  },
+  {
+    slot: "h.t4",
+    what: 'Nav label — doc still reads "Contact Us", page shows "Availability"',
+    resolve:
+      'set h.t4 to "Availability" in Prismic, then delete NAV_LABEL_OVERRIDES ' +
+      "(the override is keyed on the current text, so it no-ops on its own first)",
+  },
+];
+
+/**
+ * Nav labels the design review changed. Keyed on the CURRENT text, so once the
+ * `frozen_page` doc is edited in Prismic the override stops matching and
+ * quietly no-ops rather than pinning the nav against the CMS forever. See
+ * `CMS_DIVERGENCES` for the full picture.
+ */
+export const NAV_LABEL_OVERRIDES: Record<string, string> = {
+  "Contact Us": "Availability",
+};
+
+export function rewriteNavLabels(
+  html: string,
+  overrides: Record<string, string> = NAV_LABEL_OVERRIDES,
+): string {
+  return html.replace(
+    /(<a\b[^>]*\bclass="[^"]*\bnavigation0ullia\b[^"]*"[^>]*>)([^<]*)(<\/a>)/g,
+    (whole, open: string, label: string, close: string) => {
+      const next = overrides[label.trim()];
+      return next ? `${open}${next}${close}` : whole;
+    },
+  );
+}
+
+/**
+ * Blux hash indexes for the nav items the design review dropped — Vision (`1`),
+ * Amenities (`5`) and Burbank (`8`), leaving Availability as the only item.
+ * Keyed on the hash rather than the label because the labels are CMS content;
+ * this runs BEFORE `rewriteHashlinks`, while the hrefs are still `/#N`.
+ */
+export const NAV_LINKS_DROPPED = ["1", "5", "8"];
+
+export function dropNavLinks(
+  html: string,
+  hashes: string[] = NAV_LINKS_DROPPED,
+): string {
+  let out = html;
+  for (const n of hashes) {
+    out = out.replace(
+      new RegExp(
+        `<li class="navigation0ulli">\\s*` +
+          `<a class="navigation0ullia data-hashlink" href="/#${n}">` +
+          `[^<]*</a>\\s*</li>`,
+        "g",
+      ),
+      "",
+    );
+  }
+  return out;
 }
 
 /**
@@ -46,9 +251,216 @@ export function rewriteCfEmails(html: string): string {
     );
 }
 
-/** All render-time markup repairs, applied after token substitution. */
-export function enhanceFrozenHtml(html: string): string {
-  return rewriteCfEmails(rewriteHashlinks(html));
+/**
+ * The freeze tokenizes each editable text run separately, which drops the
+ * whitespace that separated an inline `<a class="links">` from the prose around
+ * it: the original renders `state-of-the-art <a>FIT Health Club</a> with …`,
+ * the frozen template `⟦t:s4.t0⟧<a>⟦t:s4.t1⟧</a>⟦t:s4.t2⟧` — so the words run
+ * together once substituted. Restore a single space wherever an alphanumeric
+ * abuts a `.links` anchor's boundary. Deliberately alphanumeric-only on both
+ * sides: standalone "Visit Website" anchors are bounded by tags (`>`/`<`) and
+ * trailing punctuation must stay hugged, so neither is touched.
+ */
+const LINKS_OPEN = String.raw`<a\b[^>]*\bclass="[^"]*\blinks\b[^"]*"[^>]*>`;
+
+export function restoreLinkSpacing(html: string): string {
+  return html
+    .replace(new RegExp(`([A-Za-z0-9])(${LINKS_OPEN})`, "g"), "$1 $2")
+    .replace(
+      new RegExp(`(${LINKS_OPEN}[\\s\\S]*?</a>)(?=[A-Za-z0-9])`, "g"),
+      "$1 ",
+    );
+}
+
+/**
+ * The freeze's `<video>` carries no `poster`, so the player renders as a black
+ * box until playback starts. Give it the client-supplied cover still (Worthe
+ * aerial, committed under `static/`). Applied to the frozen `<video>` markup so
+ * the committed artifact stays byte-faithful. The video's own src IS a slot
+ * (`s8.i2`) but no poster slot exists — see `CMS_DIVERGENCES`.
+ */
+export const VIDEO_POSTER = "/worthe-aerial-labelled.jpg";
+
+export function addVideoPoster(
+  html: string,
+  poster: string = VIDEO_POSTER,
+): string {
+  return html.replace(
+    /<video\b(?![^>]*\bposter=)/g,
+    `<video poster="${poster}"`,
+  );
+}
+
+/**
+ * Promote the export's `#page-content` wrapper to a `<main>` landmark.
+ *
+ * Blux emits `<div id="site-icon-set">` (a display:none sprite), `<nav>`,
+ * `<div id="page-content">` and `<footer>` — every region but the main one. A
+ * frozen page renders bare (the root layout deliberately skips the app chrome,
+ * including its own `<main id="main-content">`), so nothing else supplies the
+ * landmark and every element in the body sits outside one. That is one axe
+ * `region` violation per top-level node, and for a screen-reader user it means
+ * no "skip to main content" target and no main region to jump to.
+ *
+ * `#page-content` is exactly the right element: it already spans everything
+ * between the nav and the footer, so this renames the tag rather than adding a
+ * wrapper — no extra box, no layout change, and the id (which the frozen CSS
+ * styles) is preserved.
+ *
+ * The close tag is found by depth-counting from the open, not by assuming the
+ * `</div><footer` adjacency the current artifact happens to have; an unbalanced
+ * document leaves the html untouched rather than mis-nesting it.
+ */
+export function addMainLandmark(html: string, id = "page-content"): string {
+  const open = `<div id="${id}"`;
+  const at = html.indexOf(open);
+  if (at === -1) return html;
+  const openEnd = html.indexOf(">", at);
+  if (openEnd === -1) return html;
+
+  const re = /<(\/?)div\b[^>]*?(\/?)>/gi;
+  re.lastIndex = openEnd + 1;
+  let depth = 1;
+  let m: RegExpExecArray | null;
+  while ((m = re.exec(html))) {
+    if (m[2] === "/") continue; // self-closing: opens nothing
+    depth += m[1] === "/" ? -1 : 1;
+    if (depth === 0) {
+      return (
+        html.slice(0, at) +
+        "<main" +
+        html.slice(at + "<div".length, openEnd + 1) +
+        html.slice(openEnd + 1, m.index) +
+        "</main>" +
+        html.slice(m.index + m[0].length)
+      );
+    }
+  }
+  return html; // never closed — leave the document alone
+}
+
+/**
+ * Accessible names for the two links whose only content is a background-image
+ * div. The freeze has no `<img>` to carry alt text — Blux paints logos as CSS
+ * backgrounds — so the anchor itself has to be named or a screen reader
+ * announces bare "link". Matched on the literal open tag: the nav logo appears
+ * twice (desktop + mobile), and both need it.
+ */
+export const LINK_LABELS: { match: string; label: string }[] = [
+  {
+    match: '<a class="navigation0ullia" href="/">',
+    label: "The Pointe — home",
+  },
+  {
+    match:
+      '<a class="footer0ullia" href="https://www.theburbankportfolio.com/">',
+    label: "The Burbank Portfolio",
+  },
+];
+
+export function nameBareLinks(
+  html: string,
+  labels: { match: string; label: string }[] = LINK_LABELS,
+): string {
+  let out = html;
+  for (const { match, label } of labels) {
+    if (!out.includes(match)) continue;
+    out = out.split(match).join(match.slice(0, -1) + ` aria-label="${label}">`);
+  }
+  return out;
+}
+
+/**
+ * Name the mobile menu toggle. It is a bare checkbox driving a pure-CSS
+ * disclosure, so it has no label of any kind and announces as an unnamed
+ * checkbox. Left alone if the freeze ever starts emitting one.
+ */
+export function nameMenuToggle(html: string, label = "Menu"): string {
+  return html.replace(
+    /<input\b([^>]*\bid="[^"]*-menuicon"[^>]*)>/g,
+    (whole, attrs: string) =>
+      /\baria-label=/.test(attrs)
+        ? whole
+        : `<input${attrs} aria-label="${label}">`,
+  );
+}
+
+/**
+ * Repair the export's heading outline.
+ *
+ * Blux picks heading tags for their baked type styles, not for structure, so
+ * the page runs h1 → h4, h2 → h5 and h2 → h4 — four skipped levels, which
+ * leaves a screen-reader's heading list implying sections that do not exist.
+ *
+ * No mechanical re-ranking can fix this, because the source uses h4 in two
+ * different roles — once directly under the h1 (the hero's second line) and
+ * again under an h2. So the rule is positional: h1 and h2 stay as they are,
+ * and every other heading becomes h2 if it appears BEFORE the first section
+ * heading, h3 once sections have started. The one pre-section heading is the
+ * hero's own subtitle, which is genuinely section-level.
+ *
+ * That yields 1,2,2,3…,2,3…,2,3…,2 — no skips, and siblings keep the same
+ * level as each other, which a "clamp to previous+1" pass would have broken by
+ * ratcheting consecutive siblings up through 3,4,5.
+ *
+ * Purely semantic: verified that neither the frozen stylesheet nor app.css
+ * carries a bare h1–h6 selector, so every heading is styled by its class
+ * (`text11`, `text5`) and nothing moves on screen.
+ *
+ * Runs AFTER `restyleCarouselCaptions`, which keys on the caption's `<h5>`.
+ */
+export function liftHeadingLevels(html: string): string {
+  // Every heading is matched, not just the ones being changed: the replacer
+  // has to see h2s in document order to know when sections have begun.
+  // Headings never nest, so a lazy match to the close is safe, and the
+  // backreference keeps each open tag paired with its own level's close.
+  let inSections = false;
+  return html.replace(
+    /<h([1-6])((?:\s[^>]*)?)>([\s\S]*?)<\/h\1>/g,
+    (whole, level: string, attrs: string, inner: string) => {
+      if (level === "1") return whole;
+      if (level === "2") {
+        inSections = true;
+        return whole;
+      }
+      const next = inSections ? "3" : "2";
+      return `<h${next}${attrs}>${inner}</h${next}>`;
+    },
+  );
+}
+
+/**
+ * All render-time markup work, applied in order after token substitution.
+ * `dropNavLinks` MUST come first — it keys on the raw `/#N` hrefs that
+ * `rewriteHashlinks` then rewrites away.
+ *
+ * `values` is the page's Prismic slot map. It is optional so every caller that
+ * only cares about markup repair (and the whole existing test suite) can keep
+ * passing html alone; when absent, the committed defaults are used unchanged.
+ */
+function steps(values?: SlotLookup): ((html: string) => string)[] {
+  const availability = availabilityFromSlots(availabilityData, values);
+  const poster = values?.get(POSTER_SLOT)?.url || VIDEO_POSTER;
+  return [
+    dropNavLinks,
+    rewriteHashlinks,
+    rewriteCfEmails,
+    restoreLinkSpacing,
+    rewriteNavLabels,
+    addMainLandmark,
+    (html) => addVideoPoster(html, poster),
+    (html) => replaceAvailabilityImage(html, availability),
+    restyleCarouselCaptions,
+    replaceRuleMarks,
+    nameBareLinks,
+    nameMenuToggle,
+    // After restyleCarouselCaptions, which matches the caption's <h5>.
+    liftHeadingLevels,
+  ];
+}
+
+export function enhanceFrozenHtml(html: string, values?: SlotLookup): string {
+  return steps(values).reduce((acc, step) => step(acc), html);
 }
 
 /**
@@ -58,12 +470,115 @@ export function enhanceFrozenHtml(html: string): string {
  *   elements — FrozenPage's hydration adds `wait` only to elements below the
  *   viewport (above-fold content never flashes) and swaps to `run` on
  *   intersection. No-JS and reduced-motion users keep the force-visible page.
- * - `scroll-margin-top`: anchor targets clear the (~100px) fixed Blux nav.
+ * - `scroll-margin-top`: anchor targets clear the fixed Blux nav — 100px,
+ *   matching the original's measured landing gap exactly.
  * - `scroll-behavior`: smooth native anchor scrolling, motion-gated.
  */
 export const FROZEN_ENHANCE_CSS = [
   ".block-effects.rd-fx-wait{opacity:0!important;transform:translateY(18px)!important;transition:none!important}",
   ".block-effects.rd-fx-run{opacity:1!important;transform:none!important;transition:opacity .65s cubic-bezier(.2,.55,.88,.95),transform .65s cubic-bezier(.2,.55,.88,.95)!important}",
-  '[id^="page-block-"]{scroll-margin-top:110px}',
+  '[id^="page-block-"],.rd-avail{scroll-margin-top:100px}',
   "@media (prefers-reduced-motion:no-preference){html{scroll-behavior:smooth}}",
+  // Map legend plus/minus glyph: the Blux CSS centers the horizontal bar at
+  // 50% of the chip but hardcodes the vertical bar at top:10px (and the active
+  // collapse at 17px) — correct only for a 34px chip, so the cross sits
+  // off-center under our font metrics. Center both bars relatively; the
+  // original .25s transition still animates the plus→minus collapse.
+  ".map_icon_plusm:before{top:calc(50% - 7px);height:14px}",
+  '.map_icon[data-clicked="1"] .map_icon_plusm:before{top:50%;height:0}',
+
+  // Map legend chips: the freeze's #919FAD behind white 14px text is 2.7:1,
+  // well under the 4.5:1 minimum, so the inactive chip labels are hard to read
+  // against the photography behind them. #6d7782 is the SAME hue and
+  // saturation scaled down 25% — the smallest uniform darkening that reaches
+  // 4.55:1, chosen over the brand navy so the chips stay visibly inactive
+  // next to the white active chip rather than reading as a second live state.
+  ".map_icon{background-color:#6d7782}",
+
+  // — Design review, round 2 (Nicole, 2026-07-30) —
+
+  // Three 1px white rules the original site drew between stacked rows (one in
+  // Amenities, two in Local Amenities). They read as stray hairlines against
+  // the near-white page, so they come out. The freeze baked them as INLINE
+  // border styles, hence !important.
+  "#page-block-6-item-1,#page-block-12-item-1,#page-block-12-item-2" +
+    "{border-top-width:0!important}",
+
+  // (The `.links` underline weight/offset is specified in app.css, alongside
+  // the platform anchor base that owns the underline itself.)
+
+  // Halve the gap between the Burbank Portfolio copy and the video below it:
+  // both sections use the stock 80px `.blocks0container` block padding, so the
+  // seam was 160px. Child combinators match the two outer containers only —
+  // nested block containers keep their own inline padding.
+  "#page-block-9>.block-holder>.blocks0container{padding-bottom:40px}",
+  "#page-block-10>.blocks0container{padding-top:40px}",
+
+  // Type scale, per the Figma DevTools annotations. Only the leading changes —
+  // the annotated font sizes already match the artifact's desktop values, so
+  // these override the top-level rules and leave the ≤700px mobile step alone.
+  ".text1{line-height:30px}",
+  ".text11{font-size:50px;line-height:70px}",
+  ".text12{font-size:80px;line-height:100px}",
+  "@media all and (max-width:700px){.text1{font-size:18px;line-height:30px}" +
+    ".text11{font-size:40px;line-height:60px}" +
+    ".text12{font-size:48px;line-height:70px}}",
+
+  // Amenities heading: Figma tightens the block under "premium amenities" from
+  // an inline `20px 0 30px` to `20px 0 5px`. Inline, so !important.
+  "#page-block-5-item-0-item-1>.blocks0container" +
+    "{padding:20px 0 5px!important}",
+
+  // "Burbank Incentives" becomes a boxed white button rather than an underlined
+  // text link (Figma node 12:140). `.buttons2` carries the freeze's link skin,
+  // so its border and underline are cleared here.
+  //
+  // Every selector below keeps the `#page-block-11` prefix, and must: the base
+  // rule is (1,1,0), so a bare `.buttons2:hover` at (0,2,0) would lose. That is
+  // exactly why the artifact's own `.buttons2:hover{background-color:transparent}`
+  // is inert on this element.
+  "#page-block-11 .buttons2{display:inline-block;background:#fff;border:0;" +
+    "border-radius:4px;padding:10px;font-family:Montserrat,sans-serif;" +
+    "font-size:11px;font-weight:500;line-height:normal;letter-spacing:.03em;" +
+    "text-transform:uppercase;text-decoration:none;color:#053a6c;" +
+    "transition:background-color .15s ease-in-out,color .15s ease-in-out}",
+
+  // The freeze draws the old text link's underline as a pseudo-element rather
+  // than a border — `.buttons2:before{…bottom:-4px;border-bottom:1px solid}`,
+  // recoloured to #4b4b6e. Clearing `border` and `text-decoration` above never
+  // touched it, so a stray full-width hairline was still being drawn 4px under
+  // the white box. Scoped to this block so any other `.buttons2` keeps its skin.
+  "#page-block-11 .buttons2:before{display:none}",
+
+  // Hover/focus: invert the fill. Neither the Figma redline (a single static
+  // frame, no variants) nor the original site (whose only rule for this class
+  // is a verified no-op) defines an interactive state, so this is a new
+  // decision made to match what the codebase already does — DefaultButton's
+  // `hover:bg-dark hover:text-white`, and the artifact's own map chips, which
+  // swap fill and text on activation.
+  //
+  // `.15s ease-in-out` is the artifact's interaction timing (`.transition150`,
+  // on the carousel arrows). Deliberately NOT cubic-bezier(.2,.55,.88,.95):
+  // that is the export's reveal easing, used here only for entrance motion.
+  //
+  // No `prefers-reduced-motion` guard is needed — app.css's `@layer base` reset
+  // is `!important`, so it beats this unlayered declaration and clamps the
+  // duration. Verified on this element, not assumed: emulating `reduce` drops
+  // its computed transition-duration to 1e-05s.
+  //
+  // `:focus-visible` rides the same rule so keyboard users get the same signal,
+  // and nothing sets `outline` — the UA focus ring is left intact rather than
+  // repeating the artifact's own `.icon:focus{outline:0}`.
+  "#page-block-11 .buttons2:hover,#page-block-11 .buttons2:focus-visible" +
+    "{background:#053a6c;color:#fff}",
+
+  // Lush Haven carousel caption (Figma node 12:130): the rule mark above a
+  // left-aligned white caption, over the image rather than in a white bar.
+  CAROUSEL_CAPTION_CSS,
+
+  // Suite availability panel, rebuilt from JSON in place of the flattened PNG.
+  AVAILABILITY_CSS,
+
+  // The double-rule mark, now vector rather than two baked PNGs.
+  RULE_MARK_CSS,
 ].join("");

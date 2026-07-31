@@ -3,14 +3,25 @@
 
   import {
     enhanceFrozenHtml,
+    restoreSpacerSlots,
     FROZEN_ENHANCE_CSS,
   } from "$lib/blux-frozen/enhance";
+  import {
+    hydrateFrozenMap,
+    type FrozenMapConfig,
+  } from "$lib/blux-frozen/frozen-map";
   import {
     substitute,
     styleTag,
     type SlotValue,
   } from "$lib/blux-frozen/substitute";
-  import { loadMapsApi } from "$lib/blux/maps-loader";
+
+  // Committed map artifacts (`frozen/<uid>.map.json`): one per hydratable map,
+  // keyed by its mountId — only configs whose mount exists in this page's DOM
+  // take effect, so the glob needs no uid plumbing.
+  const frozenMapConfigs = import.meta.glob("./frozen/*.map.json", {
+    eager: true,
+  }) as Record<string, { default: FrozenMapConfig }>;
 
   // A frozen page = the Blux export's own settled markup (byte-faithful layout,
   // 316 inline styles) with editable leaves tokenized. We inject the extracted
@@ -40,15 +51,27 @@
     slots: FrozenSlot[];
   } = $props();
 
+  // `restoreSpacerSlots` refills the export's whitespace-only layout slots,
+  // which Prismic Rich Text cannot store and hands back as "". Applied to the
+  // VALUES rather than the markup so it lands on exactly the one row that lost
+  // its blank line — see SPACER_SLOTS.
   const values = $derived(
-    new Map<string, SlotValue>(
-      slots.map((s) => [
-        s.key,
-        s.kind === "image" ? { url: s.url } : { text: s.text },
-      ]),
+    restoreSpacerSlots(
+      new Map<string, SlotValue>(
+        slots.map((s) => [
+          s.key,
+          s.kind === "image" ? { url: s.url } : { text: s.text },
+        ]),
+      ),
     ),
   );
-  const html = $derived(enhanceFrozenHtml(substitute(template, values)));
+  // `values` goes to BOTH passes: `substitute` fills the template's tokens,
+  // and `enhanceFrozenHtml` reads the site-declared `x.` slots — content the
+  // render composes itself, so it has no token to fill (the video poster, the
+  // rebuilt availability panel). Missing slots fall back to committed defaults.
+  const html = $derived(
+    enhanceFrozenHtml(substitute(template, values), values),
+  );
 
   // Progressive enhancement on the frozen markup (the bare frozen route owns
   // the whole document, so page-scoped document queries are safe here):
@@ -61,6 +84,37 @@
   //    it into a live interactive map (KmlLayer re-fits the viewport).
   onMount(() => {
     const cleanups: (() => void)[] = [];
+
+    // Sticky nav: Blux's runtime flips the `data-type="sticky"` nav from its
+    // settled position:absolute to fixed once the page scrolls (measured on
+    // the original: absolute at top, fixed + same white background after
+    // scroll). The nav is out of flow either way, so the flip never shifts
+    // layout.
+    const stickyNav = document.querySelector<HTMLElement>(
+      'nav[data-type="sticky"]',
+    );
+    if (stickyNav) {
+      const pin = () => {
+        stickyNav.style.position = window.scrollY > 0 ? "fixed" : "absolute";
+      };
+      pin();
+      window.addEventListener("scroll", pin, { passive: true });
+      cleanups.push(() => window.removeEventListener("scroll", pin));
+    }
+
+    // Mobile menu: the hamburger is a pure-CSS checkbox hack, so without
+    // Blux's JS the overlay stays open after tapping an anchor. Close it on
+    // any nav-link click.
+    const menuToggle = document.querySelector<HTMLInputElement>(
+      'input[id$="-menuicon"]',
+    );
+    if (menuToggle) {
+      const closeMenu = (e: Event) => {
+        if ((e.target as HTMLElement).closest("a")) menuToggle.checked = false;
+      };
+      document.addEventListener("click", closeMenu);
+      cleanups.push(() => document.removeEventListener("click", closeMenu));
+    }
 
     const reduced =
       typeof matchMedia !== "undefined" &&
@@ -82,10 +136,12 @@
       );
       // Only elements FULLY below the viewport animate — anything partially
       // visible at load stays put (hiding it would blink: wait-class, then an
-      // immediate IO reveal).
+      // immediate IO reveal). `.rd-rule` marks ride the same observer: the
+      // shared wait/run classes drive their own left-to-right draw-in (see
+      // RULE_MARK_CSS), so a mark already on screen is simply drawn.
       const foldLine = window.innerHeight;
       for (const el of document.querySelectorAll<HTMLElement>(
-        ".block-effects",
+        ".block-effects, .rd-rule",
       )) {
         if (el.getBoundingClientRect().top > foldLine) {
           el.classList.add("rd-fx-wait");
@@ -95,30 +151,12 @@
       cleanups.push(() => io.disconnect());
     }
 
-    const mapEl = document.querySelector<HTMLElement>(
-      ".blux-frozen-map[data-kml-mid]",
-    );
+    // Maps: hydrate each committed map artifact whose mount is in this page's
+    // DOM — the full Blux location-map widget (lid-scoped KML layers + the
+    // frozen legend chips), not a bare KML dump. See frozen-map.ts.
     const mapsKey = import.meta.env.VITE_GOOGLE_MAPS_KEY as string | undefined;
-    if (mapEl && mapsKey) {
-      loadMapsApi(mapsKey)
-        .then((maps) => {
-          const map = new maps.Map(mapEl, {
-            // Fallback viewport (Burbank); the KmlLayer re-fits to its bounds.
-            center: { lat: 34.1808, lng: -118.309 },
-            zoom: 14,
-            mapTypeControl: false,
-            streetViewControl: false,
-            fullscreenControl: false,
-          });
-          new maps.KmlLayer({
-            url: `https://www.google.com/maps/d/kml?mid=${encodeURIComponent(mapEl.dataset.kmlMid ?? "")}`,
-            map,
-            preserveViewport: false,
-          });
-        })
-        .catch(() => {
-          // Placeholder stays — a failed Maps load must never break the page.
-        });
+    for (const mod of Object.values(frozenMapConfigs)) {
+      cleanups.push(hydrateFrozenMap(mod.default, mapsKey));
     }
 
     return () => {
