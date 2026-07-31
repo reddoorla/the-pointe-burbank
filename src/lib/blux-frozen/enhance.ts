@@ -83,6 +83,14 @@ export const HASHLINK_OVERRIDES: Record<string, string> = {
  * `enhance.test.ts` derives the true key list from the committed freeze
  * manifest, so a re-freeze that introduces another spacer fails the suite
  * instead of silently collapsing another row.
+ *
+ * TEMPORARY. reddoor-maintenance#475 fixes this upstream: the freeze no longer
+ * tokenizes a whitespace-only leaf at all, so it stays literal in the template
+ * and no CMS field can blank it. Once that lands AND this site is re-frozen,
+ * `h.t11` disappears from the manifest, the derived-list test above fails, and
+ * this whole constant plus `restoreSpacerSlots` should be deleted rather than
+ * updated. (Re-freezing is its own exercise — the new template resolves nav
+ * anchors to `#page-block-N`, which `dropNavLinks` keys on the raw `/#N` form.)
  */
 export const SPACER_SLOTS: readonly string[] = ["h.t11"];
 
