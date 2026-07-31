@@ -314,7 +314,12 @@ main > section.hero-band:first-child {
   display: inline-block;
 }
 .links {
-  text-decoration: underline;
+  /* Weight and distance are specified rather than left to the UA default
+     (design review, 2026-07-30). Kept as the `text-decoration` shorthand so
+     thickness stays atomic — a bare `text-decoration: underline` landing later
+     in the cascade would otherwise reset it back to `auto`. */
+  text-decoration: underline 1px;
+  text-underline-offset: 4px;
 }
 .txt-role-text1,
 .txt-role-text5,
