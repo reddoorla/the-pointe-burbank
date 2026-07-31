@@ -3,6 +3,7 @@
 
   import {
     enhanceFrozenHtml,
+    restoreSpacerSlots,
     FROZEN_ENHANCE_CSS,
   } from "$lib/blux-frozen/enhance";
   import {
@@ -50,15 +51,27 @@
     slots: FrozenSlot[];
   } = $props();
 
+  // `restoreSpacerSlots` refills the export's whitespace-only layout slots,
+  // which Prismic Rich Text cannot store and hands back as "". Applied to the
+  // VALUES rather than the markup so it lands on exactly the one row that lost
+  // its blank line — see SPACER_SLOTS.
   const values = $derived(
-    new Map<string, SlotValue>(
-      slots.map((s) => [
-        s.key,
-        s.kind === "image" ? { url: s.url } : { text: s.text },
-      ]),
+    restoreSpacerSlots(
+      new Map<string, SlotValue>(
+        slots.map((s) => [
+          s.key,
+          s.kind === "image" ? { url: s.url } : { text: s.text },
+        ]),
+      ),
     ),
   );
-  const html = $derived(enhanceFrozenHtml(substitute(template, values)));
+  // `values` goes to BOTH passes: `substitute` fills the template's tokens,
+  // and `enhanceFrozenHtml` reads the site-declared `x.` slots — content the
+  // render composes itself, so it has no token to fill (the video poster, the
+  // rebuilt availability panel). Missing slots fall back to committed defaults.
+  const html = $derived(
+    enhanceFrozenHtml(substitute(template, values), values),
+  );
 
   // Progressive enhancement on the frozen markup (the bare frozen route owns
   // the whole document, so page-scoped document queries are safe here):
@@ -123,10 +136,12 @@
       );
       // Only elements FULLY below the viewport animate — anything partially
       // visible at load stays put (hiding it would blink: wait-class, then an
-      // immediate IO reveal).
+      // immediate IO reveal). `.rd-rule` marks ride the same observer: the
+      // shared wait/run classes drive their own left-to-right draw-in (see
+      // RULE_MARK_CSS), so a mark already on screen is simply drawn.
       const foldLine = window.innerHeight;
       for (const el of document.querySelectorAll<HTMLElement>(
-        ".block-effects",
+        ".block-effects, .rd-rule",
       )) {
         if (el.getBoundingClientRect().top > foldLine) {
           el.classList.add("rd-fx-wait");

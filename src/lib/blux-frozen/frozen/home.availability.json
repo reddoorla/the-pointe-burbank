@@ -1,0 +1,15 @@
+{
+  "mediaId": "43983b42-cd6d-42ba-b76d-9bce1931e581.png",
+  "anchorId": "availability",
+  "caption": "Suite availability",
+  "totalLabel": "Total",
+  "total": "480,000 SF",
+  "availableLabel": "Availability",
+  "suites": [
+    { "name": "Suite 300", "area": "18,000 SF" },
+    { "name": "Suite 400", "area": "37,000 SF" },
+    { "name": "Suite 600", "area": "10,800 SF" },
+    { "name": "Suite 620", "area": "8,500 SF" },
+    { "name": "Suite 990", "area": "24,500 SF" }
+  ]
+}
