@@ -59,11 +59,19 @@ test("committed template and published Prismic document agree", async ({
     .map((m) => byKey.get(m[1]!))
     .filter((v): v is string => v !== undefined)
     .map((v) => decodeEntities(v).trim())
-    .filter(Boolean);
+    .filter(Boolean)
+    // The two address slots hold Cloudflare's "[email protected]" placeholder,
+    // and `decodeCloudflareEmails` in enhance.ts swaps each for the real
+    // address at render time — so their rendered text NEVER equals the value
+    // the document stores, and matching them by text would fail on a correct
+    // page. They are checked separately below instead. Ordering coverage is
+    // unaffected: a shifted key moves the surrounding values, which are the
+    // ones compared here.
+    .filter((v) => v !== EMAIL_PLACEHOLDER);
   expect(
     expected.length,
     "no footer text slots found — the artifact or its key scheme changed",
-  ).toBeGreaterThan(8);
+  ).toBeGreaterThanOrEqual(8);
 
   await page.goto("/", { waitUntil: "load" });
   await page.evaluate(() => document.fonts.ready.then(() => undefined));
@@ -74,10 +82,20 @@ test("committed template and published Prismic document agree", async ({
       .filter(Boolean),
   );
 
-  // Every expected value must appear, IN ORDER. A subsequence rather than
-  // strict equality, so the Cloudflare email rewrite (which replaces the
-  // "[email protected]" placeholder with the real address) does not fail it —
-  // a key shift still breaks the ordering, which is what this catches.
+  // The address slots still have to RENDER — dropping them from the ordering
+  // check above must not become a way for them to disappear. Both decode to a
+  // real mailbox, so requiring one per slot proves the decode ran and the slots
+  // carried a payload.
+  const addresses = rendered.filter((line) => /\S+@\S+\.\S+/.test(line));
+  expect(
+    addresses,
+    `expected one decoded address per email slot. Rendered: ${JSON.stringify(rendered)}`,
+  ).toHaveLength(2);
+
+  // Every expected value must appear, IN ORDER — a subsequence rather than
+  // strict equality, so the decoded addresses sitting between them are simply
+  // skipped over. A key shift still breaks the ordering, which is what this
+  // catches.
   const missing: string[] = [];
   let at = 0;
   for (const want of expected) {
@@ -91,6 +109,13 @@ test("committed template and published Prismic document agree", async ({
       `republish the frozen_page migration release. Rendered: ${JSON.stringify(rendered)}`,
   ).toEqual([]);
 });
+
+/**
+ * What Cloudflare's email protection leaves in the markup where an address was.
+ * The freeze stores it with a non-breaking space, so this is its post-decode
+ * form — compare against values that have been through `decodeEntities`.
+ */
+const EMAIL_PLACEHOLDER = "[email protected]";
 
 /** The freeze stores a text node's RAW source, so defaults carry entities. */
 function decodeEntities(s: string): string {
