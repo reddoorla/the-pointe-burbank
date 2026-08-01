@@ -495,10 +495,65 @@ export const FROZEN_ENHANCE_CSS = [
     ".text11{font-size:40px;line-height:60px}" +
     ".text12{font-size:48px;line-height:70px}}",
 
-  // Amenities heading: Figma tightens the block under "premium amenities" from
-  // an inline `20px 0 30px` to `20px 0 5px`. Inline, so !important.
-  "#page-block-5-item-0-item-1>.blocks0container" +
+  // — Design review, round 3 (Nicole, Figma comments, 2026-07-31) —
+
+  // Section heading blocks: the inline `20px 0 30px` becomes `20px 0 5px`.
+  // Asked for on "premium amenities" in round 2 and on "A Monument of
+  // Excellence" in round 3; the two are the same eyebrow/rule/heading pattern,
+  // so they take the same treatment. Inline, so !important.
+  "#page-block-1-item-0-item-1>.blocks0container," +
+    "#page-block-5-item-0-item-1>.blocks0container" +
     "{padding:20px 0 5px!important}",
+
+  // "Even out the spacing above/below the lines" — the double rule under each
+  // section eyebrow sat 18px below the eyebrow and 44px above the heading,
+  // measured as INK rather than boxes (the eyebrow's descent space and the
+  // 50/70 heading's leading overhang both hide inside the box gaps, which read
+  // a misleading 10 and 34.5).
+  //
+  // `.rd-rule-box` is inline-block, so a top margin does NOT simply push the
+  // mark down — part of it is absorbed by the line box, and the holder grows by
+  // less than the margin. So the margin closes the gap from BOTH sides at once:
+  // every 2px added moves the upper gap +2 and the lower gap -2. Swept it
+  // rather than solved it, pixel-probing the painted rows at each step:
+  //
+  //     margin   0  →  18 / 45.5      margin  12  →  30 / 33.5
+  //     margin   8  →  26 / 37.5      margin  14  →  32 / 31.5   ← even
+  //
+  // 14px lands them 0.5px apart. Nicole's own reference crop measures 21/30 at
+  // its scale (24.5/35 at ours), so this is if anything tighter than the
+  // reference — which is what "even out" asks for.
+  //
+  // Scoped to the four eyebrow marks by their own containers: `.rd-rule-box`
+  // also draws the availability panel's rule and the three carousel captions,
+  // whose spacing is set by their own designs.
+  "#page-block-1-item-0-item-0 .rd-rule-box," +
+    "#page-block-5-item-0-item-0 .rd-rule-box," +
+    "#page-block-9-item-0-item-0 .rd-rule-box," +
+    "#page-block-11-item-0-item-0 .rd-rule-box" +
+    "{margin-top:14px}",
+
+  // Left-side padding on the copy blocks that sit to the RIGHT of their image.
+  // Nicole's note is a DevTools capture reading `padding: 8% 0px 30px 8%`
+  // (node 12:118) against the Amenities/FIT block, whose baked inline value is
+  // `8% 0px 30px 4%` — so the single change is left 4% → 8%, opening the gutter
+  // between the photograph and the copy.
+  //
+  // Applied to all three blocks carrying that exact inline shape, not just the
+  // one screenshotted: they are the same layout case (copy right of image, no
+  // right padding) in Amenities and in A City Full Of Possibilities. The
+  // mirrored rows — copy LEFT of the image — are deliberately untouched; their
+  // inline `6%` right padding already owns that gutter, and widening their left
+  // would push them off the outer margin.
+  //
+  // The child combinator is load-bearing: the inline padding sits on the
+  // `.blocks0container` INSIDE each `#…-item-N` wrapper, not on the wrapper
+  // itself. Targeting the wrapper adds a second, outer 8% instead of widening
+  // the real one — which is what the first attempt here did, narrowing the copy
+  // column by 28px and reflowing it. Inline, so !important.
+  "#page-block-6-item-0-item-1>.blocks0container," +
+    "#page-block-6-item-2-item-1>.blocks0container," +
+    "#page-block-12-item-1-item-1>.blocks0container{padding-left:8%!important}",
 
   // "Burbank Incentives" becomes a boxed white button rather than an underlined
   // text link (Figma node 12:140). `.buttons2` carries the freeze's link skin,
