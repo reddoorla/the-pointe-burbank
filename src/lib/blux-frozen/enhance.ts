@@ -7,6 +7,7 @@ import {
   type SlotLookup,
 } from "./availability";
 import { replaceRuleMarks, RULE_MARK_CSS } from "./rule-mark";
+import { DISTINGUISHED_CSS } from "./distinguished";
 import {
   restyleCarouselCaptions,
   CAROUSEL_CAPTION_CSS,
@@ -624,6 +625,11 @@ export const FROZEN_ENHANCE_CSS = [
 
   // Suite availability panel, rebuilt from JSON in place of the flattened PNG.
   AVAILABILITY_CSS,
+
+  // Distinguished Design band: icon row above a full-width white band, with the
+  // graphic on its left half and the availability table to its right.
+  // Loaded after AVAILABILITY_CSS — it repositions the table's own block.
+  DISTINGUISHED_CSS,
 
   // The double-rule mark, now vector rather than two baked PNGs.
   RULE_MARK_CSS,
