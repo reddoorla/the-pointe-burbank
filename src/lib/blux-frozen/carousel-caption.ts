@@ -45,6 +45,15 @@ export function restyleCarouselCaptions(html: string): string {
  * garden shots where plain white type would wash out.
  */
 export const CAROUSEL_CAPTION_CSS = [
+  // Round 3: "just needs to move down". Restyling the caption left it at the
+  // TOP of the 720px slide, where the freeze's white bar used to sit; Figma
+  // (12:130) puts it bottom-left, its frame ending 33px above the photo in an
+  // 800px-tall crop — 30px at our 720px height. The slide container already
+  // reserves `padding: 40px 0`, so making it a bottom-justified column drops
+  // the caption to the floor and the padding sets the gap; trimmed to 30px to
+  // match the Figma proportion.
+  "#page-block-8 .blocks2container{display:flex;flex-direction:column;" +
+    "justify-content:flex-end;padding-bottom:30px}",
   "#page-block-8 .rd-caption-host{background-color:transparent!important;" +
     "text-align:left!important}",
   "#page-block-8 .rd-caption{display:flex;flex-direction:column;gap:10px;" +

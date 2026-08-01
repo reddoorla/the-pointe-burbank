@@ -3,7 +3,6 @@
 
   import {
     enhanceFrozenHtml,
-    restoreSpacerSlots,
     FROZEN_ENHANCE_CSS,
   } from "$lib/blux-frozen/enhance";
   import {
@@ -51,18 +50,12 @@
     slots: FrozenSlot[];
   } = $props();
 
-  // `restoreSpacerSlots` refills the export's whitespace-only layout slots,
-  // which Prismic Rich Text cannot store and hands back as "". Applied to the
-  // VALUES rather than the markup so it lands on exactly the one row that lost
-  // its blank line — see SPACER_SLOTS.
   const values = $derived(
-    restoreSpacerSlots(
-      new Map<string, SlotValue>(
-        slots.map((s) => [
-          s.key,
-          s.kind === "image" ? { url: s.url } : { text: s.text },
-        ]),
-      ),
+    new Map<string, SlotValue>(
+      slots.map((s) => [
+        s.key,
+        s.kind === "image" ? { url: s.url } : { text: s.text },
+      ]),
     ),
   );
   // `values` goes to BOTH passes: `substitute` fills the template's tokens,

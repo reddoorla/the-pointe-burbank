@@ -96,8 +96,16 @@ test("frozen the-pointe renders whole: ~14820px, 50 media, panels live, no token
   // The availability panel replaced a flattened PNG so its type would render
   // from the font rather than from pixels; these are the numbers that make the
   // rebuild faithful to Figma node 4:36 rather than merely close to it.
-  // 175px = an 80px term column + a 95px border-box value cell (15px gutter +
-  // 80px column), and every string is real selectable text.
+  //
+  // Every value is now Figma's × 1.0958 — the ratio between the Distinguished
+  // Design band here (1166px) and in the design (1064px), applied in round 3
+  // when the list moved inside that band and needed to scale with it. So
+  // 192px = an 88px term column + a 104px border-box value cell (16px gutter +
+  // 88px column), against Figma's 175 = 80 + 95. Every string is real
+  // selectable text.
+  //
+  // Below 1000px the band does not exist and the panel reverts to Figma's
+  // absolute 13px/175px; this gate runs at 1440, so it measures the scaled form.
   const panel = await page.evaluate(() => {
     const el = document.querySelector<HTMLElement>(".rd-avail-table");
     if (!el) return null;
@@ -116,20 +124,20 @@ test("frozen the-pointe renders whole: ~14820px, 50 media, panels live, no token
   expect(panel, "availability panel did not render").not.toBeNull();
   const { height: panelHeight, ...panelBox } = panel!;
   expect(panelBox).toEqual({
-    width: 175,
-    termWidth: 80,
-    valueWidth: 95,
-    fontSize: "13px",
+    width: 192,
+    termWidth: 88,
+    valueWidth: 104,
+    fontSize: "14px",
     color: "rgb(5, 58, 108)",
     rows: 8, // total + rule + heading + 5 suites
   });
-  // 187.45px, matching Figma's 187px frame. Fully determined by fixed
+  // Figma's 187px frame at the same 1.0958. Fully determined by fixed
   // line-heights, paddings and the mark's aspect-ratio — no font metrics — so
   // it is stable across platforms. This catches the class of bug the per-row
-  // pitch check missed: the rule-mark row inheriting the 16px text line-height
-  // stood 26px instead of 15.4px, shifting the heading and all five suites
-  // down while every individual pitch still measured a correct 26px.
-  expect(panelHeight).toBeCloseTo(187.45, 1);
+  // pitch check missed: the rule-mark row inheriting the text line-height stood
+  // a full row tall instead of hugging the mark, shifting the heading and all
+  // five suites down while every individual pitch still measured correct.
+  expect(panelHeight).toBeCloseTo(201.97, 1);
   expect(rebuilt.ruleMarks).toBe(9);
   expect(rebuilt.rulePngs).toBe(0);
   // Nav is a single "Availability" item after the review.
