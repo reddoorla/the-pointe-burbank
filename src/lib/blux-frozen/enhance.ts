@@ -598,6 +598,26 @@ export const FROZEN_ENHANCE_CSS = [
   "#page-block-11 .buttons2:hover,#page-block-11 .buttons2:focus-visible" +
     "{background:#053a6c;color:#fff}",
 
+  // Round 3: "reduce space by 50%" — the gap between the body copy and the
+  // "Burbank Incentives" button (node 21:12).
+  //
+  // Measured as the VISIBLE white gap: the last line's ink bottom to the top
+  // edge of the button's white rectangle. Both boundaries are things you can
+  // see, which is what Nicole's arrow spans; the box gap reads a flat 40px
+  // because the copy's box keeps 10px of unused descent space below "activities."
+  // and the button's own 10px padding sits inside its visible edge.
+  //
+  // Halving 49.3px wants 24.65px. The wrapper's inline `padding: 40px 0 0` is
+  // the only thing in that gap, so it maps 1:1 — probed at four values:
+  //
+  //     padding 40 → 49.3      padding 15 → 24.3   ← half
+  //     padding 20 → 29.3      padding 12 → 21.3
+  //
+  // Scoped to the block even though this is the page's only `.buttons` wrapper —
+  // a re-freeze that adds a second button elsewhere should not inherit this.
+  // Inline, so !important.
+  "#page-block-11-item-0-item-2 .buttons{padding-top:15px!important}",
+
   // Lush Haven carousel caption (Figma node 12:130): the rule mark above a
   // left-aligned white caption, over the image rather than in a white bar.
   CAROUSEL_CAPTION_CSS,
