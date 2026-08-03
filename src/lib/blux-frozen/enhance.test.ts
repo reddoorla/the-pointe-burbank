@@ -726,26 +726,48 @@ describe("enhanceFrozenHtml + css", () => {
     );
   });
 
-  it("takes 10% off the LEED badge at BOTH of its rendered sizes", () => {
-    // The badge does not render at one width: below 1000px it is the freeze's
-    // inline 123px, at 1000px and up DISTINGUISHED_CSS normalises the row to
-    // 107px. Ten percent off each, or the desktop badge ends up LARGER than the
-    // neighbours it is supposed to shrink below.
+  it("sizes the LEED badge to the building icons' HEIGHT, not their width", () => {
+    // The badge is the only square artwork in a row of 67.92%/68.18% ones, so
+    // equal width leaves it a third taller than its neighbours. Each rule is
+    // asserted as the arithmetic that produced it, not as a literal, so a
+    // changed ratio or baseline cannot silently keep passing.
+    const ICON_RATIO = 0.679167; // page-block-3-item-1-item-0-item-0/-1
+    const WIDE_RATIO = 0.681818; // …-item-2, the one 0.3% taller
+
+    // ≤700px: one per row at inline widths, badge already shorter than the
+    // icons (110.7 against 135.8/143.2). Left at round 4's value — parity here
+    // would mean growing it, and the note asks for smaller.
     expect(FROZEN_ENHANCE_CSS).toContain(
       "#page-block-3-item-1-item-0-item-3 .camediaload{width:110.7px!important}",
     );
-    expect(110.7).toBeCloseTo(123 * 0.9, 5);
+
+    // 701-999px: `max-width:100%` clamps every image to the holder, so the
+    // icons ARE the holder width and their height is that width × the ratio.
+    expect(FROZEN_ENHANCE_CSS).toContain(
+      "@media all and (min-width:701px){#page-block-3-item-1-item-0-item-3 " +
+        ".camediaload{width:68%!important}}",
+    );
+    expect(0.68).toBeCloseTo((ICON_RATIO + WIDE_RATIO) / 2, 2);
+
+    // ≥1000px: the real row. 107 × ratio is 72.68 and 72.95; 72.8 splits them.
     expect(FROZEN_ENHANCE_CSS).toContain(
       "@media all and (min-width:1000px){#page-block-3-item-1-item-0-item-3 " +
-        ".block-media-holder>.ib.img{width:96.3px!important}}",
+        ".block-media-holder>.ib.img{width:72.8px!important}}",
     );
-    expect(96.3).toBeCloseTo(107 * 0.9, 5);
+    expect(72.8).toBeCloseTo((107 * ICON_RATIO + 107 * WIDE_RATIO) / 2, 1);
+    expect(72.8).toBeGreaterThan(107 * ICON_RATIO);
+    expect(72.8).toBeLessThan(107 * WIDE_RATIO);
+
     // The 107px baseline is DISTINGUISHED_CSS's, so this stays true only while
     // that rule says 107 — assert it rather than trusting the comment.
     expect(DISTINGUISHED_CSS).toContain(
       ".block-media-holder>.ib.img{width:107px!important}",
     );
-    // Its two neighbours keep their own widths.
+    // The badge only ever gets smaller: every rule is under the 123px inline
+    // width the freeze ships, and each regime is tighter than the last.
+    expect(110.7).toBeLessThan(123);
+    expect(72.8).toBeLessThan(110.7);
+    // Its neighbours keep their own widths.
     expect(FROZEN_ENHANCE_CSS).not.toContain(
       "#page-block-3-item-1-item-0-item-2 .camediaload",
     );
