@@ -831,8 +831,8 @@ export const FROZEN_ENHANCE_CSS = [
   // The double-rule mark, now vector rather than two baked PNGs.
   RULE_MARK_CSS,
 
-  // Link underlines that draw in left-to-right — the rule mark's gesture and
-  // timing applied to the nav (on first scroll) and to body links (on scroll
-  // into view). Nicole's comment on node 51:42.
+  // Body-link underlines that draw in left-to-right as they scroll into view —
+  // the rule mark's gesture and timing. Nicole's comment on node 51:42. The nav
+  // deliberately gets no underline; see underline-draw.ts.
   UNDERLINE_DRAW_CSS,
 ].join("");
