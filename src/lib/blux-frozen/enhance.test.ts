@@ -12,6 +12,8 @@ import {
   rewriteNavLabels,
   dropNavLinks,
   addContactNavItem,
+  linkCopyWord,
+  breakHeadingLine,
   CONTACT_NAV_ITEM,
   enhanceFrozenHtml,
   FROZEN_ENHANCE_CSS,
@@ -24,6 +26,7 @@ import {
 } from "./enhance";
 import { UNDERLINE_DRAW_CSS, NAV_UNDERLINE_RUN_CLASS } from "./underline-draw";
 import { RULE_MARK_CSS } from "./rule-mark";
+import { DISTINGUISHED_CSS } from "./distinguished";
 import { substitute, type SlotValue } from "./substitute";
 import extra from "./frozen/home.extra-slots.json";
 import template from "./frozen/home.html?raw";
@@ -341,6 +344,82 @@ describe("addContactNavItem", () => {
   });
 });
 
+describe("linkCopyWord", () => {
+  const body = (text: string) => `<div class="block-body text14">${text}</div>`;
+  const copy = "Head to the MRKT for a quick bite on-the-go.";
+
+  it("links the word and nothing else in the sentence", () => {
+    const out = linkCopyWord(body(copy));
+    expect(out).toContain(
+      '<a class="links" href="https://mrktburbank.square.site/" ' +
+        'target="_blank" rel="noopener">MRKT</a>',
+    );
+    expect(out).toContain("Head to the <a");
+    expect(out).toContain("</a> for a quick bite");
+  });
+
+  it("carries `links` without `ib`, so it wraps inside the sentence", () => {
+    // `.ib` is inline-block — right for the standalone Visit Website links,
+    // wrong for a word mid-paragraph.
+    expect(linkCopyWord(body(copy))).not.toContain('class="ib middle links"');
+  });
+
+  it("links only the first mention", () => {
+    const out = linkCopyWord(body("MRKT is a MRKT."));
+    expect([...out.matchAll(/<a /g)]).toHaveLength(1);
+  });
+
+  it("leaves a longer word that merely contains it alone", () => {
+    const out = linkCopyWord(body("The MRKTPLACE is open."));
+    expect(out).not.toContain("<a ");
+  });
+
+  it("no-ops once an editor rewrites the sentence without the word", () => {
+    const rewritten = body("Head to the market for a quick bite.");
+    expect(linkCopyWord(rewritten)).toBe(rewritten);
+  });
+
+  it("does not reach into other body classes", () => {
+    const other = '<div class="block-body text1">Visit the MRKT today.</div>';
+    expect(linkCopyWord(other)).toBe(other);
+  });
+});
+
+describe("breakHeadingLine", () => {
+  const block = (text: string) =>
+    `<div id="page-block-11-item-0-item-1" class="blocks0">` +
+    `<div class="blockcontainer"><div class="block-content">` +
+    `<h4 class="block-title text11">${text}</h4></div></div></div>`;
+
+  it("breaks before `of`, matching how the left heading breaks", () => {
+    const out = breakHeadingLine(block("a city full of possibilities"));
+    expect(out).toContain(
+      '<h4 class="block-title text11">a city full<br>of possibilities</h4>',
+    );
+  });
+
+  it("inserts exactly one break", () => {
+    const out = breakHeadingLine(block("a city full of possibilities"));
+    expect([...out.matchAll(/<br>/g)]).toHaveLength(1);
+  });
+
+  it("no-ops when the heading has been reworded in Prismic", () => {
+    const reworded = block("endless opportunity awaits");
+    expect(breakHeadingLine(reworded)).toBe(reworded);
+  });
+
+  it("leaves a same-worded heading in a different block alone", () => {
+    const elsewhere =
+      '<div id="page-block-4-item-0"><h4>a city full of possibilities</h4></div>';
+    expect(breakHeadingLine(elsewhere)).toBe(elsewhere);
+  });
+
+  it("is idempotent — a heading already broken is not broken again", () => {
+    const once = breakHeadingLine(block("a city full of possibilities"));
+    expect(breakHeadingLine(once)).toBe(once);
+  });
+});
+
 describe("addMainLandmark", () => {
   it("promotes the real artifact's page-content wrapper to <main>", () => {
     expect(template).toContain('<div id="page-content"');
@@ -627,6 +706,70 @@ describe("enhanceFrozenHtml + css", () => {
     expect(1.137 * 18 + 4).toBeCloseTo(24.5, 1);
   });
 
+  it("links MRKT and breaks the City heading in the real artifact", () => {
+    const out = enhanceFrozenHtml(
+      substitute(template, freezeValues),
+      freezeValues,
+    );
+    expect(out).toContain(
+      '<a class="links" href="https://mrktburbank.square.site/" ' +
+        'target="_blank" rel="noopener">MRKT</a>',
+    );
+    // Exactly one — the word appears once in the copy, and a second link to the
+    // same place in one paragraph would be noise when tabbing.
+    expect([...out.matchAll(/mrktburbank\.square\.site/g)]).toHaveLength(1);
+    // The heading now breaks the way page-block-1's does.
+    const city = out.slice(out.indexOf('id="page-block-11-item-0-item-1"'));
+    expect(city.slice(0, 400)).toContain("a city full<br>of possibilities");
+  });
+
+  it("matches the City heading's spacing to the heading Nicole pointed at", () => {
+    // 50:12 "make sure spacing matches other (left)" — page-block-1 has carried
+    // this padding since round 3; page-block-11 now joins the same rule.
+    expect(FROZEN_ENHANCE_CSS).toContain(
+      "#page-block-1-item-0-item-1>.blocks0container," +
+        "#page-block-5-item-0-item-1>.blocks0container," +
+        "#page-block-11-item-0-item-1>.blocks0container" +
+        "{padding:20px 0 5px!important}",
+    );
+  });
+
+  it("takes 10% off the LEED badge at BOTH of its rendered sizes", () => {
+    // The badge does not render at one width: below 1000px it is the freeze's
+    // inline 123px, at 1000px and up DISTINGUISHED_CSS normalises the row to
+    // 107px. Ten percent off each, or the desktop badge ends up LARGER than the
+    // neighbours it is supposed to shrink below.
+    expect(FROZEN_ENHANCE_CSS).toContain(
+      "#page-block-3-item-1-item-0-item-3 .camediaload{width:110.7px!important}",
+    );
+    expect(110.7).toBeCloseTo(123 * 0.9, 5);
+    expect(FROZEN_ENHANCE_CSS).toContain(
+      "@media all and (min-width:1000px){#page-block-3-item-1-item-0-item-3 " +
+        ".block-media-holder>.ib.img{width:96.3px!important}}",
+    );
+    expect(96.3).toBeCloseTo(107 * 0.9, 5);
+    // The 107px baseline is DISTINGUISHED_CSS's, so this stays true only while
+    // that rule says 107 — assert it rather than trusting the comment.
+    expect(DISTINGUISHED_CSS).toContain(
+      ".block-media-holder>.ib.img{width:107px!important}",
+    );
+    // Its two neighbours keep their own widths.
+    expect(FROZEN_ENHANCE_CSS).not.toContain(
+      "#page-block-3-item-1-item-0-item-2 .camediaload",
+    );
+  });
+
+  it("scrims the carousel image bottom-up, under the content", () => {
+    // 51:27 + 51:30, both asking for a gradient overlay on this image.
+    expect(FROZEN_ENHANCE_CSS).toContain("#page-block-8 .blocks2::after");
+    expect(FROZEN_ENHANCE_CSS).toContain("linear-gradient(to top,");
+    // Above the photo, below `.block-holder`'s own z-index:2.
+    expect(FROZEN_ENHANCE_CSS).toContain("z-index:1;pointer-events:none");
+    // Bottom-weighted: fully transparent well before the top of the image, so
+    // "slight" holds and the photograph is untouched where the caption is not.
+    expect(FROZEN_ENHANCE_CSS).toContain("rgba(0,0,0,0) 45%)");
+  });
+
   it("ships the reveal + anchor css", () => {
     expect(FROZEN_ENHANCE_CSS).toContain(".rd-fx-wait");
     expect(FROZEN_ENHANCE_CSS).toContain(".rd-fx-run");
@@ -662,9 +805,13 @@ describe("enhanceFrozenHtml + css", () => {
   });
 
   it("tightens the amenities heading block per Figma", () => {
-    expect(FROZEN_ENHANCE_CSS).toContain(
-      "#page-block-5-item-0-item-1>.blocks0container{padding:20px 0 5px!important}",
+    // Round 4 added page-block-11 to this same rule, so the amenities selector
+    // is asserted as a member of it rather than as the whole declaration.
+    const rule = /#[^{}]*\{padding:20px 0 5px!important\}/.exec(
+      FROZEN_ENHANCE_CSS,
     );
+    expect(rule, "no 20px 0 5px rule in the bundle").not.toBeNull();
+    expect(rule![0]).toContain("#page-block-5-item-0-item-1>.blocks0container");
   });
 
   it("turns Burbank Incentives into a boxed white button", () => {

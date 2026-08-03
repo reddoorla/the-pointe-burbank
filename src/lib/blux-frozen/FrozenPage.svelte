@@ -10,6 +10,7 @@
     type FrozenMapConfig,
   } from "$lib/blux-frozen/frozen-map";
   import { NAV_UNDERLINE_RUN_CLASS } from "$lib/blux-frozen/underline-draw";
+  import { hydrateCarousels } from "$lib/blux-frozen/carousel";
   import {
     substitute,
     styleTag,
@@ -158,6 +159,13 @@
       }
       cleanups.push(() => io.disconnect());
     }
+
+    // Carousel: the freeze ships the Lush Haven slider's settled first frame
+    // and two dead arrow buttons. Rebind them. Not motion-gated — swapping
+    // which slide is displayed is a content change the arrows were always going
+    // to make, and suppressing it under reduced motion would leave a visible
+    // control that does nothing. See carousel.ts.
+    cleanups.push(hydrateCarousels());
 
     // Maps: hydrate each committed map artifact whose mount is in this page's
     // DOM — the full Blux location-map widget (lid-scoped KML layers + the

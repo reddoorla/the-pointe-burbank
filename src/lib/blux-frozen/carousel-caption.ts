@@ -39,12 +39,34 @@ export function restyleCarouselCaptions(html: string): string {
 
 /**
  * The caption now sits on a photograph rather than a white bar, so the white
- * type needs its own legibility floor — a soft shadow rather than a scrim, to
- * keep Figma's clean look. Flagged as a deliberate addition: Figma shows the
- * caption over a mid-tone crop, while the live slides include bright daylight
- * garden shots where plain white type would wash out.
+ * type needs its own legibility floor.
+ *
+ * Round 3 used a soft text shadow alone, deliberately avoiding a scrim to keep
+ * Figma's clean look, and flagged the risk: the live slides are bright daylight
+ * garden shots where white type washes out. Round 4 settles it — Nicole asked
+ * for the scrim twice on the same section, "could we do a slight gradient
+ * overlay on the image? maybe that will help..." (node 51:27) and "gradient
+ * overlay on top of this image" (node 51:30). The shadow stays underneath it;
+ * the two together are what carry the contrast, and the scrim alone would have
+ * to be much heavier to do it on its own.
  */
 export const CAROUSEL_CAPTION_CSS = [
+  // The scrim. Black rather than the brand navy so it reads as shade on a
+  // photograph instead of a colour cast, and bottom-weighted so it only darkens
+  // the band the caption occupies — the top two-thirds of the image are left
+  // completely untouched, which is what keeps it "slight".
+  //
+  // It sits on the slide's own background box, ABOVE the photograph and BELOW
+  // the content: `.block-holder` already carries `position:relative;z-index:2`,
+  // so z-index 1 slots the scrim between them without touching either. The
+  // slide is `position:relative` for the same reason the nav links are — the
+  // artifact already sets it, restated so a re-freeze that drops it cannot
+  // silently anchor this to the page instead.
+  "#page-block-8 .blocks2{position:relative}",
+  '#page-block-8 .blocks2::after{content:"";position:absolute;inset:0;' +
+    "z-index:1;pointer-events:none;background:linear-gradient(to top," +
+    "rgba(0,0,0,.55) 0%,rgba(0,0,0,.34) 14%,rgba(0,0,0,.12) 28%," +
+    "rgba(0,0,0,0) 45%)}",
   // Round 3: "just needs to move down". Restyling the caption left it at the
   // TOP of the 720px slide, where the freeze's white bar used to sit; Figma
   // (12:130) puts it bottom-left, its frame ending 33px above the photo in an

@@ -240,6 +240,102 @@ export function addContactNavItem(
 }
 
 /**
+ * Link a word inside body copy that the CMS stores as plain text.
+ *
+ * Blux has no rich-text inside these leaves — a `block-body` slot is a single
+ * string — so a link inside a sentence cannot come from Prismic and has to be
+ * composed here. Keyed on BOTH the block's own class and the word, so an editor
+ * who rewrites the sentence gets an unlinked word rather than a link wrapped
+ * around the wrong text; and `word` is matched on a word boundary so a longer
+ * word merely containing it is left alone.
+ *
+ * Only the first occurrence is linked. A second mention in the same paragraph
+ * would be a repeated link to the same destination, which is noise for anyone
+ * tabbing through.
+ */
+export interface CopyLink {
+  /** Word to turn into a link, as it appears in the rendered sentence. */
+  word: string;
+  href: string;
+  /** Class of the `block-body` leaf holding it — scopes the search. */
+  bodyClass: string;
+}
+
+/**
+ * "Underline MRKT, link to: …" — Nicole, Figma node 51:42 (2026-08-03).
+ *
+ * `class="links"` rather than the artifact's `ib middle links`: `.ib` is the
+ * platform's inline-BLOCK, right for the standalone "Visit Website" links but
+ * wrong mid-sentence, where it would stop the word wrapping with its line. The
+ * FIT Health Club link, the page's only other inline body link, is bare `links`
+ * for the same reason. It also picks up the draw-in underline (`underline-draw.ts`).
+ *
+ * `target="_blank"` follows the artifact's own majority for offsite links (six
+ * of its seven carry it); `rel="noopener"` is added because none of them do and
+ * a new-tab link without it hands the opener reference to the destination.
+ */
+export const MRKT_LINK: CopyLink = {
+  word: "MRKT",
+  href: "https://mrktburbank.square.site/",
+  bodyClass: "block-body text14",
+};
+
+export function linkCopyWord(html: string, link: CopyLink = MRKT_LINK): string {
+  const body = new RegExp(
+    `(<div class="${link.bodyClass}"[^>]*>)([^<]*)(</div>)`,
+    "g",
+  );
+  const word = new RegExp(`\\b${link.word}\\b`);
+  return html.replace(body, (whole, open: string, text: string, close) => {
+    if (!word.test(text)) return whole;
+    const anchor =
+      `<a class="links" href="${link.href}" target="_blank" ` +
+      `rel="noopener">${link.word}</a>`;
+    return open + text.replace(word, anchor) + close;
+  });
+}
+
+/**
+ * Break a one-line section heading onto two lines.
+ *
+ * "make into two lines and make sure spacing matches other (left)" — Nicole,
+ * Figma node 50:12. The left-hand heading it points at is "A Monument / Of
+ * Excellence", which the export ships as two slots with a literal `<br>`
+ * between them. "A City Full Of Possibilities" is a SINGLE slot, so there is no
+ * break to inherit and one has to be inserted — before "of", which is where the
+ * monument heading breaks too. (The matching spacing is CSS, in
+ * FROZEN_ENHANCE_CSS.)
+ *
+ * Scoped to the heading's own block id, and keyed on the text still reading the
+ * way it does: reword it in Prismic and this quietly stops matching rather than
+ * inserting a break in the middle of a different sentence.
+ */
+export const CITY_HEADING = {
+  blockId: "page-block-11-item-0-item-1",
+  /** Break before this word, keeping it on the second line. */
+  before: "of",
+  /** Guard — the heading must still say this for the break to be inserted. */
+  expect: "city full of possibilities",
+};
+
+export function breakHeadingLine(html: string, spec = CITY_HEADING): string {
+  const at = html.indexOf(`id="${spec.blockId}"`);
+  if (at === -1) return html;
+  const head = /<h([1-6])([^>]*)>([^<]*)<\/h\1>/;
+  const region = html.slice(at, at + 900);
+  const m = head.exec(region);
+  if (!m || !m[3].toLowerCase().includes(spec.expect)) return html;
+  const broken = m[3].replace(new RegExp(`\\s+(${spec.before}\\s)`), "<br>$1");
+  if (broken === m[3]) return html;
+  const rebuilt = `<h${m[1]}${m[2]}>${broken}</h${m[1]}>`;
+  return (
+    html.slice(0, at + m.index) +
+    rebuilt +
+    html.slice(at + m.index + m[0].length)
+  );
+}
+
+/**
  * Decode one Cloudflare email-protection payload: first hex byte is the XOR
  * key, the rest are the address's chars.
  */
@@ -476,6 +572,10 @@ function steps(values?: SlotLookup): ((html: string) => string)[] {
     rewriteHashlinks,
     rewriteCfEmails,
     restoreLinkSpacing,
+    // After restoreLinkSpacing, which exists to repair the freeze's own inline
+    // anchors — the one this inserts is already spaced correctly.
+    linkCopyWord,
+    breakHeadingLine,
     rewriteNavLabels,
     // After rewriteHashlinks + rewriteNavLabels, both of which would otherwise
     // rewrite the item this adds.
@@ -563,8 +663,13 @@ export const FROZEN_ENHANCE_CSS = [
   // Asked for on "premium amenities" in round 2 and on "A Monument of
   // Excellence" in round 3; the two are the same eyebrow/rule/heading pattern,
   // so they take the same treatment. Inline, so !important.
+  // Round 4 adds page-block-11 ("A City Full Of Possibilities"). Nicole's 50:12
+  // note is "make sure spacing matches other (left)", and the heading she points
+  // at is page-block-1's — which has had this exact padding since round 3, while
+  // the City one kept the export's `20px 0 30px 0%`. Same pattern, same rule.
   "#page-block-1-item-0-item-1>.blocks0container," +
-    "#page-block-5-item-0-item-1>.blocks0container" +
+    "#page-block-5-item-0-item-1>.blocks0container," +
+    "#page-block-11-item-0-item-1>.blocks0container" +
     "{padding:20px 0 5px!important}",
 
   // "Even out the spacing above/below the lines" — the double rule under each
@@ -679,6 +784,37 @@ export const FROZEN_ENHANCE_CSS = [
   // a re-freeze that adds a second button elsewhere should not inherit this.
   // Inline, so !important.
   "#page-block-11-item-0-item-2 .buttons{padding-top:15px!important}",
+
+  // — Design review, round 4 (Nicole, Figma comments, 2026-08-03) —
+
+  // "could you make the image 10% smaller?" (node 51:24) — the USGBC seal in
+  // the LEED Gold / Energy Star credential row. A `padding-bottom:100%` spacer
+  // holds its square ratio, so scaling the width alone scales both axes and
+  // nothing else in the row moves.
+  //
+  // 10% off WHAT is the whole question, and the answer differs by breakpoint —
+  // the freeze's inline `width:123px` is not what the badge actually renders at.
+  // Measured across the range rather than reasoned about:
+  //
+  //   ≤700px    badges render at their inline widths   123 → 110.7  (rule 1)
+  //   700-1000  the 20% grid + max-width:100% clamps all three to the SAME
+  //             width, so there is nothing left to shrink; rule 1 is inert
+  //   ≥1000px   DISTINGUISHED_CSS normalises the row to 107px   107 → 96.3
+  //
+  // The desktop case is the one the note was written against, and the one that
+  // makes the second rule necessary: taking 110.7px there would have rendered
+  // the badge BIGGER than the 107px neighbours it is meant to shrink below —
+  // the opposite of the ask. Verified after the change at 1440px: 96.3 against
+  // 107 either side.
+  //
+  // Both rules are id-scoped to this one credential. Its neighbours are wider
+  // logos at ~68% ratios and the comment is pinned on this badge alone. The
+  // desktop selector mirrors DISTINGUISHED_CSS's own shape so the two are
+  // legibly the same target; its id gives it the specificity to win. Inline
+  // width and an `!important` rule respectively, so both need !important.
+  "#page-block-3-item-1-item-0-item-3 .camediaload{width:110.7px!important}",
+  "@media all and (min-width:1000px){#page-block-3-item-1-item-0-item-3 " +
+    ".block-media-holder>.ib.img{width:96.3px!important}}",
 
   // Lush Haven carousel caption (Figma node 12:130): the rule mark above a
   // left-aligned white caption, over the image rather than in a white bar.
