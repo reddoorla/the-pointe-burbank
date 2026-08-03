@@ -11,6 +11,8 @@ import {
   liftHeadingLevels,
   rewriteNavLabels,
   dropNavLinks,
+  addContactNavItem,
+  CONTACT_NAV_ITEM,
   enhanceFrozenHtml,
   FROZEN_ENHANCE_CSS,
   VIDEO_POSTER,
@@ -20,9 +22,23 @@ import {
   NAV_LABEL_OVERRIDES,
   HASHLINK_OVERRIDES,
 } from "./enhance";
+import { UNDERLINE_DRAW_CSS, NAV_UNDERLINE_RUN_CLASS } from "./underline-draw";
+import { RULE_MARK_CSS } from "./rule-mark";
+import { substitute, type SlotValue } from "./substitute";
 import extra from "./frozen/home.extra-slots.json";
 import template from "./frozen/home.html?raw";
 import freezeDefaults from "./frozen/home.slots.json";
+
+/**
+ * The freeze's own default slot values, i.e. what the page renders with when
+ * Prismic returns nothing. Enough to exercise the label-keyed nav steps, which
+ * see raw `⟦t:…⟧` tokens and match nothing without it.
+ */
+const freezeValues = new Map<string, SlotValue>(
+  (freezeDefaults.slots as { key: string; kind: string; text?: string }[]).map(
+    (s) => [s.key, s.kind === "image" ? {} : { text: s.text }],
+  ),
+);
 
 describe("CMS_DIVERGENCES", () => {
   // Anchor target -> label slot, read from the REAL committed artifact so the
@@ -60,6 +76,15 @@ describe("CMS_DIVERGENCES", () => {
   it("covers the overridden nav label too", () => {
     expect(Object.keys(NAV_LABEL_OVERRIDES)).toHaveLength(1);
     expect(listed).toContain(navSlots.get("footer0"));
+  });
+
+  it("covers the Contact item, which has no slot behind it at all", () => {
+    // The mirror case: nav text on the page that Prismic cannot reach. It is
+    // listed with a null slot, so the "nothing stale" check below skips it —
+    // this is what proves it is listed.
+    const noSlot = CMS_DIVERGENCES.filter((d) => d.slot === null);
+    expect(noSlot).toHaveLength(1);
+    expect(noSlot[0].what).toContain(CONTACT_NAV_ITEM.label);
   });
 
   it("retargets exactly one link, so nothing else is silently redirected", () => {
@@ -251,20 +276,68 @@ describe("dropNavLinks", () => {
     li("page-block-8", "Burbank") +
     li("footer0", "Contact Us");
 
-  it("leaves only the Availability item", () => {
+  it("drops Vision and keeps the three items asked back in", () => {
     const out = dropNavLinks(nav);
-    expect(out).toBe(li("footer0", "Contact Us"));
+    expect(out).toBe(
+      li("page-block-5", "Amenities") +
+        li("page-block-8", "Burbank") +
+        li("footer0", "Contact Us"),
+    );
   });
 
   it("removes the whole list item, not just the anchor", () => {
     expect(dropNavLinks(nav)).not.toContain('navigation0ulli"></li>');
-    expect([...dropNavLinks(nav).matchAll(/<li /g)]).toHaveLength(1);
+    expect([...dropNavLinks(nav).matchAll(/<li /g)]).toHaveLength(3);
   });
 
   it("does not touch the logo link, which has no hashlink", () => {
     const logo =
       '<li class="navigation0ulli"><a class="navigation0ullia" href="/">L</a></li>';
     expect(dropNavLinks(logo)).toBe(logo);
+  });
+});
+
+describe("addContactNavItem", () => {
+  const li = (href: string, label: string) =>
+    '<li class="navigation0ulli">' +
+    `<a class="navigation0ullia data-hashlink" href="${href}">${label}</a></li>`;
+  // The nav as the earlier steps leave it: Contact Us already relabelled and
+  // retargeted into the Availability item.
+  const nav =
+    "<ul>" +
+    li("#page-block-5", "Amenities") +
+    li("#page-block-8", "Burbank") +
+    li(`#${AVAILABILITY_ANCHOR}`, "Availability") +
+    "</ul>";
+
+  it("appends Contact Us after Availability, inside the same list", () => {
+    expect(addContactNavItem(nav)).toBe(
+      "<ul>" +
+        li("#page-block-5", "Amenities") +
+        li("#page-block-8", "Burbank") +
+        li(`#${AVAILABILITY_ANCHOR}`, "Availability") +
+        li("#footer0", "Contact Us") +
+        "</ul>",
+    );
+  });
+
+  it("points it at the footer contact strip, not the availability panel", () => {
+    const out = addContactNavItem(nav);
+    expect(out).toContain('href="#footer0">Contact Us<');
+    expect([...out.matchAll(/href="#footer0"/g)]).toHaveLength(1);
+    // The Availability item is untouched — this adds, it does not retarget.
+    expect(out).toContain(`href="#${AVAILABILITY_ANCHOR}">Availability<`);
+  });
+
+  it("is a no-op when a Contact link is already present", () => {
+    const once = addContactNavItem(nav);
+    expect(addContactNavItem(once)).toBe(once);
+  });
+
+  it("leaves markup with no Availability item alone", () => {
+    const logo =
+      '<li class="navigation0ulli"><a class="navigation0ullia" href="/">L</a></li>';
+    expect(addContactNavItem(logo)).toBe(logo);
   });
 });
 
@@ -450,6 +523,108 @@ describe("enhanceFrozenHtml + css", () => {
     expect(out).toContain(`poster="${VIDEO_POSTER}"`);
     expect(out).toContain(`href="#${AVAILABILITY_ANCHOR}"`);
     expect(out).toContain(">Availability<");
+  });
+
+  it("renders the real artifact's nav as Amenities/Burbank/Availability/Contact", () => {
+    // The whole nav pipeline against the committed markup, in order: Vision
+    // dropped, the other two restored, the fourth slot relabelled + retargeted,
+    // and Contact Us appended. Asserted end-to-end because the steps are
+    // order-coupled — addContactNavItem run too early yields two Availability
+    // links, which every per-function test above would still pass.
+    const out = enhanceFrozenHtml(
+      substitute(template, freezeValues),
+      freezeValues,
+    );
+    const nav = out.slice(out.indexOf("<nav"), out.indexOf("</nav>"));
+    const items = [
+      ...nav.matchAll(
+        /<a class="navigation0ullia data-hashlink" href="#([A-Za-z0-9_-]+)">([^<]*)<\/a>/g,
+      ),
+    ].map((m) => [m[2], m[1]]);
+    expect(items).toEqual([
+      ["Amenities", "page-block-5"],
+      ["Burbank", "page-block-8"],
+      ["Availability", AVAILABILITY_ANCHOR],
+      ["Contact Us", "footer0"],
+    ]);
+  });
+
+  it("puts the Contact item in the same list as the others", () => {
+    // A regex that appended after the wrong `</li>` could still produce the
+    // right item order above while landing it outside the right `<ul>`.
+    const out = enhanceFrozenHtml(
+      substitute(template, freezeValues),
+      freezeValues,
+    );
+    const right = out.slice(
+      out.indexOf('<ul class="ibb navigation0section navigation0right">'),
+    );
+    const list = right.slice(0, right.indexOf("</ul>"));
+    expect([...list.matchAll(/<li /g)]).toHaveLength(4);
+    expect(list).toContain('href="#footer0">Contact Us<');
+  });
+
+  it("ships the nav underline draw-in, gated and staggered", () => {
+    expect(FROZEN_ENHANCE_CSS).toContain(UNDERLINE_DRAW_CSS);
+    // Hidden at rest, drawn on the run class, and never on the logo anchors
+    // (which are `.navigation0ullia` without `.data-hashlink`).
+    expect(UNDERLINE_DRAW_CSS).toContain("transform:scaleX(0)");
+    expect(UNDERLINE_DRAW_CSS).toContain(
+      `.${NAV_UNDERLINE_RUN_CLASS} .navigation0ullia.data-hashlink::after` +
+        "{transform:scaleX(1)",
+    );
+    expect(UNDERLINE_DRAW_CSS).not.toMatch(/\.navigation0ullia(?!\.data-hash)/);
+    // The rule mark's own easing and stagger step, reused rather than reinvented.
+    expect(UNDERLINE_DRAW_CSS).toContain("cubic-bezier(.2,.55,.88,.95)");
+    expect(RULE_MARK_CSS).toContain("cubic-bezier(.2,.55,.88,.95)");
+    expect(UNDERLINE_DRAW_CSS).toContain("transition-delay:0.12s");
+    expect(UNDERLINE_DRAW_CSS).toContain("transition-delay:0.36s");
+    // Only the stagger is motion-gated; the underline itself must survive
+    // reduced motion (app.css clamps its duration so it snaps into place).
+    expect(UNDERLINE_DRAW_CSS).toContain(
+      "@media (prefers-reduced-motion:no-preference)",
+    );
+    expect(
+      UNDERLINE_DRAW_CSS.slice(
+        0,
+        UNDERLINE_DRAW_CSS.indexOf("@media (prefers-reduced-motion"),
+      ),
+    ).toContain("transform:scaleX(1)");
+  });
+
+  it("draws body link underlines in on scroll, wrap-safe and id-scoped", () => {
+    // Nicole's 51:42 comment is pinned on a BODY link, so `.links` gets the
+    // same gesture on the observer the rule marks already use.
+    expect(UNDERLINE_DRAW_CSS).toContain(
+      "#page-content .links.rd-fx-wait{background-size:0 1px",
+    );
+    expect(UNDERLINE_DRAW_CSS).toContain(
+      "#page-content .links.rd-fx-run{background-size:100% 1px;" +
+        "transition:background-size .7s cubic-bezier(.2,.55,.88,.95)}",
+    );
+    // A gradient, not a pseudo-element: the FIT link is a true inline that
+    // wraps, and each fragment needs its own underline.
+    expect(UNDERLINE_DRAW_CSS).toContain("box-decoration-break:clone");
+    expect(UNDERLINE_DRAW_CSS).toContain(
+      "background-image:linear-gradient(currentColor,currentColor)",
+    );
+    // Replaces app.css's text-decoration rather than doubling it, and must
+    // out-specify that unlayered (0,1,0) rule rather than rely on source order.
+    expect(UNDERLINE_DRAW_CSS).toContain(
+      "#page-content .links{text-decoration:none",
+    );
+    expect(UNDERLINE_DRAW_CSS).not.toMatch(/(^|})\.links\{/);
+  });
+
+  it("keeps the body underline on the row text-decoration drew it", () => {
+    // 1.137em + 4px reproduces the measured rows at both font sizes on the
+    // page: 29px at 22px type and 24.5px at 18px. Guarded because a nudge here
+    // moves every body underline off the row the design review signed off.
+    expect(UNDERLINE_DRAW_CSS).toContain(
+      "background-position:0 calc(1.137em + 4px)",
+    );
+    expect(1.137 * 22 + 4).toBeCloseTo(29, 1);
+    expect(1.137 * 18 + 4).toBeCloseTo(24.5, 1);
   });
 
   it("ships the reveal + anchor css", () => {

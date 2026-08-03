@@ -7,6 +7,7 @@ import {
   type SlotLookup,
 } from "./availability";
 import { replaceRuleMarks, RULE_MARK_CSS } from "./rule-mark";
+import { UNDERLINE_DRAW_CSS } from "./underline-draw";
 import { DISTINGUISHED_CSS } from "./distinguished";
 import {
   restyleCarouselCaptions,
@@ -88,9 +89,11 @@ export interface CmsDivergence {
  * `frozen_page` Prismic doc, after the 2026-07-30 design review.
  *
  * This exists because the divergences are otherwise invisible from the CMS
- * side: the four nav slots are all still live, editable fields in Prismic, and
- * three of them now render nothing at all. Without this list, an editor who
- * renames "Vision" sees no change on the site and has no way to find out why.
+ * side: all four nav slots are still live, editable fields in Prismic, yet one
+ * renders nothing at all and one renders text the doc does not contain. Without
+ * this list, an editor who renames "Vision" sees no change on the site and has
+ * no way to find out why. The trailing entry is the mirror case — nav text on
+ * the page that has no field behind it anywhere in Prismic.
  *
  * Slot keys verified against the committed artifact's nav markup.
  * `enhance.test.ts` holds it in lockstep with the code below, so an entry
@@ -104,23 +107,20 @@ export const CMS_DIVERGENCES: CmsDivergence[] = [
       "remove 'page-block-1' from NAV_LINKS_DROPPED to bring the item back",
   },
   {
-    slot: "h.t2",
-    what: 'Nav "Amenities" (#page-block-5) — dropped, renders nothing',
-    resolve:
-      "remove 'page-block-5' from NAV_LINKS_DROPPED to bring the item back",
-  },
-  {
-    slot: "h.t3",
-    what: 'Nav "Burbank" (#page-block-8) — dropped, renders nothing',
-    resolve:
-      "remove 'page-block-8' from NAV_LINKS_DROPPED to bring the item back",
-  },
-  {
     slot: "h.t4",
     what: 'Nav label — doc still reads "Contact Us", page shows "Availability"',
     resolve:
       'set h.t4 to "Availability" in Prismic, then delete NAV_LABEL_OVERRIDES ' +
       "(the override is keyed on the current text, so it no-ops on its own first)",
+  },
+  {
+    slot: null,
+    what:
+      'Nav "Contact Us" (#footer0) — a fifth item the freeze has no slot for, ' +
+      "so its label is hardcoded and NOT editable in Prismic",
+    resolve:
+      "edit CONTACT_NAV_ITEM here; to make it CMS-editable the export itself " +
+      "needs a fifth nav entry, which a re-freeze would then tokenize",
   },
 ];
 
@@ -148,23 +148,22 @@ export function rewriteNavLabels(
 }
 
 /**
- * Anchor targets of the nav items the design review dropped — Vision, Amenities
- * and Burbank — leaving Availability as the only item. Keyed on the target
+ * Anchor targets of the nav items that render nothing. Keyed on the target
  * rather than the label because the labels are CMS content, and a label can be
  * renamed in Prismic without this silently ceasing to match.
+ *
+ * The 2026-07-30 design review dropped Vision, Amenities and Burbank, leaving
+ * Availability alone. Amenities (#page-block-5) and Burbank (#page-block-8) were
+ * asked back in on 2026-08-03; Vision was not, so it is the one that stays here.
  *
  * These are the ids the freeze resolved from the export's own runtime. They were
  * Blux hash indexes (`/#1`, `/#5`, `/#8`) until the freeze started baking real
  * anchors; the ids happen to correspond, but this keys on what is actually in
- * the markup. `enhance.test.ts` asserts all three exist in the artifact, so a
+ * the markup. `enhance.test.ts` asserts every entry exists in the artifact, so a
  * re-freeze that resolves them differently fails rather than quietly restoring
- * three nav items nobody wanted back.
+ * a nav item nobody wanted back.
  */
-export const NAV_LINKS_DROPPED = [
-  "page-block-1",
-  "page-block-5",
-  "page-block-8",
-];
+export const NAV_LINKS_DROPPED = ["page-block-1"];
 
 export function dropNavLinks(
   html: string,
@@ -183,6 +182,61 @@ export function dropNavLinks(
     );
   }
   return out;
+}
+
+/**
+ * The nav's fifth item, added 2026-08-03.
+ *
+ * The export ships four nav entries and the freeze tokenized all four, so there
+ * is no spare slot to put this in: the original "Contact Us" entry is the one
+ * the review repurposed as "Availability", and the site wants BOTH now. So this
+ * item is composed here rather than driven by Prismic — which is a real CMS
+ * divergence, listed as such in `CMS_DIVERGENCES`.
+ *
+ * `#footer0` is the contact strip at the page bottom — the target the original
+ * Contact Us item carried before `HASHLINK_OVERRIDES` sent it to the
+ * availability panel instead.
+ */
+export const CONTACT_NAV_ITEM = { label: "Contact Us", href: "#footer0" };
+
+/**
+ * Append the Contact Us item after the Availability one.
+ *
+ * ORDER-COUPLED, both ways, which is why it is not just a string concat at
+ * template level. It must run AFTER `rewriteHashlinks` (which rewrites every
+ * `#footer0` to the availability anchor — including, otherwise, this item's own
+ * href) and AFTER `rewriteNavLabels` (which rewrites the text "Contact Us" to
+ * "Availability"). Run either way round and the nav grows a second Availability
+ * link rather than a Contact one. `steps()` places it accordingly, and
+ * `enhance.test.ts` asserts the end-to-end result rather than trusting this
+ * note.
+ *
+ * Anchored on the Availability item so the new one lands last in the list and
+ * inside the right `<ul>` — the nav has three of them (left/center/right), and
+ * the two logo items live in their own. Unmatched markup is left alone; the
+ * `#footer0` guard makes a second application a no-op should a re-freeze ever
+ * ship a Contact entry of its own.
+ */
+export function addContactNavItem(
+  html: string,
+  item: { label: string; href: string } = CONTACT_NAV_ITEM,
+): string {
+  if (html.includes(`href="${item.href}"`)) return html;
+  const availability = new RegExp(
+    `<li class="navigation0ulli">\\s*` +
+      `<a class="navigation0ullia data-hashlink" href="#${AVAILABILITY_ANCHOR}">` +
+      `[^<]*</a>\\s*</li>`,
+  );
+  const m = availability.exec(html);
+  if (!m) return html;
+  const at = m.index + m[0].length;
+  return (
+    html.slice(0, at) +
+    `<li class="navigation0ulli">` +
+    `<a class="navigation0ullia data-hashlink" href="${item.href}">` +
+    `${item.label}</a></li>` +
+    html.slice(at)
+  );
 }
 
 /**
@@ -402,9 +456,13 @@ export function liftHeadingLevels(html: string): string {
  * `dropNavLinks` and `rewriteHashlinks` used to be order-coupled: both keyed on
  * the raw `/#N` hrefs, so dropping had to happen before rewriting resolved them
  * away. The freeze bakes real anchors now, and the two key on disjoint targets
- * (`#page-block-{1,5,8}` vs `#footer0`), so that coupling is gone. The order
- * that still matters is `liftHeadingLevels` LAST — it must see the headings the
- * caption transform produces, not the ones it replaced.
+ * (`#page-block-1` vs `#footer0`), so that coupling is gone.
+ *
+ * Two orderings still matter. `addContactNavItem` must come after BOTH
+ * `rewriteHashlinks` and `rewriteNavLabels`, or the item it adds gets rewritten
+ * into a second Availability link — see its own doc comment. And
+ * `liftHeadingLevels` runs LAST: it must see the headings the caption transform
+ * produces, not the ones it replaced.
  *
  * `values` is the page's Prismic slot map. It is optional so every caller that
  * only cares about markup repair (and the whole existing test suite) can keep
@@ -419,6 +477,9 @@ function steps(values?: SlotLookup): ((html: string) => string)[] {
     rewriteCfEmails,
     restoreLinkSpacing,
     rewriteNavLabels,
+    // After rewriteHashlinks + rewriteNavLabels, both of which would otherwise
+    // rewrite the item this adds.
+    addContactNavItem,
     addMainLandmark,
     (html) => addVideoPoster(html, poster),
     (html) => replaceAvailabilityImage(html, availability),
@@ -633,4 +694,9 @@ export const FROZEN_ENHANCE_CSS = [
 
   // The double-rule mark, now vector rather than two baked PNGs.
   RULE_MARK_CSS,
+
+  // Link underlines that draw in left-to-right — the rule mark's gesture and
+  // timing applied to the nav (on first scroll) and to body links (on scroll
+  // into view). Nicole's comment on node 51:42.
+  UNDERLINE_DRAW_CSS,
 ].join("");

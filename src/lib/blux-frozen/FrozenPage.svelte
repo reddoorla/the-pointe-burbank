@@ -9,6 +9,7 @@
     hydrateFrozenMap,
     type FrozenMapConfig,
   } from "$lib/blux-frozen/frozen-map";
+  import { NAV_UNDERLINE_RUN_CLASS } from "$lib/blux-frozen/underline-draw";
   import {
     substitute,
     styleTag,
@@ -83,12 +84,25 @@
     // the original: absolute at top, fixed + same white background after
     // scroll). The nav is out of flow either way, so the flip never shifts
     // layout.
+    //
+    // The same scroll state drives the nav-link underlines (NAV_UNDERLINE_CSS):
+    // they draw themselves in left-to-right the first time the page leaves the
+    // top. The class is only ever added — scrolling back up leaves them drawn
+    // rather than retracting them — so the reveal reads as an entrance, not as
+    // a control bound to scroll position. It rides `pin` instead of its own
+    // listener because the two describe the same moment.
+    //
+    // Deliberately outside the reduced-motion guard below: the underline is a
+    // visual state, not an animation, and app.css's reduced-motion reset
+    // already clamps the transition so it snaps rather than sweeps.
     const stickyNav = document.querySelector<HTMLElement>(
       'nav[data-type="sticky"]',
     );
     if (stickyNav) {
       const pin = () => {
-        stickyNav.style.position = window.scrollY > 0 ? "fixed" : "absolute";
+        const scrolled = window.scrollY > 0;
+        stickyNav.style.position = scrolled ? "fixed" : "absolute";
+        if (scrolled) stickyNav.classList.add(NAV_UNDERLINE_RUN_CLASS);
       };
       pin();
       window.addEventListener("scroll", pin, { passive: true });
@@ -129,12 +143,13 @@
       );
       // Only elements FULLY below the viewport animate — anything partially
       // visible at load stays put (hiding it would blink: wait-class, then an
-      // immediate IO reveal). `.rd-rule` marks ride the same observer: the
-      // shared wait/run classes drive their own left-to-right draw-in (see
-      // RULE_MARK_CSS), so a mark already on screen is simply drawn.
+      // immediate IO reveal). `.rd-rule` marks and `.links` anchors ride the
+      // same observer: the shared wait/run classes drive their own
+      // left-to-right draw-in (see RULE_MARK_CSS and UNDERLINE_DRAW_CSS), so a
+      // mark or underline already on screen is simply drawn.
       const foldLine = window.innerHeight;
       for (const el of document.querySelectorAll<HTMLElement>(
-        ".block-effects, .rd-rule",
+        ".block-effects, .rd-rule, .links",
       )) {
         if (el.getBoundingClientRect().top > foldLine) {
           el.classList.add("rd-fx-wait");
