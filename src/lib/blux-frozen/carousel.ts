@@ -13,17 +13,30 @@
 //   inactive style="width:100%;transform:translateX(-N00%);pointer-events:none;
 //                   opacity:0;display:none"
 //
-// So the slides do not slide. Blux lays them out as inline-blocks in a
-// `white-space:nowrap;overflow:hidden` track and then shows exactly one with
-// `display`, which makes the baked `translateX(-N00%)` on the hidden ones inert
-// — a leftover of the track geometry, not a position this reads or writes.
-// Cross-fading `opacity` is what the settled markup actually describes, and
-// touching the transforms would be inventing behaviour the freeze never had.
+// TRANSFORM IS PART OF THE CONTRACT. An earlier version of this file toggled
+// only `display`/`opacity` and called the baked `translateX(-N00%)` inert track
+// geometry. It is not: the track is `overflow:hidden`, so an activated slide
+// that keeps its parked transform renders one or two full widths to the LEFT of
+// the track and the arrows appear to do nothing. Slide 0 alone looked right,
+// because its baked transform is already `translateX(0%)`. Both states are
+// therefore written on every change — `translateX(0%)` to bring a slide into
+// the track, its own parked value to put it back.
+//
+// The slides still do not SLIDE. Blux lays them out as inline-blocks and shows
+// exactly one with `display`, so a swap is a cut between frames, not a glide
+// along a rail. Cross-fading `opacity` is what the settled markup describes.
 //
 // `display:none` on the inactive slides is load-bearing for accessibility, not
 // just paint: it takes their headings and images out of the accessibility tree
 // and the tab order, so a screen reader announces one caption rather than all
 // three, and nothing off-screen can be tabbed into.
+//
+// Verified against a DEPLOYED page. Under `vite dev` the committed slot
+// defaults point at Blux CloudFront, which `img-src` blocks, so every slide is
+// a blank box — a slide parked off-screen and a slide with no image look
+// exactly the same. That is how the transform bug shipped. The gate spec now
+// asserts each activated slide's box lands inside the track, which is geometry
+// and so holds with or without the photographs.
 
 /** Arrow button ids are the slider's block id plus these suffixes. */
 const ARROWS = { prev: "-left", next: "-right" } as const;
@@ -31,6 +44,14 @@ const ARROWS = { prev: "-left", next: "-right" } as const;
 interface Slider {
   track: HTMLElement;
   slides: HTMLElement[];
+  /**
+   * Each slide's baked `transform`, read once before the first `show()`.
+   *
+   * Read rather than derived from the index: `-N00%` happens to describe this
+   * artifact, but the parked value belongs to the freeze, and restoring exactly
+   * what was there cannot drift from it.
+   */
+  parked: string[];
   prev: HTMLElement | null;
   next: HTMLElement | null;
 }
@@ -49,6 +70,9 @@ function show(s: Slider, index: number): void {
     const on = i === index;
     slide.style.display = on ? "block" : "none";
     slide.style.opacity = on ? "1" : "0";
+    // Without this the slide stays parked outside an `overflow:hidden` track
+    // and the arrow reads as broken. See the note at the top of the file.
+    slide.style.transform = on ? "translateX(0%)" : s.parked[i];
     slide.style.pointerEvents = on ? "" : "none";
     slide.setAttribute("aria-hidden", on ? "false" : "true");
   });
@@ -80,6 +104,8 @@ export function hydrateCarousels(root: ParentNode = document): () => void {
     const s: Slider = {
       track,
       slides,
+      // Captured before the first `show()`, which overwrites the active one.
+      parked: slides.map((el) => el.style.transform),
       prev: document.getElementById(id + ARROWS.prev),
       next: document.getElementById(id + ARROWS.next),
     };

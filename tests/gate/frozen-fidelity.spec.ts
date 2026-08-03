@@ -254,3 +254,80 @@ test("frozen the-pointe renders whole: ~14820px, 50 media, panels live, no token
   expect(await page.content()).not.toContain("⟦");
   expect(errors).toEqual([]);
 });
+
+// Carousel geometry gate.
+//
+// Separate from the render gate above because it drives the page rather than
+// measuring it at rest, and because it is the check that was missing when the
+// slider shipped broken: `hydrateCarousels` toggled display and opacity but not
+// the freeze's parked `translateX(-N00%)`, so slides 2 and 3 became visible one
+// and two full widths to the left of an `overflow:hidden` track. Every unit
+// test passed — the state machine was correct — and the failure was invisible
+// under `vite dev`, where the committed slot defaults point at Blux CloudFront,
+// `img-src` blocks that host, and a slide parked off-screen looks exactly like
+// a slide with no photograph.
+//
+// Geometry is what distinguishes them, and geometry needs no images: whichever
+// slide is showing must overlap the track it lives in.
+test("carousel: every slide lands inside the track when shown", async ({
+  page,
+}) => {
+  await page.goto("/dev/blux-frozen", { waitUntil: "load" });
+  await page.evaluate(() =>
+    document
+      .querySelector("#page-block-8")
+      ?.scrollIntoView({ block: "center" }),
+  );
+  await page.waitForTimeout(300);
+
+  // One flat shape in every case — a missing track or a wrong number of visible
+  // slides reports as counts rather than as a different type, so the assertions
+  // below need no narrowing and a structural failure still names itself.
+  const shown = () =>
+    page.evaluate(() => {
+      const track = document.querySelector("#page-block-8 .caslider");
+      const slides = track
+        ? [...track.children].filter((c) => c.classList.contains("cagriditem"))
+        : [];
+      const visible = slides.filter(
+        (c) => getComputedStyle(c as HTMLElement).display !== "none",
+      );
+      const t = track?.getBoundingClientRect();
+      const r =
+        visible.length === 1 ? visible[0].getBoundingClientRect() : null;
+      return {
+        slideCount: slides.length,
+        visibleCount: visible.length,
+        index: r ? slides.indexOf(visible[0]) : -1,
+        // How much of the slide's box overlaps the track's. A parked slide sits
+        // a full width to the side, so this goes to zero or below.
+        overlapX:
+          r && t ? Math.min(r.right, t.right) - Math.max(r.left, t.left) : -1,
+        width: r ? Math.round(r.width) : -1,
+        trackWidth: t ? Math.round(t.width) : -1,
+      };
+    });
+
+  // Three slides, so four clicks proves the wrap as well as each frame.
+  const seen: number[] = [];
+  for (let i = 0; i < 4; i++) {
+    const s = await shown();
+    expect(s, "the slider should show exactly one of its slides").toMatchObject(
+      {
+        slideCount: 3,
+        visibleCount: 1,
+      },
+    );
+    // The whole bug in one assertion: a parked slide barely overlaps, or not
+    // at all. A slide that is properly in the track overlaps it entirely.
+    expect
+      .soft(s.overlapX, `slide ${s.index} is parked outside the track`)
+      .toBeGreaterThan(s.trackWidth * 0.99);
+    expect(s.width).toBe(s.trackWidth);
+    seen.push(s.index);
+    await page.click("#page-block-8-right");
+    await page.waitForTimeout(200);
+  }
+  // Advancing must actually change frames, and wrap back to where it started.
+  expect(seen).toEqual([0, 1, 2, 0]);
+});

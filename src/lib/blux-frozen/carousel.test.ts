@@ -5,9 +5,17 @@ import template from "./frozen/home.html?raw";
 // The freeze's own shape, reproduced exactly: an active slide carrying
 // display:block/opacity:1 and inactive ones carrying display:none/opacity:0,
 // with the arrows OUTSIDE the track and keyed to the block id.
+//
+// The parked `translateX(-N00%)` matters as much as the display flags — the
+// track is `overflow:hidden`, so a slide shown without its transform cleared
+// renders N widths to the left of it. Slide 0 sits at 0%, which is why it was
+// the only one that ever looked right.
+const parkedAt = (i: number) =>
+  i === 0 ? "translateX(0%)" : `translateX(-${i}00%)`;
+
 const slide = (i: number, active: boolean) =>
   `<div class="block-subcontent cagriditem top grid-1 " style="width: 100%; ` +
-  `transform: translateX(-${i}00%); ${active ? "" : "pointer-events: none; "}` +
+  `transform: ${parkedAt(i)}; ${active ? "" : "pointer-events: none; "}` +
   `opacity: ${active ? 1 : 0};display:${active ? "block" : "none"}">` +
   `<div id="page-block-8-item-${i}"><h5>caption ${i}</h5></div></div>`;
 
@@ -70,6 +78,40 @@ describe("hydrateCarousels", () => {
     hydrateCarousels();
     for (let i = 0; i < 7; i++) {
       expect(visible().filter((d) => d === "block")).toHaveLength(1);
+      click("page-block-8-right");
+    }
+  });
+
+  it("brings the shown slide into the track instead of leaving it parked", () => {
+    // The bug this guards: `show()` used to toggle display and opacity only, so
+    // slide 1 became visible while still translated one full width left of an
+    // `overflow:hidden` track. The arrows worked; the carousel looked dead.
+    hydrateCarousels();
+    click("page-block-8-right");
+    const els = [...document.querySelectorAll<HTMLElement>(".cagriditem")];
+    expect(els[1].style.transform).toBe("translateX(0%)");
+    expect(els[1].style.display).toBe("block");
+  });
+
+  it("parks a slide back where the freeze had it when it goes inactive", () => {
+    hydrateCarousels();
+    click("page-block-8-right"); // 0 -> 1
+    click("page-block-8-right"); // 1 -> 2
+    const els = [...document.querySelectorAll<HTMLElement>(".cagriditem")];
+    expect(els.map((e) => e.style.transform)).toEqual([
+      "translateX(0%)", // slide 0's own parked value happens to be 0%
+      "translateX(-100%)",
+      "translateX(0%)", // the active one
+    ]);
+  });
+
+  it("keeps exactly one slide un-parked through a full cycle", () => {
+    hydrateCarousels();
+    for (let i = 0; i < 7; i++) {
+      const at = [...document.querySelectorAll<HTMLElement>(".cagriditem")];
+      const shown = at.filter((e) => e.style.display === "block");
+      expect(shown).toHaveLength(1);
+      expect(shown[0].style.transform).toBe("translateX(0%)");
       click("page-block-8-right");
     }
   });
@@ -166,5 +208,25 @@ describe("the artifact the hydration depends on", () => {
     ].map((m) => m[1]);
     expect(styles.filter((s) => /display:block/.test(s))).toHaveLength(1);
     expect(styles.filter((s) => /display:none/.test(s))).toHaveLength(2);
+  });
+
+  it("parks its hidden slides off to the left, which is why they must be moved", () => {
+    // The premise of `show()`'s transform handling. If a re-freeze ever settles
+    // with every slide at 0%, restoring the parked value becomes a no-op and
+    // this test says so before anyone concludes the transform code is dead.
+    const section = template.slice(
+      template.indexOf('<section id="page-block-8"'),
+    );
+    const region = section.slice(0, section.indexOf("</section>"));
+    const transforms = [
+      ...region.matchAll(
+        /<div class="block-subcontent cagriditem[^"]*"[^>]*?transform:\s*(translateX\([^)]*\))/g,
+      ),
+    ].map((m) => m[1].replace(/\s/g, ""));
+    expect(transforms).toEqual([
+      "translateX(0%)",
+      "translateX(-100%)",
+      "translateX(-200%)",
+    ]);
   });
 });
