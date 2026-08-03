@@ -792,29 +792,56 @@ export const FROZEN_ENHANCE_CSS = [
   // holds its square ratio, so scaling the width alone scales both axes and
   // nothing else in the row moves.
   //
-  // 10% off WHAT is the whole question, and the answer differs by breakpoint —
-  // the freeze's inline `width:123px` is not what the badge actually renders at.
-  // Measured across the range rather than reasoned about:
+  // TARGET: equal HEIGHT with the building icons beside it, not "10% off".
+  // Round 4 read the note literally and took 10% off the width; the badge still
+  // stood a third taller than its neighbours, because it is the only square
+  // artwork in a row of 67.92%/68.18% ones. Equal width in that row is not equal
+  // size to the eye — height is what the note is describing.
   //
-  //   ≤700px    badges render at their inline widths   123 → 110.7  (rule 1)
-  //   700-1000  the 20% grid + max-width:100% clamps all three to the SAME
-  //             width, so there is nothing left to shrink; rule 1 is inert
-  //   ≥1000px   DISTINGUISHED_CSS normalises the row to 107px   107 → 96.3
+  //                     icons          badge before   badge now
+  //   ≥1000px           107 x 72.7     96.3 x 96.3    72.8 x 72.8
+  //   701-999px         W x 0.679W     W x W          0.68W x 0.68W
   //
-  // The desktop case is the one the note was written against, and the one that
-  // makes the second rule necessary: taking 110.7px there would have rendered
-  // the badge BIGGER than the 107px neighbours it is meant to shrink below —
-  // the opposite of the ask. Verified after the change at 1440px: 96.3 against
-  // 107 either side.
+  // Box parity, checked against ink. The four artworks do NOT fill their boxes
+  // equally, so box height alone would not have settled it — measured at 4x on
+  // the deploy preview, the ink runs 67.5 / 67.0 / 73.0 tall in the three icons
+  // and fills 95.5% of the badge's square. 72.8px of box therefore reads as
+  // 69.6px of ink, which sits inside the 6px spread the icons already have
+  // between themselves and lands 0.4px off their mean. Chasing ink parity more
+  // precisely than that would be false precision.
   //
-  // Both rules are id-scoped to this one credential. Its neighbours are wider
-  // logos at ~68% ratios and the comment is pinned on this badge alone. The
-  // desktop selector mirrors DISTINGUISHED_CSS's own shape so the two are
-  // legibly the same target; its id gives it the specificity to win. Inline
-  // width and an `!important` rule respectively, so both need !important.
+  // The measurement has to be taken against a DEPLOYED page, not `vite dev`:
+  // the committed slot defaults still carry Blux CloudFront URLs, and `img-src`
+  // does not allow that host, so locally every media box renders empty. Prismic
+  // serves the real assets in production, and only the box geometry (driven by
+  // the `padding-bottom` spacer, not the image) is trustworthy in dev.
+  //
+  // Three layout regimes, and the boundaries are the freeze's own — a
+  // `max-width:700px` block, and DISTINGUISHED_CSS's `min-width:1000px`:
+  //
+  //   ≤700px      one credential per row, each at its inline width. The badge
+  //               reads SHORTER than the icons here already (110.7 against
+  //               135.8/143.2), so parity would mean growing it. Left at the
+  //               round-4 value — nothing sits next to it to be out of step
+  //               with, and the note asks for smaller.
+  //   701-999px   still one per row, but the 20% grid + `max-width:100%` clamps
+  //               every image to the holder width, so the icons ARE the holder
+  //               and 68% of it is their height. Round 4 called this regime
+  //               unfixable; it is not, it just needs a ratio rather than a px.
+  //   ≥1000px     the real row — DISTINGUISHED_CSS normalises the icons to
+  //               107px, so 107 x 0.6792 = 72.68 and 107 x 0.6818 = 72.95.
+  //               72.8px splits them, landing within 0.15px of both.
+  //
+  // All three are id-scoped to this one credential: its neighbours are fine as
+  // they are, and the comment is pinned on this badge alone. The desktop
+  // selector mirrors DISTINGUISHED_CSS's own shape so the two are legibly the
+  // same target; its id beats that file's `[id^=…]` attribute selector. Inline
+  // width and an `!important` rule respectively, so all need !important.
   "#page-block-3-item-1-item-0-item-3 .camediaload{width:110.7px!important}",
+  "@media all and (min-width:701px){#page-block-3-item-1-item-0-item-3 " +
+    ".camediaload{width:68%!important}}",
   "@media all and (min-width:1000px){#page-block-3-item-1-item-0-item-3 " +
-    ".block-media-holder>.ib.img{width:96.3px!important}}",
+    ".block-media-holder>.ib.img{width:72.8px!important}}",
 
   // Lush Haven carousel caption (Figma node 12:130): the rule mark above a
   // left-aligned white caption, over the image rather than in a white bar.
