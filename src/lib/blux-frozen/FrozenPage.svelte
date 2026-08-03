@@ -9,7 +9,6 @@
     hydrateFrozenMap,
     type FrozenMapConfig,
   } from "$lib/blux-frozen/frozen-map";
-  import { NAV_UNDERLINE_RUN_CLASS } from "$lib/blux-frozen/underline-draw";
   import { hydrateCarousels } from "$lib/blux-frozen/carousel";
   import {
     substitute,
@@ -85,25 +84,12 @@
     // the original: absolute at top, fixed + same white background after
     // scroll). The nav is out of flow either way, so the flip never shifts
     // layout.
-    //
-    // The same scroll state drives the nav-link underlines (NAV_UNDERLINE_CSS):
-    // they draw themselves in left-to-right the first time the page leaves the
-    // top. The class is only ever added — scrolling back up leaves them drawn
-    // rather than retracting them — so the reveal reads as an entrance, not as
-    // a control bound to scroll position. It rides `pin` instead of its own
-    // listener because the two describe the same moment.
-    //
-    // Deliberately outside the reduced-motion guard below: the underline is a
-    // visual state, not an animation, and app.css's reduced-motion reset
-    // already clamps the transition so it snaps rather than sweeps.
     const stickyNav = document.querySelector<HTMLElement>(
       'nav[data-type="sticky"]',
     );
     if (stickyNav) {
       const pin = () => {
-        const scrolled = window.scrollY > 0;
-        stickyNav.style.position = scrolled ? "fixed" : "absolute";
-        if (scrolled) stickyNav.classList.add(NAV_UNDERLINE_RUN_CLASS);
+        stickyNav.style.position = window.scrollY > 0 ? "fixed" : "absolute";
       };
       pin();
       window.addEventListener("scroll", pin, { passive: true });

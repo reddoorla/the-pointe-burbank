@@ -24,7 +24,7 @@ import {
   NAV_LABEL_OVERRIDES,
   HASHLINK_OVERRIDES,
 } from "./enhance";
-import { UNDERLINE_DRAW_CSS, NAV_UNDERLINE_RUN_CLASS } from "./underline-draw";
+import { UNDERLINE_DRAW_CSS } from "./underline-draw";
 import { RULE_MARK_CSS } from "./rule-mark";
 import { DISTINGUISHED_CSS } from "./distinguished";
 import { substitute, type SlotValue } from "./substitute";
@@ -643,32 +643,24 @@ describe("enhanceFrozenHtml + css", () => {
     expect(list).toContain('href="#footer0">Contact Us<');
   });
 
-  it("ships the nav underline draw-in, gated and staggered", () => {
+  it("draws no underline under the nav items", () => {
+    // Round 4 gave the nav the draw-in too, reading Nicole's 51:42 comment as
+    // covering links generally; the pin is on a body link and the nav lines were
+    // dropped on 2026-08-03. Asserted as an absence so nothing reintroduces
+    // them by reaching for `.links`-style rules in the nav's direction.
     expect(FROZEN_ENHANCE_CSS).toContain(UNDERLINE_DRAW_CSS);
-    // Hidden at rest, drawn on the run class, and never on the logo anchors
-    // (which are `.navigation0ullia` without `.data-hashlink`).
-    expect(UNDERLINE_DRAW_CSS).toContain("transform:scaleX(0)");
-    expect(UNDERLINE_DRAW_CSS).toContain(
-      `.${NAV_UNDERLINE_RUN_CLASS} .navigation0ullia.data-hashlink::after` +
-        "{transform:scaleX(1)",
-    );
-    expect(UNDERLINE_DRAW_CSS).not.toMatch(/\.navigation0ullia(?!\.data-hash)/);
-    // The rule mark's own easing and stagger step, reused rather than reinvented.
+    expect(UNDERLINE_DRAW_CSS).not.toContain("navigation0ullia");
+    expect(UNDERLINE_DRAW_CSS).not.toContain("navigation0ulli");
+    expect(UNDERLINE_DRAW_CSS).not.toContain("rd-nav-run");
+    expect(UNDERLINE_DRAW_CSS).not.toContain("scaleX");
+    // The whole enhance bundle, not just this module — the nav must come out of
+    // the render with no underline rule from any of them.
+    expect(FROZEN_ENHANCE_CSS).not.toMatch(/navigation0ullia[^{]*::after/);
+  });
+
+  it("reuses the rule mark's easing rather than reinventing it", () => {
     expect(UNDERLINE_DRAW_CSS).toContain("cubic-bezier(.2,.55,.88,.95)");
     expect(RULE_MARK_CSS).toContain("cubic-bezier(.2,.55,.88,.95)");
-    expect(UNDERLINE_DRAW_CSS).toContain("transition-delay:0.12s");
-    expect(UNDERLINE_DRAW_CSS).toContain("transition-delay:0.36s");
-    // Only the stagger is motion-gated; the underline itself must survive
-    // reduced motion (app.css clamps its duration so it snaps into place).
-    expect(UNDERLINE_DRAW_CSS).toContain(
-      "@media (prefers-reduced-motion:no-preference)",
-    );
-    expect(
-      UNDERLINE_DRAW_CSS.slice(
-        0,
-        UNDERLINE_DRAW_CSS.indexOf("@media (prefers-reduced-motion"),
-      ),
-    ).toContain("transform:scaleX(1)");
   });
 
   it("draws body link underlines in on scroll, wrap-safe and id-scoped", () => {
