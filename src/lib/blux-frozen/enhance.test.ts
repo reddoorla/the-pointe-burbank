@@ -11,6 +11,10 @@ import {
   liftHeadingLevels,
   rewriteNavLabels,
   dropNavLinks,
+  addContactNavItem,
+  linkCopyWord,
+  breakHeadingLine,
+  CONTACT_NAV_ITEM,
   enhanceFrozenHtml,
   FROZEN_ENHANCE_CSS,
   VIDEO_POSTER,
@@ -20,9 +24,24 @@ import {
   NAV_LABEL_OVERRIDES,
   HASHLINK_OVERRIDES,
 } from "./enhance";
+import { UNDERLINE_DRAW_CSS, NAV_UNDERLINE_RUN_CLASS } from "./underline-draw";
+import { RULE_MARK_CSS } from "./rule-mark";
+import { DISTINGUISHED_CSS } from "./distinguished";
+import { substitute, type SlotValue } from "./substitute";
 import extra from "./frozen/home.extra-slots.json";
 import template from "./frozen/home.html?raw";
 import freezeDefaults from "./frozen/home.slots.json";
+
+/**
+ * The freeze's own default slot values, i.e. what the page renders with when
+ * Prismic returns nothing. Enough to exercise the label-keyed nav steps, which
+ * see raw `⟦t:…⟧` tokens and match nothing without it.
+ */
+const freezeValues = new Map<string, SlotValue>(
+  (freezeDefaults.slots as { key: string; kind: string; text?: string }[]).map(
+    (s) => [s.key, s.kind === "image" ? {} : { text: s.text }],
+  ),
+);
 
 describe("CMS_DIVERGENCES", () => {
   // Anchor target -> label slot, read from the REAL committed artifact so the
@@ -60,6 +79,15 @@ describe("CMS_DIVERGENCES", () => {
   it("covers the overridden nav label too", () => {
     expect(Object.keys(NAV_LABEL_OVERRIDES)).toHaveLength(1);
     expect(listed).toContain(navSlots.get("footer0"));
+  });
+
+  it("covers the Contact item, which has no slot behind it at all", () => {
+    // The mirror case: nav text on the page that Prismic cannot reach. It is
+    // listed with a null slot, so the "nothing stale" check below skips it —
+    // this is what proves it is listed.
+    const noSlot = CMS_DIVERGENCES.filter((d) => d.slot === null);
+    expect(noSlot).toHaveLength(1);
+    expect(noSlot[0].what).toContain(CONTACT_NAV_ITEM.label);
   });
 
   it("retargets exactly one link, so nothing else is silently redirected", () => {
@@ -251,20 +279,144 @@ describe("dropNavLinks", () => {
     li("page-block-8", "Burbank") +
     li("footer0", "Contact Us");
 
-  it("leaves only the Availability item", () => {
+  it("drops Vision and keeps the three items asked back in", () => {
     const out = dropNavLinks(nav);
-    expect(out).toBe(li("footer0", "Contact Us"));
+    expect(out).toBe(
+      li("page-block-5", "Amenities") +
+        li("page-block-8", "Burbank") +
+        li("footer0", "Contact Us"),
+    );
   });
 
   it("removes the whole list item, not just the anchor", () => {
     expect(dropNavLinks(nav)).not.toContain('navigation0ulli"></li>');
-    expect([...dropNavLinks(nav).matchAll(/<li /g)]).toHaveLength(1);
+    expect([...dropNavLinks(nav).matchAll(/<li /g)]).toHaveLength(3);
   });
 
   it("does not touch the logo link, which has no hashlink", () => {
     const logo =
       '<li class="navigation0ulli"><a class="navigation0ullia" href="/">L</a></li>';
     expect(dropNavLinks(logo)).toBe(logo);
+  });
+});
+
+describe("addContactNavItem", () => {
+  const li = (href: string, label: string) =>
+    '<li class="navigation0ulli">' +
+    `<a class="navigation0ullia data-hashlink" href="${href}">${label}</a></li>`;
+  // The nav as the earlier steps leave it: Contact Us already relabelled and
+  // retargeted into the Availability item.
+  const nav =
+    "<ul>" +
+    li("#page-block-5", "Amenities") +
+    li("#page-block-8", "Burbank") +
+    li(`#${AVAILABILITY_ANCHOR}`, "Availability") +
+    "</ul>";
+
+  it("appends Contact Us after Availability, inside the same list", () => {
+    expect(addContactNavItem(nav)).toBe(
+      "<ul>" +
+        li("#page-block-5", "Amenities") +
+        li("#page-block-8", "Burbank") +
+        li(`#${AVAILABILITY_ANCHOR}`, "Availability") +
+        li("#footer0", "Contact Us") +
+        "</ul>",
+    );
+  });
+
+  it("points it at the footer contact strip, not the availability panel", () => {
+    const out = addContactNavItem(nav);
+    expect(out).toContain('href="#footer0">Contact Us<');
+    expect([...out.matchAll(/href="#footer0"/g)]).toHaveLength(1);
+    // The Availability item is untouched — this adds, it does not retarget.
+    expect(out).toContain(`href="#${AVAILABILITY_ANCHOR}">Availability<`);
+  });
+
+  it("is a no-op when a Contact link is already present", () => {
+    const once = addContactNavItem(nav);
+    expect(addContactNavItem(once)).toBe(once);
+  });
+
+  it("leaves markup with no Availability item alone", () => {
+    const logo =
+      '<li class="navigation0ulli"><a class="navigation0ullia" href="/">L</a></li>';
+    expect(addContactNavItem(logo)).toBe(logo);
+  });
+});
+
+describe("linkCopyWord", () => {
+  const body = (text: string) => `<div class="block-body text14">${text}</div>`;
+  const copy = "Head to the MRKT for a quick bite on-the-go.";
+
+  it("links the word and nothing else in the sentence", () => {
+    const out = linkCopyWord(body(copy));
+    expect(out).toContain(
+      '<a class="links" href="https://mrktburbank.square.site/" ' +
+        'target="_blank" rel="noopener">MRKT</a>',
+    );
+    expect(out).toContain("Head to the <a");
+    expect(out).toContain("</a> for a quick bite");
+  });
+
+  it("carries `links` without `ib`, so it wraps inside the sentence", () => {
+    // `.ib` is inline-block — right for the standalone Visit Website links,
+    // wrong for a word mid-paragraph.
+    expect(linkCopyWord(body(copy))).not.toContain('class="ib middle links"');
+  });
+
+  it("links only the first mention", () => {
+    const out = linkCopyWord(body("MRKT is a MRKT."));
+    expect([...out.matchAll(/<a /g)]).toHaveLength(1);
+  });
+
+  it("leaves a longer word that merely contains it alone", () => {
+    const out = linkCopyWord(body("The MRKTPLACE is open."));
+    expect(out).not.toContain("<a ");
+  });
+
+  it("no-ops once an editor rewrites the sentence without the word", () => {
+    const rewritten = body("Head to the market for a quick bite.");
+    expect(linkCopyWord(rewritten)).toBe(rewritten);
+  });
+
+  it("does not reach into other body classes", () => {
+    const other = '<div class="block-body text1">Visit the MRKT today.</div>';
+    expect(linkCopyWord(other)).toBe(other);
+  });
+});
+
+describe("breakHeadingLine", () => {
+  const block = (text: string) =>
+    `<div id="page-block-11-item-0-item-1" class="blocks0">` +
+    `<div class="blockcontainer"><div class="block-content">` +
+    `<h4 class="block-title text11">${text}</h4></div></div></div>`;
+
+  it("breaks before `of`, matching how the left heading breaks", () => {
+    const out = breakHeadingLine(block("a city full of possibilities"));
+    expect(out).toContain(
+      '<h4 class="block-title text11">a city full<br>of possibilities</h4>',
+    );
+  });
+
+  it("inserts exactly one break", () => {
+    const out = breakHeadingLine(block("a city full of possibilities"));
+    expect([...out.matchAll(/<br>/g)]).toHaveLength(1);
+  });
+
+  it("no-ops when the heading has been reworded in Prismic", () => {
+    const reworded = block("endless opportunity awaits");
+    expect(breakHeadingLine(reworded)).toBe(reworded);
+  });
+
+  it("leaves a same-worded heading in a different block alone", () => {
+    const elsewhere =
+      '<div id="page-block-4-item-0"><h4>a city full of possibilities</h4></div>';
+    expect(breakHeadingLine(elsewhere)).toBe(elsewhere);
+  });
+
+  it("is idempotent — a heading already broken is not broken again", () => {
+    const once = breakHeadingLine(block("a city full of possibilities"));
+    expect(breakHeadingLine(once)).toBe(once);
   });
 });
 
@@ -452,6 +604,172 @@ describe("enhanceFrozenHtml + css", () => {
     expect(out).toContain(">Availability<");
   });
 
+  it("renders the real artifact's nav as Amenities/Burbank/Availability/Contact", () => {
+    // The whole nav pipeline against the committed markup, in order: Vision
+    // dropped, the other two restored, the fourth slot relabelled + retargeted,
+    // and Contact Us appended. Asserted end-to-end because the steps are
+    // order-coupled — addContactNavItem run too early yields two Availability
+    // links, which every per-function test above would still pass.
+    const out = enhanceFrozenHtml(
+      substitute(template, freezeValues),
+      freezeValues,
+    );
+    const nav = out.slice(out.indexOf("<nav"), out.indexOf("</nav>"));
+    const items = [
+      ...nav.matchAll(
+        /<a class="navigation0ullia data-hashlink" href="#([A-Za-z0-9_-]+)">([^<]*)<\/a>/g,
+      ),
+    ].map((m) => [m[2], m[1]]);
+    expect(items).toEqual([
+      ["Amenities", "page-block-5"],
+      ["Burbank", "page-block-8"],
+      ["Availability", AVAILABILITY_ANCHOR],
+      ["Contact Us", "footer0"],
+    ]);
+  });
+
+  it("puts the Contact item in the same list as the others", () => {
+    // A regex that appended after the wrong `</li>` could still produce the
+    // right item order above while landing it outside the right `<ul>`.
+    const out = enhanceFrozenHtml(
+      substitute(template, freezeValues),
+      freezeValues,
+    );
+    const right = out.slice(
+      out.indexOf('<ul class="ibb navigation0section navigation0right">'),
+    );
+    const list = right.slice(0, right.indexOf("</ul>"));
+    expect([...list.matchAll(/<li /g)]).toHaveLength(4);
+    expect(list).toContain('href="#footer0">Contact Us<');
+  });
+
+  it("ships the nav underline draw-in, gated and staggered", () => {
+    expect(FROZEN_ENHANCE_CSS).toContain(UNDERLINE_DRAW_CSS);
+    // Hidden at rest, drawn on the run class, and never on the logo anchors
+    // (which are `.navigation0ullia` without `.data-hashlink`).
+    expect(UNDERLINE_DRAW_CSS).toContain("transform:scaleX(0)");
+    expect(UNDERLINE_DRAW_CSS).toContain(
+      `.${NAV_UNDERLINE_RUN_CLASS} .navigation0ullia.data-hashlink::after` +
+        "{transform:scaleX(1)",
+    );
+    expect(UNDERLINE_DRAW_CSS).not.toMatch(/\.navigation0ullia(?!\.data-hash)/);
+    // The rule mark's own easing and stagger step, reused rather than reinvented.
+    expect(UNDERLINE_DRAW_CSS).toContain("cubic-bezier(.2,.55,.88,.95)");
+    expect(RULE_MARK_CSS).toContain("cubic-bezier(.2,.55,.88,.95)");
+    expect(UNDERLINE_DRAW_CSS).toContain("transition-delay:0.12s");
+    expect(UNDERLINE_DRAW_CSS).toContain("transition-delay:0.36s");
+    // Only the stagger is motion-gated; the underline itself must survive
+    // reduced motion (app.css clamps its duration so it snaps into place).
+    expect(UNDERLINE_DRAW_CSS).toContain(
+      "@media (prefers-reduced-motion:no-preference)",
+    );
+    expect(
+      UNDERLINE_DRAW_CSS.slice(
+        0,
+        UNDERLINE_DRAW_CSS.indexOf("@media (prefers-reduced-motion"),
+      ),
+    ).toContain("transform:scaleX(1)");
+  });
+
+  it("draws body link underlines in on scroll, wrap-safe and id-scoped", () => {
+    // Nicole's 51:42 comment is pinned on a BODY link, so `.links` gets the
+    // same gesture on the observer the rule marks already use.
+    expect(UNDERLINE_DRAW_CSS).toContain(
+      "#page-content .links.rd-fx-wait{background-size:0 1px",
+    );
+    expect(UNDERLINE_DRAW_CSS).toContain(
+      "#page-content .links.rd-fx-run{background-size:100% 1px;" +
+        "transition:background-size .7s cubic-bezier(.2,.55,.88,.95)}",
+    );
+    // A gradient, not a pseudo-element: the FIT link is a true inline that
+    // wraps, and each fragment needs its own underline.
+    expect(UNDERLINE_DRAW_CSS).toContain("box-decoration-break:clone");
+    expect(UNDERLINE_DRAW_CSS).toContain(
+      "background-image:linear-gradient(currentColor,currentColor)",
+    );
+    // Replaces app.css's text-decoration rather than doubling it, and must
+    // out-specify that unlayered (0,1,0) rule rather than rely on source order.
+    expect(UNDERLINE_DRAW_CSS).toContain(
+      "#page-content .links{text-decoration:none",
+    );
+    expect(UNDERLINE_DRAW_CSS).not.toMatch(/(^|})\.links\{/);
+  });
+
+  it("keeps the body underline on the row text-decoration drew it", () => {
+    // 1.137em + 4px reproduces the measured rows at both font sizes on the
+    // page: 29px at 22px type and 24.5px at 18px. Guarded because a nudge here
+    // moves every body underline off the row the design review signed off.
+    expect(UNDERLINE_DRAW_CSS).toContain(
+      "background-position:0 calc(1.137em + 4px)",
+    );
+    expect(1.137 * 22 + 4).toBeCloseTo(29, 1);
+    expect(1.137 * 18 + 4).toBeCloseTo(24.5, 1);
+  });
+
+  it("links MRKT and breaks the City heading in the real artifact", () => {
+    const out = enhanceFrozenHtml(
+      substitute(template, freezeValues),
+      freezeValues,
+    );
+    expect(out).toContain(
+      '<a class="links" href="https://mrktburbank.square.site/" ' +
+        'target="_blank" rel="noopener">MRKT</a>',
+    );
+    // Exactly one — the word appears once in the copy, and a second link to the
+    // same place in one paragraph would be noise when tabbing.
+    expect([...out.matchAll(/mrktburbank\.square\.site/g)]).toHaveLength(1);
+    // The heading now breaks the way page-block-1's does.
+    const city = out.slice(out.indexOf('id="page-block-11-item-0-item-1"'));
+    expect(city.slice(0, 400)).toContain("a city full<br>of possibilities");
+  });
+
+  it("matches the City heading's spacing to the heading Nicole pointed at", () => {
+    // 50:12 "make sure spacing matches other (left)" — page-block-1 has carried
+    // this padding since round 3; page-block-11 now joins the same rule.
+    expect(FROZEN_ENHANCE_CSS).toContain(
+      "#page-block-1-item-0-item-1>.blocks0container," +
+        "#page-block-5-item-0-item-1>.blocks0container," +
+        "#page-block-11-item-0-item-1>.blocks0container" +
+        "{padding:20px 0 5px!important}",
+    );
+  });
+
+  it("takes 10% off the LEED badge at BOTH of its rendered sizes", () => {
+    // The badge does not render at one width: below 1000px it is the freeze's
+    // inline 123px, at 1000px and up DISTINGUISHED_CSS normalises the row to
+    // 107px. Ten percent off each, or the desktop badge ends up LARGER than the
+    // neighbours it is supposed to shrink below.
+    expect(FROZEN_ENHANCE_CSS).toContain(
+      "#page-block-3-item-1-item-0-item-3 .camediaload{width:110.7px!important}",
+    );
+    expect(110.7).toBeCloseTo(123 * 0.9, 5);
+    expect(FROZEN_ENHANCE_CSS).toContain(
+      "@media all and (min-width:1000px){#page-block-3-item-1-item-0-item-3 " +
+        ".block-media-holder>.ib.img{width:96.3px!important}}",
+    );
+    expect(96.3).toBeCloseTo(107 * 0.9, 5);
+    // The 107px baseline is DISTINGUISHED_CSS's, so this stays true only while
+    // that rule says 107 — assert it rather than trusting the comment.
+    expect(DISTINGUISHED_CSS).toContain(
+      ".block-media-holder>.ib.img{width:107px!important}",
+    );
+    // Its two neighbours keep their own widths.
+    expect(FROZEN_ENHANCE_CSS).not.toContain(
+      "#page-block-3-item-1-item-0-item-2 .camediaload",
+    );
+  });
+
+  it("scrims the carousel image bottom-up, under the content", () => {
+    // 51:27 + 51:30, both asking for a gradient overlay on this image.
+    expect(FROZEN_ENHANCE_CSS).toContain("#page-block-8 .blocks2::after");
+    expect(FROZEN_ENHANCE_CSS).toContain("linear-gradient(to top,");
+    // Above the photo, below `.block-holder`'s own z-index:2.
+    expect(FROZEN_ENHANCE_CSS).toContain("z-index:1;pointer-events:none");
+    // Bottom-weighted: fully transparent well before the top of the image, so
+    // "slight" holds and the photograph is untouched where the caption is not.
+    expect(FROZEN_ENHANCE_CSS).toContain("rgba(0,0,0,0) 45%)");
+  });
+
   it("ships the reveal + anchor css", () => {
     expect(FROZEN_ENHANCE_CSS).toContain(".rd-fx-wait");
     expect(FROZEN_ENHANCE_CSS).toContain(".rd-fx-run");
@@ -487,9 +805,13 @@ describe("enhanceFrozenHtml + css", () => {
   });
 
   it("tightens the amenities heading block per Figma", () => {
-    expect(FROZEN_ENHANCE_CSS).toContain(
-      "#page-block-5-item-0-item-1>.blocks0container{padding:20px 0 5px!important}",
+    // Round 4 added page-block-11 to this same rule, so the amenities selector
+    // is asserted as a member of it rather than as the whole declaration.
+    const rule = /#[^{}]*\{padding:20px 0 5px!important\}/.exec(
+      FROZEN_ENHANCE_CSS,
     );
+    expect(rule, "no 20px 0 5px rule in the bundle").not.toBeNull();
+    expect(rule![0]).toContain("#page-block-5-item-0-item-1>.blocks0container");
   });
 
   it("turns Burbank Incentives into a boxed white button", () => {

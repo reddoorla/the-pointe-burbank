@@ -7,6 +7,7 @@ import {
   type SlotLookup,
 } from "./availability";
 import { replaceRuleMarks, RULE_MARK_CSS } from "./rule-mark";
+import { UNDERLINE_DRAW_CSS } from "./underline-draw";
 import { DISTINGUISHED_CSS } from "./distinguished";
 import {
   restyleCarouselCaptions,
@@ -88,9 +89,11 @@ export interface CmsDivergence {
  * `frozen_page` Prismic doc, after the 2026-07-30 design review.
  *
  * This exists because the divergences are otherwise invisible from the CMS
- * side: the four nav slots are all still live, editable fields in Prismic, and
- * three of them now render nothing at all. Without this list, an editor who
- * renames "Vision" sees no change on the site and has no way to find out why.
+ * side: all four nav slots are still live, editable fields in Prismic, yet one
+ * renders nothing at all and one renders text the doc does not contain. Without
+ * this list, an editor who renames "Vision" sees no change on the site and has
+ * no way to find out why. The trailing entry is the mirror case — nav text on
+ * the page that has no field behind it anywhere in Prismic.
  *
  * Slot keys verified against the committed artifact's nav markup.
  * `enhance.test.ts` holds it in lockstep with the code below, so an entry
@@ -104,23 +107,20 @@ export const CMS_DIVERGENCES: CmsDivergence[] = [
       "remove 'page-block-1' from NAV_LINKS_DROPPED to bring the item back",
   },
   {
-    slot: "h.t2",
-    what: 'Nav "Amenities" (#page-block-5) — dropped, renders nothing',
-    resolve:
-      "remove 'page-block-5' from NAV_LINKS_DROPPED to bring the item back",
-  },
-  {
-    slot: "h.t3",
-    what: 'Nav "Burbank" (#page-block-8) — dropped, renders nothing',
-    resolve:
-      "remove 'page-block-8' from NAV_LINKS_DROPPED to bring the item back",
-  },
-  {
     slot: "h.t4",
     what: 'Nav label — doc still reads "Contact Us", page shows "Availability"',
     resolve:
       'set h.t4 to "Availability" in Prismic, then delete NAV_LABEL_OVERRIDES ' +
       "(the override is keyed on the current text, so it no-ops on its own first)",
+  },
+  {
+    slot: null,
+    what:
+      'Nav "Contact Us" (#footer0) — a fifth item the freeze has no slot for, ' +
+      "so its label is hardcoded and NOT editable in Prismic",
+    resolve:
+      "edit CONTACT_NAV_ITEM here; to make it CMS-editable the export itself " +
+      "needs a fifth nav entry, which a re-freeze would then tokenize",
   },
 ];
 
@@ -148,23 +148,22 @@ export function rewriteNavLabels(
 }
 
 /**
- * Anchor targets of the nav items the design review dropped — Vision, Amenities
- * and Burbank — leaving Availability as the only item. Keyed on the target
+ * Anchor targets of the nav items that render nothing. Keyed on the target
  * rather than the label because the labels are CMS content, and a label can be
  * renamed in Prismic without this silently ceasing to match.
+ *
+ * The 2026-07-30 design review dropped Vision, Amenities and Burbank, leaving
+ * Availability alone. Amenities (#page-block-5) and Burbank (#page-block-8) were
+ * asked back in on 2026-08-03; Vision was not, so it is the one that stays here.
  *
  * These are the ids the freeze resolved from the export's own runtime. They were
  * Blux hash indexes (`/#1`, `/#5`, `/#8`) until the freeze started baking real
  * anchors; the ids happen to correspond, but this keys on what is actually in
- * the markup. `enhance.test.ts` asserts all three exist in the artifact, so a
+ * the markup. `enhance.test.ts` asserts every entry exists in the artifact, so a
  * re-freeze that resolves them differently fails rather than quietly restoring
- * three nav items nobody wanted back.
+ * a nav item nobody wanted back.
  */
-export const NAV_LINKS_DROPPED = [
-  "page-block-1",
-  "page-block-5",
-  "page-block-8",
-];
+export const NAV_LINKS_DROPPED = ["page-block-1"];
 
 export function dropNavLinks(
   html: string,
@@ -183,6 +182,157 @@ export function dropNavLinks(
     );
   }
   return out;
+}
+
+/**
+ * The nav's fifth item, added 2026-08-03.
+ *
+ * The export ships four nav entries and the freeze tokenized all four, so there
+ * is no spare slot to put this in: the original "Contact Us" entry is the one
+ * the review repurposed as "Availability", and the site wants BOTH now. So this
+ * item is composed here rather than driven by Prismic — which is a real CMS
+ * divergence, listed as such in `CMS_DIVERGENCES`.
+ *
+ * `#footer0` is the contact strip at the page bottom — the target the original
+ * Contact Us item carried before `HASHLINK_OVERRIDES` sent it to the
+ * availability panel instead.
+ */
+export const CONTACT_NAV_ITEM = { label: "Contact Us", href: "#footer0" };
+
+/**
+ * Append the Contact Us item after the Availability one.
+ *
+ * ORDER-COUPLED, both ways, which is why it is not just a string concat at
+ * template level. It must run AFTER `rewriteHashlinks` (which rewrites every
+ * `#footer0` to the availability anchor — including, otherwise, this item's own
+ * href) and AFTER `rewriteNavLabels` (which rewrites the text "Contact Us" to
+ * "Availability"). Run either way round and the nav grows a second Availability
+ * link rather than a Contact one. `steps()` places it accordingly, and
+ * `enhance.test.ts` asserts the end-to-end result rather than trusting this
+ * note.
+ *
+ * Anchored on the Availability item so the new one lands last in the list and
+ * inside the right `<ul>` — the nav has three of them (left/center/right), and
+ * the two logo items live in their own. Unmatched markup is left alone; the
+ * `#footer0` guard makes a second application a no-op should a re-freeze ever
+ * ship a Contact entry of its own.
+ */
+export function addContactNavItem(
+  html: string,
+  item: { label: string; href: string } = CONTACT_NAV_ITEM,
+): string {
+  if (html.includes(`href="${item.href}"`)) return html;
+  const availability = new RegExp(
+    `<li class="navigation0ulli">\\s*` +
+      `<a class="navigation0ullia data-hashlink" href="#${AVAILABILITY_ANCHOR}">` +
+      `[^<]*</a>\\s*</li>`,
+  );
+  const m = availability.exec(html);
+  if (!m) return html;
+  const at = m.index + m[0].length;
+  return (
+    html.slice(0, at) +
+    `<li class="navigation0ulli">` +
+    `<a class="navigation0ullia data-hashlink" href="${item.href}">` +
+    `${item.label}</a></li>` +
+    html.slice(at)
+  );
+}
+
+/**
+ * Link a word inside body copy that the CMS stores as plain text.
+ *
+ * Blux has no rich-text inside these leaves — a `block-body` slot is a single
+ * string — so a link inside a sentence cannot come from Prismic and has to be
+ * composed here. Keyed on BOTH the block's own class and the word, so an editor
+ * who rewrites the sentence gets an unlinked word rather than a link wrapped
+ * around the wrong text; and `word` is matched on a word boundary so a longer
+ * word merely containing it is left alone.
+ *
+ * Only the first occurrence is linked. A second mention in the same paragraph
+ * would be a repeated link to the same destination, which is noise for anyone
+ * tabbing through.
+ */
+export interface CopyLink {
+  /** Word to turn into a link, as it appears in the rendered sentence. */
+  word: string;
+  href: string;
+  /** Class of the `block-body` leaf holding it — scopes the search. */
+  bodyClass: string;
+}
+
+/**
+ * "Underline MRKT, link to: …" — Nicole, Figma node 51:42 (2026-08-03).
+ *
+ * `class="links"` rather than the artifact's `ib middle links`: `.ib` is the
+ * platform's inline-BLOCK, right for the standalone "Visit Website" links but
+ * wrong mid-sentence, where it would stop the word wrapping with its line. The
+ * FIT Health Club link, the page's only other inline body link, is bare `links`
+ * for the same reason. It also picks up the draw-in underline (`underline-draw.ts`).
+ *
+ * `target="_blank"` follows the artifact's own majority for offsite links (six
+ * of its seven carry it); `rel="noopener"` is added because none of them do and
+ * a new-tab link without it hands the opener reference to the destination.
+ */
+export const MRKT_LINK: CopyLink = {
+  word: "MRKT",
+  href: "https://mrktburbank.square.site/",
+  bodyClass: "block-body text14",
+};
+
+export function linkCopyWord(html: string, link: CopyLink = MRKT_LINK): string {
+  const body = new RegExp(
+    `(<div class="${link.bodyClass}"[^>]*>)([^<]*)(</div>)`,
+    "g",
+  );
+  const word = new RegExp(`\\b${link.word}\\b`);
+  return html.replace(body, (whole, open: string, text: string, close) => {
+    if (!word.test(text)) return whole;
+    const anchor =
+      `<a class="links" href="${link.href}" target="_blank" ` +
+      `rel="noopener">${link.word}</a>`;
+    return open + text.replace(word, anchor) + close;
+  });
+}
+
+/**
+ * Break a one-line section heading onto two lines.
+ *
+ * "make into two lines and make sure spacing matches other (left)" — Nicole,
+ * Figma node 50:12. The left-hand heading it points at is "A Monument / Of
+ * Excellence", which the export ships as two slots with a literal `<br>`
+ * between them. "A City Full Of Possibilities" is a SINGLE slot, so there is no
+ * break to inherit and one has to be inserted — before "of", which is where the
+ * monument heading breaks too. (The matching spacing is CSS, in
+ * FROZEN_ENHANCE_CSS.)
+ *
+ * Scoped to the heading's own block id, and keyed on the text still reading the
+ * way it does: reword it in Prismic and this quietly stops matching rather than
+ * inserting a break in the middle of a different sentence.
+ */
+export const CITY_HEADING = {
+  blockId: "page-block-11-item-0-item-1",
+  /** Break before this word, keeping it on the second line. */
+  before: "of",
+  /** Guard — the heading must still say this for the break to be inserted. */
+  expect: "city full of possibilities",
+};
+
+export function breakHeadingLine(html: string, spec = CITY_HEADING): string {
+  const at = html.indexOf(`id="${spec.blockId}"`);
+  if (at === -1) return html;
+  const head = /<h([1-6])([^>]*)>([^<]*)<\/h\1>/;
+  const region = html.slice(at, at + 900);
+  const m = head.exec(region);
+  if (!m || !m[3].toLowerCase().includes(spec.expect)) return html;
+  const broken = m[3].replace(new RegExp(`\\s+(${spec.before}\\s)`), "<br>$1");
+  if (broken === m[3]) return html;
+  const rebuilt = `<h${m[1]}${m[2]}>${broken}</h${m[1]}>`;
+  return (
+    html.slice(0, at + m.index) +
+    rebuilt +
+    html.slice(at + m.index + m[0].length)
+  );
 }
 
 /**
@@ -402,9 +552,13 @@ export function liftHeadingLevels(html: string): string {
  * `dropNavLinks` and `rewriteHashlinks` used to be order-coupled: both keyed on
  * the raw `/#N` hrefs, so dropping had to happen before rewriting resolved them
  * away. The freeze bakes real anchors now, and the two key on disjoint targets
- * (`#page-block-{1,5,8}` vs `#footer0`), so that coupling is gone. The order
- * that still matters is `liftHeadingLevels` LAST — it must see the headings the
- * caption transform produces, not the ones it replaced.
+ * (`#page-block-1` vs `#footer0`), so that coupling is gone.
+ *
+ * Two orderings still matter. `addContactNavItem` must come after BOTH
+ * `rewriteHashlinks` and `rewriteNavLabels`, or the item it adds gets rewritten
+ * into a second Availability link — see its own doc comment. And
+ * `liftHeadingLevels` runs LAST: it must see the headings the caption transform
+ * produces, not the ones it replaced.
  *
  * `values` is the page's Prismic slot map. It is optional so every caller that
  * only cares about markup repair (and the whole existing test suite) can keep
@@ -418,7 +572,14 @@ function steps(values?: SlotLookup): ((html: string) => string)[] {
     rewriteHashlinks,
     rewriteCfEmails,
     restoreLinkSpacing,
+    // After restoreLinkSpacing, which exists to repair the freeze's own inline
+    // anchors — the one this inserts is already spaced correctly.
+    linkCopyWord,
+    breakHeadingLine,
     rewriteNavLabels,
+    // After rewriteHashlinks + rewriteNavLabels, both of which would otherwise
+    // rewrite the item this adds.
+    addContactNavItem,
     addMainLandmark,
     (html) => addVideoPoster(html, poster),
     (html) => replaceAvailabilityImage(html, availability),
@@ -502,8 +663,13 @@ export const FROZEN_ENHANCE_CSS = [
   // Asked for on "premium amenities" in round 2 and on "A Monument of
   // Excellence" in round 3; the two are the same eyebrow/rule/heading pattern,
   // so they take the same treatment. Inline, so !important.
+  // Round 4 adds page-block-11 ("A City Full Of Possibilities"). Nicole's 50:12
+  // note is "make sure spacing matches other (left)", and the heading she points
+  // at is page-block-1's — which has had this exact padding since round 3, while
+  // the City one kept the export's `20px 0 30px 0%`. Same pattern, same rule.
   "#page-block-1-item-0-item-1>.blocks0container," +
-    "#page-block-5-item-0-item-1>.blocks0container" +
+    "#page-block-5-item-0-item-1>.blocks0container," +
+    "#page-block-11-item-0-item-1>.blocks0container" +
     "{padding:20px 0 5px!important}",
 
   // "Even out the spacing above/below the lines" — the double rule under each
@@ -619,6 +785,37 @@ export const FROZEN_ENHANCE_CSS = [
   // Inline, so !important.
   "#page-block-11-item-0-item-2 .buttons{padding-top:15px!important}",
 
+  // — Design review, round 4 (Nicole, Figma comments, 2026-08-03) —
+
+  // "could you make the image 10% smaller?" (node 51:24) — the USGBC seal in
+  // the LEED Gold / Energy Star credential row. A `padding-bottom:100%` spacer
+  // holds its square ratio, so scaling the width alone scales both axes and
+  // nothing else in the row moves.
+  //
+  // 10% off WHAT is the whole question, and the answer differs by breakpoint —
+  // the freeze's inline `width:123px` is not what the badge actually renders at.
+  // Measured across the range rather than reasoned about:
+  //
+  //   ≤700px    badges render at their inline widths   123 → 110.7  (rule 1)
+  //   700-1000  the 20% grid + max-width:100% clamps all three to the SAME
+  //             width, so there is nothing left to shrink; rule 1 is inert
+  //   ≥1000px   DISTINGUISHED_CSS normalises the row to 107px   107 → 96.3
+  //
+  // The desktop case is the one the note was written against, and the one that
+  // makes the second rule necessary: taking 110.7px there would have rendered
+  // the badge BIGGER than the 107px neighbours it is meant to shrink below —
+  // the opposite of the ask. Verified after the change at 1440px: 96.3 against
+  // 107 either side.
+  //
+  // Both rules are id-scoped to this one credential. Its neighbours are wider
+  // logos at ~68% ratios and the comment is pinned on this badge alone. The
+  // desktop selector mirrors DISTINGUISHED_CSS's own shape so the two are
+  // legibly the same target; its id gives it the specificity to win. Inline
+  // width and an `!important` rule respectively, so both need !important.
+  "#page-block-3-item-1-item-0-item-3 .camediaload{width:110.7px!important}",
+  "@media all and (min-width:1000px){#page-block-3-item-1-item-0-item-3 " +
+    ".block-media-holder>.ib.img{width:96.3px!important}}",
+
   // Lush Haven carousel caption (Figma node 12:130): the rule mark above a
   // left-aligned white caption, over the image rather than in a white bar.
   CAROUSEL_CAPTION_CSS,
@@ -633,4 +830,9 @@ export const FROZEN_ENHANCE_CSS = [
 
   // The double-rule mark, now vector rather than two baked PNGs.
   RULE_MARK_CSS,
+
+  // Link underlines that draw in left-to-right — the rule mark's gesture and
+  // timing applied to the nav (on first scroll) and to body links (on scroll
+  // into view). Nicole's comment on node 51:42.
+  UNDERLINE_DRAW_CSS,
 ].join("");
