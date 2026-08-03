@@ -88,8 +88,9 @@ test("frozen the-pointe renders whole: ~14820px, 50 media, panels live, no token
     rulePngs: document.querySelectorAll(
       '[data-media*="ec0c6ec6"],[data-media*="bf56be7d"]',
     ).length,
-    navItems: document.querySelectorAll("a.navigation0ullia.data-hashlink")
-      .length,
+    navItems: [
+      ...document.querySelectorAll("a.navigation0ullia.data-hashlink"),
+    ].map((a) => `${a.textContent?.trim()} -> ${a.getAttribute("href")}`),
   }));
   expect(rebuilt.panelText).toContain("480,000 SF");
 
@@ -140,8 +141,17 @@ test("frozen the-pointe renders whole: ~14820px, 50 media, panels live, no token
   expect(panelHeight).toBeCloseTo(201.97, 1);
   expect(rebuilt.ruleMarks).toBe(9);
   expect(rebuilt.rulePngs).toBe(0);
-  // Nav is a single "Availability" item after the review.
-  expect(rebuilt.navItems).toBe(1);
+  // Round 4 (2026-08-03) brought Amenities and Burbank back and added Contact
+  // Us alongside the repurposed Availability item; only Vision stays dropped.
+  // Asserted as labels + targets rather than a count, because the count alone
+  // passed just as happily when the render produced two Availability links —
+  // the exact failure mode of getting addContactNavItem's ordering wrong.
+  expect(rebuilt.navItems).toEqual([
+    "Amenities -> #page-block-5",
+    "Burbank -> #page-block-8",
+    "Availability -> #availability",
+    "Contact Us -> #footer0",
+  ]);
 
   // Each mark's draw-in dash must equal its own rendered width. The marks carry
   // `vector-effect="non-scaling-stroke"`, which resolves stroke-dasharray in
