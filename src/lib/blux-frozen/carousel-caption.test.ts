@@ -50,4 +50,38 @@ describe("CAROUSEL_CAPTION_CSS", () => {
   it("gives the white type a legibility floor over photography", () => {
     expect(CAROUSEL_CAPTION_CSS).toContain("text-shadow");
   });
+
+  it("scrims the sides as well as the bottom, for the arrows", () => {
+    // One pseudo-element carries all three gradients. The bottom one is the
+    // caption's (Nicole, 51:27 + 51:30); the two side ones are the arrows'.
+    const rule = /#page-block-8 \.blocks2::after\{([^}]*)\}/.exec(
+      CAROUSEL_CAPTION_CSS,
+    )?.[1];
+    expect(rule, "the scrim rule moved").toBeTruthy();
+    expect([...rule!.matchAll(/linear-gradient\(/g)]).toHaveLength(3);
+    expect(rule).toContain("linear-gradient(to right,");
+    expect(rule).toContain("linear-gradient(to left,");
+    expect(rule).toContain("linear-gradient(to top,");
+  });
+
+  it("sizes the side scrims in px, not %, so they track the arrow", () => {
+    // The arrows are a fixed 32px inset 4px and do not scale with the viewport.
+    // A percentage ramp would over-darken a wide slide and under-cover a narrow
+    // one — the exact failure the LEED badge had in reverse.
+    // One level of nesting, because every stop is an rgba(...) of its own.
+    const sides = [
+      ...CAROUSEL_CAPTION_CSS.matchAll(
+        /linear-gradient\(to (?:right|left),((?:[^()]|\([^()]*\))*)\)/g,
+      ),
+    ].map((m) => m[1]);
+    expect(sides).toHaveLength(2);
+    for (const ramp of sides) {
+      expect(ramp).not.toMatch(/\d%/);
+      // Opaque enough at the arrow, gone before the caption's ink at 103px.
+      expect(ramp).toContain("rgba(0,0,0,.45) 0");
+      expect(ramp).toContain("rgba(0,0,0,0) 168px");
+    }
+    // Both sides ramp identically, so neither arrow is favoured.
+    expect(sides[0]).toBe(sides[1]);
+  });
 });
