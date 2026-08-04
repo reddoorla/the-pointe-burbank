@@ -269,6 +269,13 @@ test("frozen the-pointe renders whole: ~14820px, 50 media, panels live, no token
 //
 // Geometry is what distinguishes them, and geometry needs no images: whichever
 // slide is showing must overlap the track it lives in.
+//
+// Timing: slides cross-fade over 450ms and BOTH are painted for that window, so
+// every measurement here waits the fade out first. Playwright's click leaves the
+// pointer over the section, which holds the 7s auto-advance, so nothing moves
+// underneath the assertions.
+const CAROUSEL_FADE_MS = 450;
+
 test("carousel: every slide lands inside the track when shown", async ({
   page,
 }) => {
@@ -326,8 +333,74 @@ test("carousel: every slide lands inside the track when shown", async ({
     expect(s.width).toBe(s.trackWidth);
     seen.push(s.index);
     await page.click("#page-block-8-right");
-    await page.waitForTimeout(200);
+    await page.waitForTimeout(CAROUSEL_FADE_MS + 150);
   }
   // Advancing must actually change frames, and wrap back to where it started.
   expect(seen).toEqual([0, 1, 2, 0]);
+});
+
+// The cross-fade's layout contract.
+//
+// Two slides are painted at once for 450ms, which the freeze's row layout has
+// no way to express — a second in-flow slide doubles the track's width. The
+// outgoing slide is lifted to `position:absolute` for exactly that window so it
+// overlays instead of displacing. Unit tests can assert the inline styles but
+// not what the box model then does with them, and "the styles were right" is
+// precisely the reasoning that shipped the parked-slide bug.
+test("carousel: the cross-fade overlaps without disturbing the layout", async ({
+  page,
+}) => {
+  await page.goto("/dev/blux-frozen", { waitUntil: "load" });
+  await page.evaluate(() =>
+    document
+      .querySelector("#page-block-8")
+      ?.scrollIntoView({ block: "center" }),
+  );
+  await page.waitForTimeout(300);
+
+  const geometry = () =>
+    page.evaluate(() => {
+      const track = document.querySelector("#page-block-8 .caslider")!;
+      const t = track.getBoundingClientRect();
+      const painted = [...track.children]
+        .filter((c) => c.classList.contains("cagriditem"))
+        .filter((c) => getComputedStyle(c as HTMLElement).display !== "none")
+        .map((c) => {
+          const r = c.getBoundingClientRect();
+          return {
+            overlapX: Math.min(r.right, t.right) - Math.max(r.left, t.left),
+            width: Math.round(r.width),
+          };
+        });
+      return {
+        painted,
+        trackWidth: Math.round(t.width),
+        trackHeight: Math.round(t.height),
+      };
+    });
+
+  const before = await geometry();
+  expect(before.painted).toHaveLength(1);
+
+  await page.click("#page-block-8-right");
+  await page.waitForTimeout(150); // mid-fade
+
+  const during = await geometry();
+  expect(during.painted, "both slides should be painted mid-fade").toHaveLength(
+    2,
+  );
+  // Neither the width nor the height may move while two slides are up: that is
+  // the whole reason the outgoing one leaves the flow.
+  expect(during.trackWidth).toBe(before.trackWidth);
+  expect(during.trackHeight).toBe(before.trackHeight);
+  // …and both are stacked ON the track, not one of them shoved off the side.
+  for (const p of during.painted) {
+    expect(p.width).toBe(before.trackWidth);
+    expect(p.overlapX).toBeGreaterThan(before.trackWidth * 0.99);
+  }
+
+  await page.waitForTimeout(500);
+  const after = await geometry();
+  expect(after.painted).toHaveLength(1);
+  expect(after.trackHeight).toBe(before.trackHeight);
 });

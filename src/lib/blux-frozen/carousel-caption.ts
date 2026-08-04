@@ -62,9 +62,37 @@ export const CAROUSEL_CAPTION_CSS = [
   // slide is `position:relative` for the same reason the nav links are — the
   // artifact already sets it, restated so a re-freeze that drops it cannot
   // silently anchor this to the page instead.
+  // Three gradients on one pseudo-element rather than three elements: they are
+  // all translucent black, and alpha compositing is order-independent for that,
+  // so stacking them as background layers gives the same result as separate
+  // overlays for a third of the boxes.
+  //
+  // The two SIDE gradients are for the arrows, not the caption (Tucker,
+  // 2026-08-03: "so the arrows have better contrast on light photos"). The
+  // arrows are 32px white glyphs inset 4px, with no plate behind them, and on
+  // the bright daylight shots they disappear. Measured on the deploy preview as
+  // WCAG contrast against a white glyph, sampling the arrow's own box and
+  // excluding the glyph's own pixels:
+  //
+  //                          before              after
+  //   slide 1 right          2.53:1  (p90 1.17)  8.02:1  (p90 3.53)
+  //   slide 3 left           5.48:1  (p90 2.00)
+  //
+  // 1.4.11 asks 3:1 for a control. The median was the honest number to design
+  // against but the p90 is the one that fails — a glyph is legible only if its
+  // WORST few pixels separate from the photo, which is why the ramp is sized to
+  // the arrow rather than to the slide. Fixed pixels, not percentages: the
+  // arrow does not grow with the viewport, so a percentage would over-darken a
+  // wide slide and under-cover a narrow one. Zero by 168px, well before the
+  // caption's first ink at 103px is meaningfully touched (.09 there).
   "#page-block-8 .blocks2{position:relative}",
   '#page-block-8 .blocks2::after{content:"";position:absolute;inset:0;' +
-    "z-index:1;pointer-events:none;background:linear-gradient(to top," +
+    "z-index:1;pointer-events:none;background:" +
+    "linear-gradient(to right,rgba(0,0,0,.45) 0,rgba(0,0,0,.34) 44px," +
+    "rgba(0,0,0,.12) 96px,rgba(0,0,0,0) 168px)," +
+    "linear-gradient(to left,rgba(0,0,0,.45) 0,rgba(0,0,0,.34) 44px," +
+    "rgba(0,0,0,.12) 96px,rgba(0,0,0,0) 168px)," +
+    "linear-gradient(to top," +
     "rgba(0,0,0,.55) 0%,rgba(0,0,0,.34) 14%,rgba(0,0,0,.12) 28%," +
     "rgba(0,0,0,0) 45%)}",
   // Round 3: "just needs to move down". Restyling the caption left it at the
