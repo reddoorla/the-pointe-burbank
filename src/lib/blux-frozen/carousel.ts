@@ -74,12 +74,23 @@ const ARROWS = { prev: "-left", next: "-right" } as const;
 /**
  * Cross-fade duration, ms.
  *
- * Shorter than the .7s rule-mark draw: the fade is the transition between two
- * photographs and wants to be over quickly, while the mark is an accent that
- * reads as deliberate. The mark starts when the fade ends, so the two run
- * back-to-back rather than on top of each other.
+ * Started at 450 and went to 600 on review (Tucker, 2026-08-03: "a touch too
+ * fast as stands"). Still under the .7s rule-mark draw that follows it, which
+ * keeps the order of the two gestures legible — the photograph settles, then
+ * the mark draws across it.
  */
-const FADE_MS = 450;
+const FADE_MS = 600;
+
+/**
+ * The site's one motion curve, shared with the rule marks and the body-link
+ * underlines (see RULE_MARK_CSS and UNDERLINE_DRAW_CSS).
+ *
+ * The fade shipped on the CSS default `ease` at first, which was a default
+ * rather than a decision — the page already had a curve and this was quietly
+ * not using it. Front-loaded, so the incoming photograph is most of the way
+ * revealed early and the last of the outgoing one lingers as a thinning ghost.
+ */
+const FADE_EASE = "cubic-bezier(.2,.55,.88,.95)";
 
 /** Auto-advance interval, ms. Nicole's brief: "slow", every 7 seconds. */
 const AUTO_MS = 7000;
@@ -187,33 +198,41 @@ function show(s: Slider, index: number, animate = false): void {
   });
 
   // The outgoing slide leaves the flow so the two can overlap without the
-  // track growing to hold both. It keeps translateX(0%) until the fade ends —
-  // parking it now would teleport it out of view instead of fading it.
+  // track growing to hold both, and sits ON TOP of the incoming one. It keeps
+  // translateX(0%) until the fade ends — parking it now would teleport it out
+  // of view instead of fading it.
   outgoing.style.position = "absolute";
   outgoing.style.inset = "0";
   outgoing.style.zIndex = "1";
   outgoing.style.pointerEvents = "none";
   outgoing.setAttribute("aria-hidden", "true");
 
+  // ONLY THE OUTGOING SLIDE ANIMATES. The incoming one is placed at full
+  // opacity underneath and simply revealed, which is what makes this a
+  // dissolve rather than two independent fades.
+  //
+  // Fading both looks equivalent and is not: with the two opacities meeting at
+  // .5, the compositor paints .5 + .5×.5 = .75 of the way to opaque, so a
+  // quarter of the page's own light background shows THROUGH the middle of
+  // every transition. That is a brightness dip in the centre of the crossfade —
+  // the flash it was supposed to remove. An opaque under-layer cannot dip.
   incoming.style.display = "block";
   incoming.style.transform = "translateX(0%)";
-  incoming.style.opacity = "0";
+  incoming.style.opacity = "1";
   incoming.style.pointerEvents = "";
   incoming.setAttribute("aria-hidden", "false");
 
-  // A frame between "displayed at 0" and "told to be 1", because a transition
-  // has nothing to interpolate from if both happen in the same style recalc.
+  // A frame between "laid out" and "told to fade", so the transition has a
+  // start value to interpolate from rather than being coalesced into one style
+  // recalc with the layout change above.
   requestAnimationFrame(() => {
-    outgoing.style.transition = `opacity ${FADE_MS}ms ease`;
+    outgoing.style.transition = `opacity ${FADE_MS}ms ${FADE_EASE}`;
     outgoing.style.opacity = "0";
-    incoming.style.transition = `opacity ${FADE_MS}ms ease`;
-    incoming.style.opacity = "1";
   });
 
   s.timers.push(
     window.setTimeout(() => {
       settle(s, outgoing, from, false);
-      incoming.style.transition = "";
     }, FADE_MS),
   );
 
@@ -235,6 +254,49 @@ function pause(s: Slider): void {
 
 const wrap = (s: Slider, step: number): number =>
   (s.at + step + s.slides.length) % s.slides.length;
+
+/**
+ * Pull every slide's photograph into the browser cache ahead of time.
+ *
+ * A `display:none` element never fetches its `background-image`, so without
+ * this the request for slide 2 starts about 20ms INTO the 450ms cross-fade
+ * that is meant to reveal it — measured on the deploy preview, the response
+ * landed at +5078ms against a fade that began at +5058ms. The fade therefore
+ * ran against an empty box and the photograph appeared afterwards, which reads
+ * as a cut with a flash rather than as a cross-fade at all.
+ *
+ * `new Image()` is enough: nothing is done with the element, the point is only
+ * that the URL is in the HTTP cache by the time a slide is shown. Deferred to
+ * idle so several megabytes of photography cannot compete with whatever the
+ * page is still doing at mount — the first auto-advance is 7s away, which is
+ * an eternity in that budget.
+ */
+function preloadSlides(slides: HTMLElement[]): () => void {
+  const urls = slides.flatMap((slide) =>
+    [...slide.querySelectorAll<HTMLElement>("*")]
+      .map((el) => /url\("?([^"')]+)"?\)/.exec(el.style.backgroundImage)?.[1])
+      .filter((u): u is string => !!u),
+  );
+  if (!urls.length) return () => {};
+
+  const warm = () => {
+    for (const url of urls) new Image().src = url;
+  };
+  // `requestIdleCallback` is unavailable in Safari <17 and in jsdom; the
+  // timeout fallback keeps the behaviour identical, just less polite.
+  const idle = (
+    globalThis as typeof globalThis & {
+      requestIdleCallback?: (cb: () => void, o?: { timeout: number }) => number;
+      cancelIdleCallback?: (h: number) => void;
+    }
+  ).requestIdleCallback;
+  if (!idle) {
+    const t = window.setTimeout(warm, 0);
+    return () => clearTimeout(t);
+  }
+  const handle = idle(warm, { timeout: 2000 });
+  return () => globalThis.cancelIdleCallback?.(handle);
+}
 
 /**
  * Find every slider in the page and wire its controls.
@@ -288,6 +350,9 @@ export function hydrateCarousels(root: ParentNode = document): () => void {
     // be its containing block. Set here rather than in CSS because it is this
     // file's requirement, not the design's.
     track.style.position = "relative";
+
+    // Every slide's photograph, warmed before anything needs to show it.
+    cleanups.push(preloadSlides(slides));
 
     for (const [el, step] of [
       [s.prev, -1],

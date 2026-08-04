@@ -32,7 +32,7 @@ const markup = (slides = 3) =>
   `<button id="page-block-8-right" aria-label="right arrow"></button>` +
   `</section>`;
 
-const FADE_MS = 450;
+const FADE_MS = 600;
 const AUTO_MS = 7000;
 
 const els = () => [...document.querySelectorAll<HTMLElement>(".cagriditem")];
@@ -243,6 +243,27 @@ describe("the cross-fade", () => {
     expect(visible()).toEqual(["none", "block", "none"]);
   });
 
+  it("dissolves over an OPAQUE incoming slide, so nothing shows through", async () => {
+    // Both slides fading at once looks equivalent and is not: two opacities
+    // meeting at .5 composite to .75, letting a quarter of the page's light
+    // background through the middle of every transition. Only the outgoing
+    // slide may animate.
+    hydrate();
+    click("page-block-8-right");
+    await vi.advanceTimersByTimeAsync(FADE_MS / 2);
+    expect(els()[1].style.opacity).toBe("1");
+    expect(els()[1].style.transition).toBe("");
+    expect(els()[0].style.transition).toContain("opacity");
+  });
+
+  it("fades on the site's own curve, not the CSS default", async () => {
+    hydrate();
+    click("page-block-8-right");
+    await vi.advanceTimersByTimeAsync(FADE_MS / 2);
+    // The same curve the rule marks and the body-link underlines draw on.
+    expect(els()[0].style.transition).toContain("cubic-bezier(.2,.55,.88,.95)");
+  });
+
   it("lifts the outgoing slide out of flow so the track cannot grow", async () => {
     // Two in-flow slides would double the track's width and shove the layout;
     // absolute positioning is what lets them overlap instead.
@@ -278,6 +299,66 @@ describe("the cross-fade", () => {
     // The first fade's cleanup must not fire over the second one's result.
     expect(visible()).toEqual(["none", "none", "block"]);
     expect(els()[2].style.transform).toBe("translateX(0%)");
+  });
+});
+
+describe("preloading the offscreen photographs", () => {
+  // A `display:none` element never fetches its background-image, so without a
+  // preload the request for the next slide starts INSIDE the cross-fade meant
+  // to reveal it — measured on the preview, the response landed 20ms after the
+  // fade began, so the fade ran against an empty box and the photo popped in
+  // afterwards. That reads as a cut with a flash, not a cross-fade.
+  const bg = (i: number) => `https://images.prismic.io/slide-${i}.jpg`;
+
+  const withPhotos = () => {
+    document.body.innerHTML = markup();
+    els().forEach((slide, i) => {
+      slide.querySelector<HTMLElement>("div")!.style.backgroundImage =
+        `url("${bg(i)}")`;
+    });
+  };
+
+  let requested: string[];
+  beforeEach(() => {
+    requested = [];
+    class FakeImage {
+      set src(v: string) {
+        requested.push(v);
+      }
+    }
+    vi.stubGlobal("Image", FakeImage);
+    withPhotos();
+  });
+
+  it("requests every slide's photograph, not just the visible one", async () => {
+    hydrate();
+    await vi.advanceTimersByTimeAsync(10);
+    expect(requested).toEqual([bg(0), bg(1), bg(2)]);
+  });
+
+  it("has them in flight long before the first auto-advance", async () => {
+    hydrate();
+    await vi.advanceTimersByTimeAsync(10);
+    const early = requested.length;
+    await vi.advanceTimersByTimeAsync(AUTO_MS);
+    // Nothing new was needed at the moment the slide actually changed.
+    expect(early).toBe(3);
+    expect(requested).toHaveLength(3);
+  });
+
+  it("does not fire if the cleanup runs first", async () => {
+    const halt = hydrate();
+    halt();
+    stop = undefined;
+    await vi.advanceTimersByTimeAsync(50);
+    expect(requested).toEqual([]);
+  });
+
+  it("skips a slider with no background images at all", async () => {
+    document.body.innerHTML = markup();
+    hydrate();
+    await vi.advanceTimersByTimeAsync(10);
+    expect(requested).toEqual([]);
   });
 });
 
