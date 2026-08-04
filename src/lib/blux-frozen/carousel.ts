@@ -95,6 +95,16 @@ const FADE_EASE = "cubic-bezier(.2,.55,.88,.95)";
 /** Auto-advance interval, ms. Nicole's brief: "slow", every 7 seconds. */
 const AUTO_MS = 7000;
 
+/**
+ * How long a change will wait for its photograph before going anyway, ms.
+ *
+ * Long enough that a slow connection still gets a clean dissolve rather than a
+ * flash, short enough that a genuinely broken image does not leave the arrows
+ * looking dead. Sized against the 7s auto-advance: even a full wait cannot
+ * stack two changes on top of each other.
+ */
+const READY_CAP_MS = 4000;
+
 type Direction = 1 | -1;
 
 interface Slider {
@@ -116,6 +126,13 @@ interface Slider {
   at: number;
   /** Which way the auto-advance goes: the last direction a click asked for. */
   dir: Direction;
+  /** Each slide's photograph, or null for a slide that has none. */
+  warm: (Warm | null)[];
+  /**
+   * Bumped by every change, so a fade that is still waiting for its image can
+   * tell that something newer has superseded it.
+   */
+  gen: number;
   /** Pending fade/draw timeouts, so a fast click cannot land a stale one. */
   timers: number[];
   /** The auto-advance interval, or null while paused or motion-suppressed. */
@@ -177,18 +194,57 @@ function drawMarks(s: Slider, slide: HTMLElement, delay: number): void {
  */
 function show(s: Slider, index: number, animate = false): void {
   const from = s.at;
-  s.at = index;
 
-  // Any fade already running is abandoned rather than left to fire late over
-  // the slide that replaced it.
+  // Any fade already running — or waiting to run — is abandoned rather than
+  // left to fire late over the slide that replaced it.
   for (const t of s.timers) clearTimeout(t);
   s.timers = [];
+  s.gen += 1;
+  const gen = s.gen;
 
   if (!animate || s.reduced || from === index) {
+    s.at = index;
     s.slides.forEach((slide, i) => settle(s, slide, i, i === index));
     return;
   }
 
+  // WAIT FOR THE PICTURE. Preloading warms the cache but does not gate
+  // anything, so on a slow connection the fade still ran against an image that
+  // had not arrived — measured under 1.6Mbps throttling, all 600ms of it with
+  // every slide reporting `complete === false`. The incoming slide is opaque
+  // and empty at that point, so dissolving the outgoing one reveals the page's
+  // own light background: the white flash.
+  //
+  // Nothing is committed until the image is ready, so the current slide simply
+  // holds a moment longer. `s.at` only moves when the fade actually starts,
+  // which means a click arriving during the wait re-targets from the slide the
+  // reader can SEE rather than from one that never appeared.
+  const w = s.warm[index];
+  if (!w || w.done) {
+    crossfade(s, from, index);
+    return;
+  }
+
+  let started = false;
+  const begin = () => {
+    if (started || s.gen !== gen) return;
+    started = true;
+    crossfade(s, from, index);
+  };
+  if (!w.pending) {
+    w.pending = true;
+    w.start();
+  }
+  // A stalled image must never freeze the carousel, so the wait is capped and
+  // the fade proceeds regardless. A flash is a poor outcome; a slider that
+  // stops responding is a worse one.
+  s.timers.push(window.setTimeout(begin, READY_CAP_MS));
+  void w.wait.then(begin);
+}
+
+/** The dissolve itself, once the destination is known to be paintable. */
+function crossfade(s: Slider, from: number, index: number): void {
+  s.at = index;
   const outgoing = s.slides[from];
   const incoming = s.slides[index];
 
@@ -256,31 +312,82 @@ const wrap = (s: Slider, step: number): number =>
   (s.at + step + s.slides.length) % s.slides.length;
 
 /**
+ * One slide's photograph: a request that can be started, and a promise that
+ * settles when the picture could be painted without a gap.
+ */
+interface Warm {
+  /** True once the image is decoded (or has failed and never will be). */
+  done: boolean;
+  /** True once `start` has been called, so the request is made exactly once. */
+  pending: boolean;
+  wait: Promise<void>;
+  start: () => void;
+}
+
+/**
+ * Find a slide's photograph and prepare to warm it.
+ *
+ * `decode()` as well as `load`, because the two are not the same moment: a
+ * downloaded 3960x2640 JPEG still has to be turned into a bitmap, and painting
+ * it for the first time is where that cost lands. Waiting on load alone would
+ * narrow the flash rather than remove it. Both handlers call the same finish,
+ * which is idempotent, so whichever the browser offers wins and a decode
+ * failure resolves rather than hangs — a broken image must not freeze the
+ * carousel.
+ */
+function warmSlide(slide: HTMLElement): Warm | null {
+  const el = [...slide.querySelectorAll<HTMLElement>("*")].find((e) =>
+    /url\(/.test(e.style.backgroundImage),
+  );
+  const url = el
+    ? /url\("?([^"')]+)"?\)/.exec(el.style.backgroundImage)?.[1]
+    : undefined;
+  if (!url) return null;
+
+  let resolve!: () => void;
+  const wait = new Promise<void>((r) => (resolve = r));
+  const w: Warm = {
+    done: false,
+    pending: false,
+    wait,
+    start: () => {
+      const img = new Image();
+      const finish = () => {
+        w.done = true;
+        resolve();
+      };
+      img.onload = finish;
+      img.onerror = finish;
+      img.src = url;
+      img.decode?.().then(finish, finish);
+    },
+  };
+  return w;
+}
+
+/**
  * Pull every slide's photograph into the browser cache ahead of time.
  *
  * A `display:none` element never fetches its `background-image`, so without
- * this the request for slide 2 starts about 20ms INTO the 450ms cross-fade
- * that is meant to reveal it — measured on the deploy preview, the response
- * landed at +5078ms against a fade that began at +5058ms. The fade therefore
- * ran against an empty box and the photograph appeared afterwards, which reads
- * as a cut with a flash rather than as a cross-fade at all.
+ * this the request for the next slide starts about 20ms INTO the cross-fade
+ * meant to reveal it — traced on the deploy preview, the response landed at
+ * +5078ms against a fade that began at +5058ms.
  *
- * `new Image()` is enough: nothing is done with the element, the point is only
- * that the URL is in the HTTP cache by the time a slide is shown. Deferred to
- * idle so several megabytes of photography cannot compete with whatever the
- * page is still doing at mount — the first auto-advance is 7s away, which is
- * an eternity in that budget.
+ * Deferred to idle so several megabytes of photography cannot compete with
+ * whatever the page is still doing at mount. That deferral is only about WHEN
+ * the download starts; it is `show()`'s readiness gate that guarantees a slide
+ * is never faded to before its picture exists.
  */
-function preloadSlides(slides: HTMLElement[]): () => void {
-  const urls = slides.flatMap((slide) =>
-    [...slide.querySelectorAll<HTMLElement>("*")]
-      .map((el) => /url\("?([^"')]+)"?\)/.exec(el.style.backgroundImage)?.[1])
-      .filter((u): u is string => !!u),
-  );
-  if (!urls.length) return () => {};
+function preloadSlides(warms: (Warm | null)[]): () => void {
+  const pending = warms.filter((w): w is Warm => !!w);
+  if (!pending.length) return () => {};
 
-  const warm = () => {
-    for (const url of urls) new Image().src = url;
+  const go = () => {
+    for (const w of pending) {
+      if (w.pending) continue;
+      w.pending = true;
+      w.start();
+    }
   };
   // `requestIdleCallback` is unavailable in Safari <17 and in jsdom; the
   // timeout fallback keeps the behaviour identical, just less polite.
@@ -291,10 +398,10 @@ function preloadSlides(slides: HTMLElement[]): () => void {
     }
   ).requestIdleCallback;
   if (!idle) {
-    const t = window.setTimeout(warm, 0);
+    const t = window.setTimeout(go, 0);
     return () => clearTimeout(t);
   }
-  const handle = idle(warm, { timeout: 2000 });
+  const handle = idle(go, { timeout: 2000 });
   return () => globalThis.cancelIdleCallback?.(handle);
 }
 
@@ -338,6 +445,8 @@ export function hydrateCarousels(root: ParentNode = document): () => void {
         0,
         slides.findIndex((el) => el.style.display !== "none"),
       ),
+      warm: slides.map(warmSlide),
+      gen: 0,
       dir: 1,
       timers: [],
       auto: null,
@@ -352,7 +461,7 @@ export function hydrateCarousels(root: ParentNode = document): () => void {
     track.style.position = "relative";
 
     // Every slide's photograph, warmed before anything needs to show it.
-    cleanups.push(preloadSlides(slides));
+    cleanups.push(preloadSlides(s.warm));
 
     for (const [el, step] of [
       [s.prev, -1],

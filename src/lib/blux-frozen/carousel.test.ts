@@ -319,16 +319,33 @@ describe("preloading the offscreen photographs", () => {
   };
 
   let requested: string[];
+  /** Images stay un-loaded until `arrive()` is called, so the wait is testable. */
+  let inFlight: Array<() => void>;
+
   beforeEach(() => {
     requested = [];
+    inFlight = [];
     class FakeImage {
+      onload: (() => void) | null = null;
+      onerror: (() => void) | null = null;
       set src(v: string) {
         requested.push(v);
+        inFlight.push(() => this.onload?.());
+      }
+      // Real browsers resolve this once the bitmap exists; here `onload` is the
+      // only channel, so this never settles and cannot short-circuit the test.
+      decode() {
+        return new Promise<void>(() => {});
       }
     }
     vi.stubGlobal("Image", FakeImage);
     withPhotos();
   });
+
+  const arrive = async () => {
+    for (const fire of inFlight.splice(0)) fire();
+    await vi.advanceTimersByTimeAsync(FADE_MS + 40);
+  };
 
   it("requests every slide's photograph, not just the visible one", async () => {
     hydrate();
@@ -359,6 +376,64 @@ describe("preloading the offscreen photographs", () => {
     hydrate();
     await vi.advanceTimersByTimeAsync(10);
     expect(requested).toEqual([]);
+  });
+
+  // Preloading only WARMS the cache; it gates nothing. Under 1.6Mbps throttling
+  // the fade still ran its full 600ms with every image reporting
+  // `complete === false`, dissolving the old photo away to reveal an opaque but
+  // empty box — i.e. the page's own light background. The white flash.
+  describe("and holding the change until the picture exists", () => {
+    it("does not touch the slides while the photograph is still coming", async () => {
+      hydrate();
+      await vi.advanceTimersByTimeAsync(10);
+      click("page-block-8-right");
+      await vi.advanceTimersByTimeAsync(FADE_MS * 2);
+      // Still showing what it was showing: nothing has faded to an empty box.
+      expect(visible()).toEqual(["block", "none", "none"]);
+      expect(els()[0].style.position).toBe("");
+    });
+
+    it("runs the dissolve the moment the photograph lands", async () => {
+      hydrate();
+      await vi.advanceTimersByTimeAsync(10);
+      click("page-block-8-right");
+      await vi.advanceTimersByTimeAsync(200);
+      expect(shownIndex()).toBe(0);
+      await arrive();
+      expect(visible()).toEqual(["none", "block", "none"]);
+    });
+
+    it("gives up after the cap so a broken image cannot freeze it", async () => {
+      hydrate();
+      await vi.advanceTimersByTimeAsync(10);
+      click("page-block-8-right");
+      // The image never arrives.
+      await vi.advanceTimersByTimeAsync(4000 + FADE_MS + 40);
+      expect(visible()).toEqual(["none", "block", "none"]);
+    });
+
+    it("re-targets from the slide the reader can SEE, not a pending one", async () => {
+      // Two clicks while nothing has moved should not race two slides ahead of
+      // what is on screen — the second supersedes the first.
+      hydrate();
+      await vi.advanceTimersByTimeAsync(10);
+      click("page-block-8-right");
+      await vi.advanceTimersByTimeAsync(100);
+      click("page-block-8-right");
+      await arrive();
+      expect(shownIndex()).toBe(1);
+    });
+
+    it("abandons a pending change that a newer one superseded", async () => {
+      hydrate();
+      await vi.advanceTimersByTimeAsync(10);
+      click("page-block-8-right"); // waiting on slide 1
+      await vi.advanceTimersByTimeAsync(100);
+      click("page-block-8-left"); // supersedes: now waiting on slide 2
+      await arrive();
+      expect(shownIndex()).toBe(2);
+      expect(visible().filter((d) => d === "block")).toHaveLength(1);
+    });
   });
 });
 
