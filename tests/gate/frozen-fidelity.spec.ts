@@ -270,11 +270,11 @@ test("frozen the-pointe renders whole: ~14820px, 50 media, panels live, no token
 // Geometry is what distinguishes them, and geometry needs no images: whichever
 // slide is showing must overlap the track it lives in.
 //
-// Timing: slides cross-fade over 450ms and BOTH are painted for that window, so
+// Timing: slides cross-fade over 600ms and BOTH are painted for that window, so
 // every measurement here waits the fade out first. Playwright's click leaves the
 // pointer over the section, which holds the 7s auto-advance, so nothing moves
 // underneath the assertions.
-const CAROUSEL_FADE_MS = 450;
+const CAROUSEL_FADE_MS = 600;
 
 test("carousel: every slide lands inside the track when shown", async ({
   page,
@@ -341,7 +341,7 @@ test("carousel: every slide lands inside the track when shown", async ({
 
 // The cross-fade's layout contract.
 //
-// Two slides are painted at once for 450ms, which the freeze's row layout has
+// Two slides are painted at once for 600ms, which the freeze's row layout has
 // no way to express — a second in-flow slide doubles the track's width. The
 // outgoing slide is lifted to `position:absolute` for exactly that window so it
 // overlays instead of displacing. Unit tests can assert the inline styles but
@@ -399,7 +399,7 @@ test("carousel: the cross-fade overlaps without disturbing the layout", async ({
     expect(p.overlapX).toBeGreaterThan(before.trackWidth * 0.99);
   }
 
-  await page.waitForTimeout(500);
+  await page.waitForTimeout(CAROUSEL_FADE_MS + 150);
   const after = await geometry();
   expect(after.painted).toHaveLength(1);
   expect(after.trackHeight).toBe(before.trackHeight);
