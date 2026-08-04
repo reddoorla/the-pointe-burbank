@@ -85,7 +85,23 @@ export const CAROUSEL_CAPTION_CSS = [
   // arrow does not grow with the viewport, so a percentage would over-darken a
   // wide slide and under-cover a narrow one. Zero by 168px, well before the
   // caption's first ink at 103px is meaningfully touched (.09 there).
-  "#page-block-8 .blocks2{position:relative}",
+  // A backdrop under the photograph, so the worst case is dim rather than
+  // white.
+  //
+  // The slides are transparent until their picture paints, and what sits behind
+  // them is the page's own light background — which is what made the failure
+  // mode a WHITE flash specifically. Preloading, the readiness gate and the
+  // width cap all shorten the window in which that can happen; none of them can
+  // close it, because the gate has to give up eventually or a broken image
+  // would freeze the slider. Under 1.6Mbps throttling the 4s cap still expires
+  // first.
+  //
+  // rgb(63,62,40) is the mean colour of the three photographs (109,108,65 /
+  // 87,87,52 / 109,104,78 — averaging 102,100,65) taken to 62%, so an unpainted
+  // slide reads as the picture not being there yet rather than as a hole in the
+  // page. It is never seen once an image has painted: `background-size:cover`
+  // leaves no gap at any aspect ratio.
+  "#page-block-8 .blocks2{position:relative;background-color:rgb(63,62,40)}",
   '#page-block-8 .blocks2::after{content:"";position:absolute;inset:0;' +
     "z-index:1;pointer-events:none;background:" +
     "linear-gradient(to right,rgba(0,0,0,.45) 0,rgba(0,0,0,.34) 44px," +

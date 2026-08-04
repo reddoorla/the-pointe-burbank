@@ -51,6 +51,22 @@ describe("CAROUSEL_CAPTION_CSS", () => {
     expect(CAROUSEL_CAPTION_CSS).toContain("text-shadow");
   });
 
+  it("puts a dim backdrop under the photographs, not the page's light one", () => {
+    // The slides are transparent until their picture paints, and the page
+    // behind them is light — which is what made the failure mode a WHITE flash.
+    // The preload, the readiness gate and the width cap all shorten that window
+    // without closing it: the gate must give up eventually or a broken image
+    // would freeze the slider.
+    const rule = /#page-block-8 \.blocks2\{([^}]*)\}/.exec(
+      CAROUSEL_CAPTION_CSS,
+    )?.[1];
+    expect(rule).toContain("background-color:rgb(63,62,40)");
+    // Darker than either photograph's mean, so it never reads as a bright hole.
+    const [r, g, b] = [63, 62, 40];
+    const mean = (109 + 87 + 109 + 108 + 87 + 104 + 65 + 52 + 78) / 9;
+    expect((r + g + b) / 3).toBeLessThan(mean);
+  });
+
   it("scrims the sides as well as the bottom, for the arrows", () => {
     // One pseudo-element carries all three gradients. The bottom one is the
     // caption's (Nicole, 51:27 + 51:30); the two side ones are the arrows'.
