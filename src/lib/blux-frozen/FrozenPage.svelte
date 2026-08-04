@@ -10,6 +10,7 @@
     type FrozenMapConfig,
   } from "$lib/blux-frozen/frozen-map";
   import { hydrateCarousels } from "$lib/blux-frozen/carousel";
+  import { sizeImageSlots, type ImageBoxes } from "$lib/blux-frozen/image-size";
   import {
     substitute,
     styleTag,
@@ -22,6 +23,14 @@
   const frozenMapConfigs = import.meta.glob("./frozen/*.map.json", {
     eager: true,
   }) as Record<string, { default: FrozenMapConfig }>;
+
+  // Painted-box measurements (`frozen/<uid>.image-boxes.json`), produced by
+  // `scripts/measure-image-boxes.mjs`. Globbed like the map configs so a site
+  // without the artifact simply gets no resizing rather than a build error.
+  const boxArtifacts = import.meta.glob("./frozen/*.image-boxes.json", {
+    eager: true,
+  }) as Record<string, { default: ImageBoxes }>;
+  const imageBoxes = Object.values(boxArtifacts)[0]?.default ?? null;
 
   // A frozen page = the Blux export's own settled markup (byte-faithful layout,
   // 316 inline styles) with editable leaves tokenized. We inject the extracted
@@ -52,11 +61,18 @@
   } = $props();
 
   const values = $derived(
-    new Map<string, SlotValue>(
-      slots.map((s) => [
-        s.key,
-        s.kind === "image" ? { url: s.url } : { text: s.text },
-      ]),
+    // Image slots are re-pointed at a variant sized to the box each one is
+    // actually painted into, BEFORE substitution — see image-size.ts. Applied
+    // here rather than to the rendered html because the values are already
+    // keyed by slot, so every url meets its own measured box with no parsing.
+    sizeImageSlots(
+      new Map<string, SlotValue>(
+        slots.map((s) => [
+          s.key,
+          s.kind === "image" ? { url: s.url } : { text: s.text },
+        ]),
+      ),
+      imageBoxes,
     ),
   );
   // `values` goes to BOTH passes: `substitute` fills the template's tokens,

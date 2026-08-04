@@ -23,7 +23,6 @@ import {
   NAV_LINKS_DROPPED,
   NAV_LABEL_OVERRIDES,
   HASHLINK_OVERRIDES,
-  sizeCarouselPhotos,
 } from "./enhance";
 import { UNDERLINE_DRAW_CSS } from "./underline-draw";
 import { RULE_MARK_CSS } from "./rule-mark";
@@ -899,90 +898,5 @@ describe("enhanceFrozenHtml + css", () => {
     expect(FROZEN_ENHANCE_CSS).toContain(
       "#page-block-10>.blocks0container{padding-top:40px}",
     );
-  });
-});
-
-describe("sizeCarouselPhotos", () => {
-  const slide = (i: number, url: string) =>
-    `<div id="page-block-8-item-${i}" class="blocks2 camediaload" ` +
-    `style="background-size: cover;;background-image:url(${url})">`;
-  const PRISMIC =
-    "https://images.prismic.io/x/abc_def.jpg?auto=format,compress";
-
-  it("asks for the width the band is actually painted at", () => {
-    // The origin files are 3960x2640 into a 1425x760 box — 3.4MB across the
-    // three slides even as AVIF. That download is what the preload and the
-    // readiness gate are both racing, so shortening it is the real fix.
-    const out = sizeCarouselPhotos(slide(0, PRISMIC));
-    expect(out).toContain(`${PRISMIC}&w=2400`);
-  });
-
-  it("keeps the parameter INSIDE the quotes substitute emits", () => {
-    const out = sizeCarouselPhotos(slide(0, `'${PRISMIC}'`));
-    expect(out).toContain(`url('${PRISMIC}&w=2400')`);
-  });
-
-  it("uses ? when the url carries no query of its own", () => {
-    const bare = "https://images.prismic.io/x/abc_def.jpg";
-    expect(sizeCarouselPhotos(slide(1, bare))).toContain(`${bare}?w=2400`);
-  });
-
-  it("leaves the Blux CloudFront defaults alone", () => {
-    // The committed slot defaults point there and it takes no such parameter;
-    // the offline gate renders from exactly those.
-    const cf = "https://d3syaxnfm3oj0e.cloudfront.net/ea3/w:3600/abc.jpg";
-    expect(sizeCarouselPhotos(slide(2, cf))).toBe(slide(2, cf));
-  });
-
-  it("does not double up if a width is already asked for", () => {
-    const sized = `${PRISMIC}&w=1200`;
-    expect(sizeCarouselPhotos(slide(0, sized))).toBe(slide(0, sized));
-  });
-
-  it("touches only the carousel, not every image on the page", () => {
-    const other = `<div id="page-block-3-item-0" style="background-image:url(${PRISMIC})">`;
-    expect(sizeCarouselPhotos(other)).toBe(other);
-  });
-
-  it("is wired into the render, on all three slides", () => {
-    // Against the committed defaults this step is a deliberate no-op — they are
-    // CloudFront URLs — so the artifact alone cannot prove the step runs at
-    // all. Feed the carousel slots what PRODUCTION actually serves instead.
-    const prismic = new Map(freezeValues);
-    for (const i of [0, 1, 2]) {
-      prismic.set(`s6.i${i}`, {
-        url: `https://images.prismic.io/the-pointe-burbank/photo${i}.jpg?auto=format,compress`,
-      });
-    }
-    const html = enhanceFrozenHtml(substitute(template, prismic), prismic);
-    const sized = [
-      ...html.matchAll(
-        /<div id="page-block-8-item-\d+"[^>]*background-image:url\(([^)]+)\)/g,
-      ),
-    ].map((m) => m[1]);
-    expect(sized).toHaveLength(3);
-    // Asserted as the WHOLE url, quotes included. `toContain("&w=2400")` passed
-    // just as happily on `url('…compress'&w=2400)` — the parameter outside the
-    // quotes, which no browser would fetch.
-    for (const [i, u] of sized.entries()) {
-      expect(u).toBe(
-        `'https://images.prismic.io/the-pointe-burbank/photo${i}.jpg` +
-          `?auto=format,compress&w=2400'`,
-      );
-    }
-  });
-
-  it("leaves the rest of the page's images at their own size", () => {
-    // Scoped on purpose: the whole page pulls 7MB from Prismic and right-sizing
-    // all 50 is its own piece of work, with its own risk of softening artwork
-    // whose box is bigger than assumed. This one band is the one blocking a
-    // transition.
-    const prismic = new Map(freezeValues);
-    prismic.set("s5.i0", {
-      url: "https://images.prismic.io/the-pointe-burbank/hero.jpg?auto=format,compress",
-    });
-    const html = enhanceFrozenHtml(substitute(template, prismic), prismic);
-    expect(html).toContain("hero.jpg?auto=format,compress'");
-    expect(html).not.toContain("hero.jpg?auto=format,compress&w=");
   });
 });
