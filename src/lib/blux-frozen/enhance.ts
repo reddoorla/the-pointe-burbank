@@ -547,53 +547,6 @@ export function liftHeadingLevels(html: string): string {
 }
 
 /**
- * Widest the full-bleed carousel band is ever painted, in CSS px.
- *
- * 2400 covers a 2400px viewport at DPR 1 and a 1200px one at DPR 2, which is
- * where the laptops that matter sit. Deliberately not the origin size: these
- * are `background-size:cover` photographs under a scrim, so they are forgiving
- * of mild upscaling in a way that type or line-art would not be.
- */
-const CAROUSEL_PHOTO_WIDTH = 2400;
-
-/**
- * Ask Prismic for carousel photographs at the size they are actually painted.
- *
- * The slides ship at their origin resolution — 3960x2640 — into a 1425x760
- * box. Measured on the deploy preview, the three of them cost 3.4MB even as
- * AVIF (906 + 1103 + 1399 KB), which is roughly seven times the pixels the
- * band can show.
- *
- * That weight is what makes the white flash survivable at all: preloading and
- * the readiness gate both come down to winning a race against the download,
- * and under 1.6Mbps throttling the images had still not arrived when the gate's
- * 4s cap expired. Capping the width wins that race by making it much shorter —
- * this one file drops 1103KB to 537KB — rather than by waiting longer.
- *
- * Prismic only; the committed slot defaults point at Blux CloudFront, which
- * takes no such parameter, and the dev gate renders from those.
- */
-export function sizeCarouselPhotos(
-  html: string,
-  width = CAROUSEL_PHOTO_WIDTH,
-): string {
-  const slide =
-    /(<div id="page-block-8-item-\d+"[^>]*background-image:url\()([^)]*)(\))/g;
-  return html.replace(slide, (whole, open: string, raw: string, close) => {
-    // `substitute` emits `url('…')` WITH quotes. Appending to the raw capture
-    // put the parameter after the closing quote and produced a url that no
-    // browser would fetch — and a `toContain` assertion happily passed on it.
-    const quoted = /^(['"])(.*)\1$/.exec(raw.trim());
-    const quote = quoted ? quoted[1] : "";
-    const url = quoted ? quoted[2] : raw.trim();
-    if (!url.includes("images.prismic.io")) return whole;
-    if (/[?&]w=/.test(url)) return whole;
-    const sized = `${url}${url.includes("?") ? "&" : "?"}w=${width}`;
-    return `${open}${quote}${sized}${quote}${close}`;
-  });
-}
-
-/**
  * All render-time markup work, applied in order after token substitution.
  *
  * `dropNavLinks` and `rewriteHashlinks` used to be order-coupled: both keyed on
@@ -631,7 +584,6 @@ function steps(values?: SlotLookup): ((html: string) => string)[] {
     (html) => addVideoPoster(html, poster),
     (html) => replaceAvailabilityImage(html, availability),
     restyleCarouselCaptions,
-    sizeCarouselPhotos,
     replaceRuleMarks,
     nameBareLinks,
     nameMenuToggle,
