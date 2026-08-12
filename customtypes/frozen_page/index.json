@@ -37,10 +37,7 @@
               "config": {
                 "label": "Kind",
                 "placeholder": "",
-                "options": [
-                  "text",
-                  "image"
-                ]
+                "options": ["text", "image"]
               }
             },
             "text": {
