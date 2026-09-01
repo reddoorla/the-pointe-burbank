@@ -2,13 +2,13 @@ name: ci
 on:
   pull_request:
   push:
-    branches: [main]
+    branches: [main, staging]
 jobs:
   ci:
     permissions:
       contents: read
       pull-requests: write
-    uses: reddoorla/.github/.github/workflows/ci.yml@4a32c3d0caf2050d6f72274d3325f2306772860d # v1.3.0
+    uses: reddoorla/.github/.github/workflows/ci.yml@8f9852c4f69f629d1d785036366d74d9358645f9 # v1.4.1
     with:
       node-version: "24"
       netlify-site: "the-pointe-burbank-rd"
