@@ -5,6 +5,7 @@
   import BluxWidget from "$lib/blux-catalog/BluxWidget.svelte";
   import type { BluxCellData } from "$lib/blux-catalog/cell";
   import { gridCellBasis } from "$lib/blux-catalog/layout";
+  import { cappedWidths } from "@reddoorla/maintenance/images";
 
   let { slice }: { slice: Content.BluxSectionSlice } = $props();
   type Cell = Content.BluxSectionSliceDefaultPrimaryCellsItem;
@@ -55,8 +56,11 @@
   style={bandStyle}
 >
   {#if isFilled.image(slice.primary.background_image)}
+    <!-- Band backdrop: absolutely positioned and cover-filled, so genuinely 100vw. -->
     <PrismicImage
       field={slice.primary.background_image}
+      widths={cappedWidths(slice.primary.background_image)}
+      sizes="100vw"
       class="blux-section__bg"
     />
   {/if}

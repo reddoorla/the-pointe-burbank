@@ -4,6 +4,7 @@
   import BluxCell from "$lib/blux-catalog/BluxCell.svelte";
   import BluxWidget from "$lib/blux-catalog/BluxWidget.svelte";
   import type { BluxCellData } from "$lib/blux-catalog/cell";
+  import { cappedWidths } from "@reddoorla/maintenance/images";
 
   let { slice }: { slice: Content.BluxCarouselSlice } = $props();
   type Cell = Content.BluxCarouselSliceDefaultPrimaryCellsItem;
@@ -29,8 +30,11 @@
   style={bandStyle}
 >
   {#if isFilled.image(slice.primary.background_image)}
+    <!-- Band backdrop: absolutely positioned and cover-filled, so genuinely 100vw. -->
     <PrismicImage
       field={slice.primary.background_image}
+      widths={cappedWidths(slice.primary.background_image)}
+      sizes="100vw"
       class="blux-carousel__bg"
     />
   {/if}

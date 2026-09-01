@@ -3,6 +3,7 @@
   import ContentBand from "$lib/components/ContentBand.svelte";
   import { PrismicImage, PrismicRichText } from "@prismicio/svelte";
   import { isFilled, type Content } from "@prismicio/client";
+  import { cappedWidths } from "@reddoorla/maintenance/images";
 
   let { slice }: { slice: Content.MediaTextSlice } = $props();
   let reverse = $derived(slice.variation === "imageLeft");
@@ -20,7 +21,14 @@
     variation={slice.variation}
     contentClass="max-w-5xl px-6 py-16"
   >
-    <PrismicImage field={slice.primary.media} class="mx-auto h-auto w-full" />
+    <!-- Feature photo fills the 64rem band minus its px-6 gutters (~976px). -->
+    <PrismicImage
+      field={slice.primary.media}
+      widths={cappedWidths(slice.primary.media)}
+      sizes="(min-width: 1024px) 976px, calc(100vw - 3rem)"
+      loading="lazy"
+      class="mx-auto h-auto w-full"
+    />
   </ContentBand>
 {:else}
   <!-- Photo-dominant editorial row: copy ~1/3, image ~2/3, alternating sides
@@ -44,7 +52,14 @@
     </div>
     {#if hasMedia}
       <div class="mt-media lg:col-span-8 {reverse ? 'lg:order-1' : ''}">
-        <PrismicImage field={slice.primary.media} class="h-auto w-full" />
+        <!-- 8 of 12 columns in the 72rem band, so ~722px once the grid locks in. -->
+        <PrismicImage
+          field={slice.primary.media}
+          widths={cappedWidths(slice.primary.media)}
+          sizes="(min-width: 1024px) 722px, calc(100vw - 3rem)"
+          loading="lazy"
+          class="h-auto w-full"
+        />
       </div>
     {/if}
   </ContentBand>
