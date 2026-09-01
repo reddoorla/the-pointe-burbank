@@ -10,6 +10,7 @@
   } from "@prismicio/client";
   import { tagFilter } from "$lib/blux-catalog/tag-filter";
   import BluxWidget from "$lib/blux-catalog/BluxWidget.svelte";
+  import { cappedWidths } from "@reddoorla/maintenance/images";
 
   /** An entity document delivered via SliceZone `context.collections` —
    * structurally the Plan-2 shared-base fields a card renders. */
@@ -88,6 +89,9 @@
     {#if isFilled.image(doc.data.media as ImageField)}
       <PrismicImage
         field={doc.data.media as ImageField}
+        widths={cappedWidths(doc.data.media as ImageField)}
+        sizes="(min-width: 768px) min(1280px, 92vw), 92vw"
+        loading="lazy"
         class="blux-collection__card-media"
       />
     {/if}
@@ -103,8 +107,11 @@
   style={bandStyle}
 >
   {#if isFilled.image(slice.primary.background_image)}
+    <!-- Band backdrop: absolutely positioned and cover-filled, so genuinely 100vw. -->
     <PrismicImage
       field={slice.primary.background_image}
+      widths={cappedWidths(slice.primary.background_image)}
+      sizes="100vw"
       class="blux-collection__bg"
     />
   {/if}

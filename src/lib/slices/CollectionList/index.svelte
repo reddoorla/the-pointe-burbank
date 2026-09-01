@@ -1,6 +1,7 @@
 <script lang="ts">
   import { PrismicImage, PrismicRichText } from "@prismicio/svelte";
   import type { Content, ImageField, RichTextField } from "@prismicio/client";
+  import { cappedWidths } from "@reddoorla/maintenance/images";
 
   type CollectionDoc = {
     uid: string;
@@ -36,8 +37,14 @@
     {#each docs as doc (doc.uid)}
       <article>
         {#if doc.data.media?.url}
+          <!-- The list variant runs the full 72rem band; the grid variant is 3 up. -->
           <PrismicImage
             field={doc.data.media as unknown as ImageField}
+            widths={cappedWidths(doc.data.media as unknown as ImageField)}
+            sizes={slice.variation === "list"
+              ? "(min-width: 1024px) 1104px, calc(100vw - 3rem)"
+              : "(min-width: 768px) 347px, calc(100vw - 3rem)"}
+            loading="lazy"
             class="mb-3 h-auto w-full rounded"
           />
         {/if}
