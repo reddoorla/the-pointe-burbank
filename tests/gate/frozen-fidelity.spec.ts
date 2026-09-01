@@ -350,6 +350,13 @@ test("carousel: every slide lands inside the track when shown", async ({
 test("carousel: the cross-fade overlaps without disturbing the layout", async ({
   page,
 }) => {
+  // This gate asserts the cross-fade itself — two slides painted at once
+  // mid-transition. @reddoorla/maintenance 0.90 emulates `prefers-reduced-motion:
+  // reduce` fleet-wide, and the site's app.css correctly collapses the fade to an
+  // instant swap under it, so only one slide is ever up and the assertion can't
+  // hold. Opt this one test back into motion; reduced-motion behaviour is the
+  // right default for every other test in this file.
+  await page.emulateMedia({ reducedMotion: "no-preference" });
   await page.goto("/dev/blux-frozen", { waitUntil: "load" });
   await page.evaluate(() =>
     document
