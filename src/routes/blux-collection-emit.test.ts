@@ -76,8 +76,6 @@ describe("blux_collection emit shape renders through the registered slice", () =
     const links = container.querySelectorAll(".blux-collection a[href]");
     expect(links).toHaveLength(1);
     expect(links[0]?.getAttribute("href")).toBe("https://example.com/steel");
-    expect(
-      container.querySelector(".blux-collection[data-layout='grid'] img"),
-    ).not.toBeNull();
+    expect(container.querySelector(".blux-collection[data-layout='grid'] img")).not.toBeNull();
   });
 });

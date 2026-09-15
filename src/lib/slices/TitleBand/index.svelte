@@ -17,16 +17,10 @@
     context?: { presentation?: Presentation };
   };
   let { slice, context = {} }: Props = $props();
-  const band = $derived(
-    bandFor(context.presentation, slice.primary.band ?? null),
-  );
+  const band = $derived(bandFor(context.presentation, slice.primary.band ?? null));
 </script>
 
-<SectionBand
-  {band}
-  sliceType={slice.slice_type}
-  sliceVariation={slice.variation}
->
+<SectionBand {band} sliceType={slice.slice_type} sliceVariation={slice.variation}>
   <BandContent {band}>
     <BandTitle
       heading={slice.primary.heading}

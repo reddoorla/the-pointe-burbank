@@ -1,13 +1,7 @@
 import { describe, it, expect } from "vitest";
-import {
-  isPrismicImageUrl,
-  imgix,
-  srcset,
-  DEFAULT_IMAGE_WIDTHS,
-} from "./image";
+import { isPrismicImageUrl, imgix, srcset, DEFAULT_IMAGE_WIDTHS } from "./image";
 
-const PRISMIC_URL =
-  "https://images.prismic.io/repo/abc123_hero.jpg?auto=compress";
+const PRISMIC_URL = "https://images.prismic.io/repo/abc123_hero.jpg?auto=compress";
 
 describe("isPrismicImageUrl", () => {
   it("accepts a Prismic imgix URL", () => {
@@ -19,9 +13,7 @@ describe("isPrismicImageUrl", () => {
   });
 
   it("rejects URLs that only mention the host in their path", () => {
-    expect(
-      isPrismicImageUrl("https://evil.example/images.prismic.io/hero.jpg"),
-    ).toBe(false);
+    expect(isPrismicImageUrl("https://evil.example/images.prismic.io/hero.jpg")).toBe(false);
   });
 
   it("rejects null, undefined, empty, and malformed input", () => {
@@ -40,9 +32,7 @@ describe("imgix", () => {
   });
 
   it("returns non-Prismic URLs unchanged", () => {
-    expect(imgix("https://example.com/hero.jpg", { w: 100 })).toBe(
-      "https://example.com/hero.jpg",
-    );
+    expect(imgix("https://example.com/hero.jpg", { w: 100 })).toBe("https://example.com/hero.jpg");
     expect(imgix("not a url")).toBe("not a url");
   });
 

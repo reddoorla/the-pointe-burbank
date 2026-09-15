@@ -1,21 +1,11 @@
 <script lang="ts">
   import { onMount } from "svelte";
 
-  import {
-    enhanceFrozenHtml,
-    FROZEN_ENHANCE_CSS,
-  } from "$lib/blux-frozen/enhance";
-  import {
-    hydrateFrozenMap,
-    type FrozenMapConfig,
-  } from "$lib/blux-frozen/frozen-map";
+  import { enhanceFrozenHtml, FROZEN_ENHANCE_CSS } from "$lib/blux-frozen/enhance";
+  import { hydrateFrozenMap, type FrozenMapConfig } from "$lib/blux-frozen/frozen-map";
   import { hydrateCarousels } from "$lib/blux-frozen/carousel";
   import { sizeImageSlots, type ImageBoxes } from "$lib/blux-frozen/image-size";
-  import {
-    substitute,
-    styleTag,
-    type SlotValue,
-  } from "$lib/blux-frozen/substitute";
+  import { substitute, styleTag, type SlotValue } from "$lib/blux-frozen/substitute";
 
   // Committed map artifacts (`frozen/<uid>.map.json`): one per hydratable map,
   // keyed by its mountId — only configs whose mount exists in this page's DOM
@@ -67,10 +57,7 @@
     // keyed by slot, so every url meets its own measured box with no parsing.
     sizeImageSlots(
       new Map<string, SlotValue>(
-        slots.map((s) => [
-          s.key,
-          s.kind === "image" ? { url: s.url } : { text: s.text },
-        ]),
+        slots.map((s) => [s.key, s.kind === "image" ? { url: s.url } : { text: s.text }]),
       ),
       imageBoxes,
     ),
@@ -79,9 +66,7 @@
   // and `enhanceFrozenHtml` reads the site-declared `x.` slots — content the
   // render composes itself, so it has no token to fill (the video poster, the
   // rebuilt availability panel). Missing slots fall back to committed defaults.
-  const html = $derived(
-    enhanceFrozenHtml(substitute(template, values), values),
-  );
+  const html = $derived(enhanceFrozenHtml(substitute(template, values), values));
 
   // Progressive enhancement on the frozen markup (the bare frozen route owns
   // the whole document, so page-scoped document queries are safe here):
@@ -100,9 +85,7 @@
     // the original: absolute at top, fixed + same white background after
     // scroll). The nav is out of flow either way, so the flip never shifts
     // layout.
-    const stickyNav = document.querySelector<HTMLElement>(
-      'nav[data-type="sticky"]',
-    );
+    const stickyNav = document.querySelector<HTMLElement>('nav[data-type="sticky"]');
     if (stickyNav) {
       const pin = () => {
         stickyNav.style.position = window.scrollY > 0 ? "fixed" : "absolute";
@@ -115,9 +98,7 @@
     // Mobile menu: the hamburger is a pure-CSS checkbox hack, so without
     // Blux's JS the overlay stays open after tapping an anchor. Close it on
     // any nav-link click.
-    const menuToggle = document.querySelector<HTMLInputElement>(
-      'input[id$="-menuicon"]',
-    );
+    const menuToggle = document.querySelector<HTMLInputElement>('input[id$="-menuicon"]');
     if (menuToggle) {
       const closeMenu = (e: Event) => {
         if ((e.target as HTMLElement).closest("a")) menuToggle.checked = false;
@@ -127,8 +108,7 @@
     }
 
     const reduced =
-      typeof matchMedia !== "undefined" &&
-      matchMedia("(prefers-reduced-motion: reduce)").matches;
+      typeof matchMedia !== "undefined" && matchMedia("(prefers-reduced-motion: reduce)").matches;
     if (!reduced && typeof IntersectionObserver !== "undefined") {
       const io = new IntersectionObserver(
         (entries) => {
@@ -151,9 +131,7 @@
       // left-to-right draw-in (see RULE_MARK_CSS and UNDERLINE_DRAW_CSS), so a
       // mark or underline already on screen is simply drawn.
       const foldLine = window.innerHeight;
-      for (const el of document.querySelectorAll<HTMLElement>(
-        ".block-effects, .rd-rule, .links",
-      )) {
+      for (const el of document.querySelectorAll<HTMLElement>(".block-effects, .rd-rule, .links")) {
         if (el.getBoundingClientRect().top > foldLine) {
           el.classList.add("rd-fx-wait");
           io.observe(el);

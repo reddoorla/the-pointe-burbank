@@ -1,10 +1,6 @@
 <script lang="ts">
   import { PrismicRichText } from "@prismicio/svelte";
-  import {
-    bandFor,
-    type Presentation,
-    type RenderMedia,
-  } from "$lib/blux/presentation";
+  import { bandFor, type Presentation, type RenderMedia } from "$lib/blux/presentation";
   import SectionBand from "$lib/blux/SectionBand.svelte";
   import BandContent from "$lib/blux/BandContent.svelte";
   import Grid from "$lib/blux/Grid.svelte";
@@ -21,9 +17,7 @@
     context?: { presentation?: Presentation };
   };
   let { slice, context = {} }: Props = $props();
-  const band = $derived(
-    bandFor(context.presentation, slice.primary.band ?? null),
-  );
+  const band = $derived(bandFor(context.presentation, slice.primary.band ?? null));
   const split = $derived(band?.split ?? null);
 
   // A framed (min-height) split fills its box with the image — the source's
@@ -37,11 +31,7 @@
 </script>
 
 {#if split}
-  <SectionBand
-    {band}
-    sliceType={slice.slice_type}
-    sliceVariation={slice.variation}
-  >
+  <SectionBand {band} sliceType={slice.slice_type} sliceVariation={slice.variation}>
     <BandContent {band}>
       <!--
         Two columns with a horizontal gutter between them at md: up, mirroring
@@ -57,8 +47,7 @@
         reserved frame IS the design.
       -->
       <div
-        class="flex w-full flex-wrap gap-y-8 md:gap-x-[4%] {split.media
-          .minHeight
+        class="flex w-full flex-wrap gap-y-8 md:gap-x-[4%] {split.media.minHeight
           ? 'md:items-stretch'
           : 'items-center'}"
         class:flex-row-reverse={split.mediaSide === "left"}
@@ -79,8 +68,8 @@
         </div>
         <div
           data-split-cell
-          class="min-w-0 grow basis-full md:basis-[calc(var(--cell-basis)_-_2%)] {split
-            .media.minHeight
+          class="min-w-0 grow basis-full md:basis-[calc(var(--cell-basis)_-_2%)] {split.media
+            .minHeight
             ? ''
             : 'md:pt-[100px]'}"
           style:--cell-basis="{split.ratio}%"
@@ -91,10 +80,7 @@
                  Same cover-frame idiom as CarouselFrames; coverMedia strips
                  the intrinsic width/aspect so the inline sizing can't defeat
                  the cover fill. -->
-            <div
-              class="relative w-full"
-              style={`min-height:${split.media.minHeight}`}
-            >
+            <div class="relative w-full" style={`min-height:${split.media.minHeight}`}>
               <Media
                 media={coverMedia(split.media)}
                 class="absolute inset-0 h-full w-full object-cover"

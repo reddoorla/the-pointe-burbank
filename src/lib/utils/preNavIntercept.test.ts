@@ -28,9 +28,7 @@ describe("shouldIntercept", () => {
   });
 
   it("never intercepts unloading navigations", () => {
-    expect(shouldIntercept(nav({ type: "leave", willUnload: true }))).toBe(
-      false,
-    );
+    expect(shouldIntercept(nav({ type: "leave", willUnload: true }))).toBe(false);
   });
 
   it("skips external navigations (no target)", () => {
@@ -79,15 +77,11 @@ describe("shouldIntercept", () => {
   });
 
   it("lets its own deferred goto through (pendingHref matches)", () => {
-    expect(
-      shouldIntercept(nav(), { pendingHref: "https://example.com/about" }),
-    ).toBe(false);
+    expect(shouldIntercept(nav(), { pendingHref: "https://example.com/about" })).toBe(false);
   });
 
   it("re-intercepts a different target while one is pending (rapid click)", () => {
-    expect(
-      shouldIntercept(nav(), { pendingHref: "https://example.com/other" }),
-    ).toBe(true);
+    expect(shouldIntercept(nav(), { pendingHref: "https://example.com/other" })).toBe(true);
   });
 
   it("intercepts when there is no `from` (defensive default)", () => {

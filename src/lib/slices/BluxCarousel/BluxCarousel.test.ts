@@ -26,12 +26,8 @@ describe("BluxCarousel slice", () => {
     const { container, getAllByRole } = render(BluxCarousel, {
       props: { slice },
     });
-    expect(
-      container.querySelector(".blux-carousel__track[data-arrows='on']"),
-    ).not.toBeNull();
-    expect(
-      container.querySelectorAll(".blux-carousel__track > .blux-cell"),
-    ).toHaveLength(3);
+    expect(container.querySelector(".blux-carousel__track[data-arrows='on']")).not.toBeNull();
+    expect(container.querySelectorAll(".blux-carousel__track > .blux-cell")).toHaveLength(3);
     expect(getAllByRole("heading", { level: 3 })).toHaveLength(3);
   });
 });

@@ -43,21 +43,17 @@
       .map((t) => t.trim())
       .filter(Boolean);
 
-  const titleText = (doc: EntityDoc): string =>
-    asText((doc.data.title ?? []) as RichTextField);
+  const titleText = (doc: EntityDoc): string => asText((doc.data.title ?? []) as RichTextField);
 
   /** Card-link contract: a card links ONLY to an external Web URL the record
    * carries; otherwise it does not link (detail pages are deferred). */
   const externalUrl = (doc: EntityDoc): string | undefined => {
     const link = doc.data.link as LinkField | undefined;
-    return isFilled.link(link) && link.link_type === "Web"
-      ? link.url
-      : undefined;
+    return isFilled.link(link) && link.link_type === "Web" ? link.url : undefined;
   };
 
   let docs = $derived.by(() => {
-    const all =
-      context?.collections?.[slice.primary.collection_type ?? ""] ?? [];
+    const all = context?.collections?.[slice.primary.collection_type ?? ""] ?? [];
     const match = tagFilter(slice.primary.filter_tag ?? undefined);
     const filtered = all.filter(
       (doc) => doc.data.disabled !== true && match(splitTags(doc.data.tags)),
@@ -68,13 +64,9 @@
             String(b.data.date ?? "").localeCompare(String(a.data.date ?? "")),
           )
         : slice.primary.sort === "title"
-          ? [...filtered].sort((a, b) =>
-              titleText(a).localeCompare(titleText(b)),
-            )
+          ? [...filtered].sort((a, b) => titleText(a).localeCompare(titleText(b)))
           : filtered;
-    return isFilled.number(slice.primary.limit)
-      ? sorted.slice(0, slice.primary.limit)
-      : sorted;
+    return isFilled.number(slice.primary.limit) ? sorted.slice(0, slice.primary.limit) : sorted;
   });
 
   let bandStyle = $derived(
@@ -134,9 +126,6 @@
   </div>
 
   {#if isFilled.keyText(slice.primary.widget_html)}
-    <BluxWidget
-      kind={slice.primary.widget_kind}
-      html={slice.primary.widget_html}
-    />
+    <BluxWidget kind={slice.primary.widget_kind} html={slice.primary.widget_html} />
   {/if}
 </section>

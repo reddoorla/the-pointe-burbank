@@ -23,12 +23,10 @@ export function load() {
   return {
     slices: home.data.slices,
     collections: fixture.collections,
-    navLinks: siteConfig.nav.items.map(
-      (i: { label: string; href: string }) => ({
-        text: i.label,
-        href: i.href,
-      }),
-    ),
+    navLinks: siteConfig.nav.items.map((i: { label: string; href: string }) => ({
+      text: i.label,
+      href: i.href,
+    })),
     footerColumns: siteConfig.footer.columns,
   };
 }

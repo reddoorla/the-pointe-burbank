@@ -20,9 +20,7 @@ describe("frozen/home.map.json (map artifact)", () => {
       expect(l.lid).toBeTruthy();
     }
     // Exactly one layer seeds the viewport (the portfolio group).
-    const seeds = config.layers.filter(
-      (l) => l.initiallyVisible && l.preserveViewport === false,
-    );
+    const seeds = config.layers.filter((l) => l.initiallyVisible && l.preserveViewport === false);
     expect(seeds).toHaveLength(1);
   });
 

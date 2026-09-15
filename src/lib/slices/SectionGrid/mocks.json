@@ -24,9 +24,7 @@
             "item_body",
             {
               "__TYPE__": "StructuredTextContent",
-              "value": [
-                { "type": "paragraph", "content": { "text": "Heated." } }
-              ]
+              "value": [{ "type": "paragraph", "content": { "text": "Heated." } }]
             }
           ]
         ]

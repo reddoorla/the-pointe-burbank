@@ -19,8 +19,7 @@ export function loadMapsApi(key: string): Promise<GMapsNS> {
     const w = window as unknown as Record<string, unknown>;
     w[cbName] = () => {
       delete w[cbName];
-      const google = (window as unknown as { google?: { maps?: GMapsNS } })
-        .google;
+      const google = (window as unknown as { google?: { maps?: GMapsNS } }).google;
       if (google?.maps) {
         resolve(google.maps);
       } else {

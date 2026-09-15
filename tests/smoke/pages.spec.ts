@@ -35,9 +35,7 @@ function attachConsoleWatcher(page: Page, extraAllowed: RegExp[] = []) {
 }
 
 for (const route of smokeRoutes) {
-  test(`${route.path} (${route.name}) loads with no console errors`, async ({
-    page,
-  }) => {
+  test(`${route.path} (${route.name}) loads with no console errors`, async ({ page }) => {
     const expectedStatus = route.expectStatus ?? 200;
     // A route whose expected status IS an error (e.g. "/" on the placeholder
     // starter, see tests/smoke/routes.ts) makes the browser log "Failed to
@@ -45,16 +43,12 @@ for (const route of smokeRoutes) {
     // bug. Same allowance as the dedicated 404-page test below.
     const errors = attachConsoleWatcher(
       page,
-      expectedStatus >= 400
-        ? [new RegExp(`Failed to load resource.*${expectedStatus}`, "i")]
-        : [],
+      expectedStatus >= 400 ? [new RegExp(`Failed to load resource.*${expectedStatus}`, "i")] : [],
     );
     const response = await page.goto(route.path, {
       waitUntil: "domcontentloaded",
     });
-    expect(response?.status(), `HTTP status for ${route.path}`).toBe(
-      expectedStatus,
-    );
+    expect(response?.status(), `HTTP status for ${route.path}`).toBe(expectedStatus);
     if (route.hydrationMarker) {
       await expect(
         page.locator(route.hydrationMarker),

@@ -18,13 +18,7 @@ export interface CountFormat {
  * and its tests agree.
  */
 export function formatCount(value: number, opts: CountFormat = {}): string {
-  const {
-    decimals = 0,
-    prefix = "",
-    suffix = "",
-    useGrouping = true,
-    locale,
-  } = opts;
+  const { decimals = 0, prefix = "", suffix = "", useGrouping = true, locale } = opts;
   const body = value.toLocaleString(locale, {
     minimumFractionDigits: decimals,
     maximumFractionDigits: decimals,

@@ -46,9 +46,7 @@
 {#if useNavLinks}
   <!-- navLinks (page-data) chrome: inline links on desktop, focus-trapped
        full-screen menu on mobile. -->
-  <nav
-    class="fixed top-0 left-0 z-50 flex w-full items-center justify-between px-8 py-4"
-  >
+  <nav class="fixed top-0 left-0 z-50 flex w-full items-center justify-between px-8 py-4">
     <a href="/" class="text-lg font-bold">Logo</a>
 
     <div class="hidden items-center gap-8 lg:flex">
@@ -102,8 +100,7 @@
                 class="flex items-center gap-1"
                 aria-expanded={openDesktopIndex === i}
                 aria-controls="nav-dropdown-{i}"
-                onclick={() =>
-                  (openDesktopIndex = openDesktopIndex === i ? null : i)}
+                onclick={() => (openDesktopIndex = openDesktopIndex === i ? null : i)}
                 onkeydown={(e) => {
                   if (e.key === "Escape") openDesktopIndex = null;
                 }}
@@ -120,10 +117,7 @@
                 {#each item.children as child, ci (ci)}
                   <li>
                     {#if child.href}
-                      <a
-                        href={child.href}
-                        class="block px-3 py-2 hover:opacity-70"
-                        >{child.label}</a
+                      <a href={child.href} class="block px-3 py-2 hover:opacity-70">{child.label}</a
                       >
                     {:else}
                       <span class="block px-3 py-2">{child.label}</span>
@@ -178,8 +172,7 @@
       </button>
 
       {#each navLinks as link (link.href)}
-        <a href={link.href} class="px-4 py-3" onclick={closeMenu}>{link.text}</a
-        >
+        <a href={link.href} class="px-4 py-3" onclick={closeMenu}>{link.text}</a>
       {/each}
     </div>
   {:else}
@@ -208,8 +201,7 @@
               type="button"
               class="flex items-center gap-1 px-4 py-2"
               aria-expanded={openMobileIndex === i}
-              onclick={() =>
-                (openMobileIndex = openMobileIndex === i ? null : i)}
+              onclick={() => (openMobileIndex = openMobileIndex === i ? null : i)}
             >
               {item.label}
               <ChevronDown size={16} aria-hidden="true" />
@@ -217,10 +209,8 @@
             {#if openMobileIndex === i}
               {#each item.children as child, ci (ci)}
                 {#if child.href}
-                  <a
-                    href={child.href}
-                    class="px-4 py-2 opacity-80"
-                    onclick={closeMenu}>{child.label}</a
+                  <a href={child.href} class="px-4 py-2 opacity-80" onclick={closeMenu}
+                    >{child.label}</a
                   >
                 {:else}
                   <span class="px-4 py-2 opacity-80">{child.label}</span>
@@ -229,9 +219,7 @@
             {/if}
           </div>
         {:else if item.href}
-          <a href={item.href} class="px-4 py-3" onclick={closeMenu}
-            >{item.label}</a
-          >
+          <a href={item.href} class="px-4 py-3" onclick={closeMenu}>{item.label}</a>
         {:else}
           <span class="px-4 py-3">{item.label}</span>
         {/if}

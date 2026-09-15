@@ -11,9 +11,7 @@ export async function checkVimeoVideo(videoId: string): Promise<boolean> {
 
   try {
     const response = await fetch(
-      `https://vimeo.com/api/oembed.json?url=${encodeURIComponent(
-        `https://vimeo.com/${videoId}`,
-      )}`,
+      `https://vimeo.com/api/oembed.json?url=${encodeURIComponent(`https://vimeo.com/${videoId}`)}`,
       {
         headers: {
           "User-Agent": "SvelteKit App",

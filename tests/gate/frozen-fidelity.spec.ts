@@ -28,11 +28,7 @@ test("frozen the-pointe renders whole: ~14820px, 50 media, panels live, no token
 }) => {
   const errors: string[] = [];
   page.on("console", (m: ConsoleMessage) => {
-    if (
-      m.type() === "error" &&
-      !allowed(m.text()) &&
-      !allowed(m.location()?.url ?? "")
-    ) {
+    if (m.type() === "error" && !allowed(m.text()) && !allowed(m.location()?.url ?? "")) {
       errors.push(m.text());
     }
   });
@@ -52,9 +48,7 @@ test("frozen the-pointe renders whole: ~14820px, 50 media, panels live, no token
   // inside the band's environment tolerance. Measuring the width itself keeps
   // the check exact: a change to `test.use` or to the Playwright project config
   // fails here, instead of silently measuring a different layout and passing.
-  const measuredWidth = await page.evaluate(
-    () => document.documentElement.clientWidth,
-  );
+  const measuredWidth = await page.evaluate(() => document.documentElement.clientWidth);
   expect(measuredWidth).toBe(GATE_VIEWPORT_WIDTH);
 
   // ~14820px: the original Blux layout (~15333px) less the design review's
@@ -85,12 +79,10 @@ test("frozen the-pointe renders whole: ~14820px, 50 media, panels live, no token
   const rebuilt = await page.evaluate(() => ({
     panelText: document.querySelector(".rd-avail")?.textContent ?? "",
     ruleMarks: document.querySelectorAll("svg.rd-rule").length,
-    rulePngs: document.querySelectorAll(
-      '[data-media*="ec0c6ec6"],[data-media*="bf56be7d"]',
-    ).length,
-    navItems: [
-      ...document.querySelectorAll("a.navigation0ullia.data-hashlink"),
-    ].map((a) => `${a.textContent?.trim()} -> ${a.getAttribute("href")}`),
+    rulePngs: document.querySelectorAll('[data-media*="ec0c6ec6"],[data-media*="bf56be7d"]').length,
+    navItems: [...document.querySelectorAll("a.navigation0ullia.data-hashlink")].map(
+      (a) => `${a.textContent?.trim()} -> ${a.getAttribute("href")}`,
+    ),
   }));
   expect(rebuilt.panelText).toContain("480,000 SF");
 
@@ -276,14 +268,10 @@ test("frozen the-pointe renders whole: ~14820px, 50 media, panels live, no token
 // underneath the assertions.
 const CAROUSEL_FADE_MS = 600;
 
-test("carousel: every slide lands inside the track when shown", async ({
-  page,
-}) => {
+test("carousel: every slide lands inside the track when shown", async ({ page }) => {
   await page.goto("/dev/blux-frozen", { waitUntil: "load" });
   await page.evaluate(() =>
-    document
-      .querySelector("#page-block-8")
-      ?.scrollIntoView({ block: "center" }),
+    document.querySelector("#page-block-8")?.scrollIntoView({ block: "center" }),
   );
   await page.waitForTimeout(300);
 
@@ -296,20 +284,16 @@ test("carousel: every slide lands inside the track when shown", async ({
       const slides = track
         ? [...track.children].filter((c) => c.classList.contains("cagriditem"))
         : [];
-      const visible = slides.filter(
-        (c) => getComputedStyle(c as HTMLElement).display !== "none",
-      );
+      const visible = slides.filter((c) => getComputedStyle(c as HTMLElement).display !== "none");
       const t = track?.getBoundingClientRect();
-      const r =
-        visible.length === 1 ? visible[0].getBoundingClientRect() : null;
+      const r = visible.length === 1 ? visible[0].getBoundingClientRect() : null;
       return {
         slideCount: slides.length,
         visibleCount: visible.length,
         index: r ? slides.indexOf(visible[0]) : -1,
         // How much of the slide's box overlaps the track's. A parked slide sits
         // a full width to the side, so this goes to zero or below.
-        overlapX:
-          r && t ? Math.min(r.right, t.right) - Math.max(r.left, t.left) : -1,
+        overlapX: r && t ? Math.min(r.right, t.right) - Math.max(r.left, t.left) : -1,
         width: r ? Math.round(r.width) : -1,
         trackWidth: t ? Math.round(t.width) : -1,
       };
@@ -319,12 +303,10 @@ test("carousel: every slide lands inside the track when shown", async ({
   const seen: number[] = [];
   for (let i = 0; i < 4; i++) {
     const s = await shown();
-    expect(s, "the slider should show exactly one of its slides").toMatchObject(
-      {
-        slideCount: 3,
-        visibleCount: 1,
-      },
-    );
+    expect(s, "the slider should show exactly one of its slides").toMatchObject({
+      slideCount: 3,
+      visibleCount: 1,
+    });
     // The whole bug in one assertion: a parked slide barely overlaps, or not
     // at all. A slide that is properly in the track overlaps it entirely.
     expect
@@ -347,9 +329,7 @@ test("carousel: every slide lands inside the track when shown", async ({
 // overlays instead of displacing. Unit tests can assert the inline styles but
 // not what the box model then does with them, and "the styles were right" is
 // precisely the reasoning that shipped the parked-slide bug.
-test("carousel: the cross-fade overlaps without disturbing the layout", async ({
-  page,
-}) => {
+test("carousel: the cross-fade overlaps without disturbing the layout", async ({ page }) => {
   // This gate asserts the cross-fade itself — two slides painted at once
   // mid-transition. @reddoorla/maintenance 0.90 emulates `prefers-reduced-motion:
   // reduce` fleet-wide, and the site's app.css correctly collapses the fade to an
@@ -359,9 +339,7 @@ test("carousel: the cross-fade overlaps without disturbing the layout", async ({
   await page.emulateMedia({ reducedMotion: "no-preference" });
   await page.goto("/dev/blux-frozen", { waitUntil: "load" });
   await page.evaluate(() =>
-    document
-      .querySelector("#page-block-8")
-      ?.scrollIntoView({ block: "center" }),
+    document.querySelector("#page-block-8")?.scrollIntoView({ block: "center" }),
   );
   await page.waitForTimeout(300);
 
@@ -393,9 +371,7 @@ test("carousel: the cross-fade overlaps without disturbing the layout", async ({
   await page.waitForTimeout(150); // mid-fade
 
   const during = await geometry();
-  expect(during.painted, "both slides should be painted mid-fade").toHaveLength(
-    2,
-  );
+  expect(during.painted, "both slides should be painted mid-fade").toHaveLength(2);
   // Neither the width nor the height may move while two slides are up: that is
   // the whole reason the outgoing one leaves the flow.
   expect(during.trackWidth).toBe(before.trackWidth);

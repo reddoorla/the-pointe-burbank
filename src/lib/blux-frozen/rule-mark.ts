@@ -78,10 +78,7 @@ export function ruleMarkBox(widthPx: number, heightPx: number): string {
  * five times against the real committed artifact, so a re-freeze that renames
  * the media fails loudly rather than silently keeping the raster.
  */
-export function replaceRuleMarks(
-  html: string,
-  media: string[] = RULE_MARK_MEDIA,
-): string {
+export function replaceRuleMarks(html: string, media: string[] = RULE_MARK_MEDIA): string {
   let out = html;
   for (const name of media) {
     const key = name.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
@@ -90,16 +87,13 @@ export function replaceRuleMarks(
         `\\s*<div class="mediaRatio"([^>]*)></div>\\s*</div>`,
       "g",
     );
-    out = out.replace(
-      block,
-      (whole, pre: string, post: string, spacer: string) => {
-        const width = /width:\s*([\d.]+px)/.exec(pre + post)?.[1];
-        const ratio = /padding-bottom:\s*([\d.]+)%/.exec(spacer)?.[1];
-        if (!width || !ratio) return whole; // unexpected shape — leave it be
-        const w = parseFloat(width);
-        return ruleMarkBox(w, (w * parseFloat(ratio)) / 100);
-      },
-    );
+    out = out.replace(block, (whole, pre: string, post: string, spacer: string) => {
+      const width = /width:\s*([\d.]+px)/.exec(pre + post)?.[1];
+      const ratio = /padding-bottom:\s*([\d.]+)%/.exec(spacer)?.[1];
+      if (!width || !ratio) return whole; // unexpected shape — leave it be
+      const w = parseFloat(width);
+      return ruleMarkBox(w, (w * parseFloat(ratio)) / 100);
+    });
   }
   return out;
 }

@@ -30,9 +30,7 @@ describe("frozenSlotsFromDoc", () => {
   });
 
   it("yields undefined url for an empty image with no media_url", () => {
-    const [slot] = frozenSlotsFromDoc([
-      { key: "s0.i0", kind: "image", image: {} },
-    ]);
+    const [slot] = frozenSlotsFromDoc([{ key: "s0.i0", kind: "image", image: {} }]);
     expect(slot!.url).toBeUndefined();
   });
 });

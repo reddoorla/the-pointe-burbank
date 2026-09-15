@@ -74,15 +74,12 @@ describe("replaceRuleMarks", () => {
   it("preserves each mark's original box, so no layout shifts", () => {
     const out = replaceRuleMarks(template);
     // 50px wide at 18.9781% -> 9.48905px; 40px wide at 17.5% -> 7px.
-    expect(out).toContain(
-      "width:50px;aspect-ratio:50/9.48905;--rd-rule-len:50",
-    );
+    expect(out).toContain("width:50px;aspect-ratio:50/9.48905;--rd-rule-len:50");
     expect(out).toContain("width:40px;aspect-ratio:40/7;--rd-rule-len:40");
   });
 
   it("leaves markup alone when the media is absent", () => {
-    const html =
-      '<div class="ib img imgfit camediaload" data-media="other.png">x</div>';
+    const html = '<div class="ib img imgfit camediaload" data-media="other.png">x</div>';
     expect(replaceRuleMarks(html)).toBe(html);
   });
 });
@@ -105,9 +102,7 @@ describe("RULE_MARK_CSS", () => {
   });
 
   it("staggers the second line behind the first", () => {
-    expect(RULE_MARK_CSS).toContain(
-      ".rd-rule.rd-fx-run line:nth-child(2){transition-delay:.12s}",
-    );
+    expect(RULE_MARK_CSS).toContain(".rd-rule.rd-fx-run line:nth-child(2){transition-delay:.12s}");
   });
 
   it("defaults to the navy the rest of the site uses", () => {

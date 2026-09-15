@@ -1,9 +1,5 @@
 <script lang="ts">
-  import {
-    PrismicImage,
-    PrismicLink,
-    PrismicRichText,
-  } from "@prismicio/svelte";
+  import { PrismicImage, PrismicLink, PrismicRichText } from "@prismicio/svelte";
   import { isFilled, type Content } from "@prismicio/client";
   import { cappedWidths } from "@reddoorla/maintenance/images";
 
@@ -46,8 +42,6 @@
     <figcaption><PrismicRichText field={slice.primary.caption} /></figcaption>
   {/if}
   {#if isFilled.link(slice.primary.link)}
-    <PrismicLink field={slice.primary.link}
-      >{slice.primary.link_label || "View"}</PrismicLink
-    >
+    <PrismicLink field={slice.primary.link}>{slice.primary.link_label || "View"}</PrismicLink>
   {/if}
 </figure>

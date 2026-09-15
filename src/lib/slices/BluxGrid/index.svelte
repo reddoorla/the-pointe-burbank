@@ -12,9 +12,7 @@
   let cells = $derived((slice.primary.cells ?? []) as Cell[]);
   let columns = $derived(slice.primary.columns ?? 1);
   let bases = $derived(
-    cells.map((c) =>
-      gridCellBasis((c as BluxCellData).width || undefined, columns),
-    ),
+    cells.map((c) => gridCellBasis((c as BluxCellData).width || undefined, columns)),
   );
 
   let bandStyle = $derived(
@@ -22,9 +20,7 @@
       isFilled.keyText(slice.primary.background_color)
         ? `background-color:${slice.primary.background_color}`
         : "",
-      isFilled.keyText(slice.primary.min_height)
-        ? `min-height:${slice.primary.min_height}`
-        : "",
+      isFilled.keyText(slice.primary.min_height) ? `min-height:${slice.primary.min_height}` : "",
     ]
       .filter(Boolean)
       .join(";"),
@@ -41,20 +37,14 @@
       isFilled.keyText(slice.primary.content_padding_mobile)
         ? `--band-pad-m:${slice.primary.content_padding_mobile}`
         : "",
-      isFilled.select(slice.primary.text_align)
-        ? `text-align:${slice.primary.text_align}`
-        : "",
+      isFilled.select(slice.primary.text_align) ? `text-align:${slice.primary.text_align}` : "",
     ]
       .filter(Boolean)
       .join(";"),
   );
 </script>
 
-<section
-  class="blux-grid"
-  data-overlay={slice.primary.overlay}
-  style={bandStyle}
->
+<section class="blux-grid" data-overlay={slice.primary.overlay} style={bandStyle}>
   {#if isFilled.image(slice.primary.background_image)}
     <!-- Band backdrop: absolutely positioned and cover-filled, so genuinely 100vw. -->
     <PrismicImage
@@ -84,9 +74,6 @@
     {/each}
   </div>
   {#if isFilled.keyText(slice.primary.widget_html)}
-    <BluxWidget
-      kind={slice.primary.widget_kind}
-      html={slice.primary.widget_html}
-    />
+    <BluxWidget kind={slice.primary.widget_kind} html={slice.primary.widget_html} />
   {/if}
 </section>

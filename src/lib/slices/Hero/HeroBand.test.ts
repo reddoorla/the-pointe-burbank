@@ -29,15 +29,9 @@ describe("Hero band variation", () => {
     // Display line (subtitle) is the visual <h2>; the heading is the eyebrow.
     // Roles come from the manifest's band.text metadata.
     expect(container.querySelector("h2")?.textContent).toBe("fresh air");
-    expect(container.querySelector("h2")?.className).toContain(
-      "txt-role-text12",
-    );
-    expect(container.querySelector("p.txt-role-text5")?.textContent).toContain(
-      "the outdoors",
-    );
-    expect(container.querySelector("img")?.getAttribute("src")).toBe(
-      "https://cdn/hero-bg.jpg",
-    );
+    expect(container.querySelector("h2")?.className).toContain("txt-role-text12");
+    expect(container.querySelector("p.txt-role-text5")?.textContent).toContain("the outdoors");
+    expect(container.querySelector("img")?.getAttribute("src")).toBe("https://cdn/hero-bg.jpg");
     expect(container.querySelector("section")?.style.minHeight).toBe("80vh");
   });
 

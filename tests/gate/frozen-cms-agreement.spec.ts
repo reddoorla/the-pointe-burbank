@@ -6,9 +6,7 @@ import { fileURLToPath } from "node:url";
 // node loader, not Vite, so `?raw` and JSON imports are unavailable here.
 const artifact = (name: string): string =>
   readFileSync(
-    fileURLToPath(
-      new URL(`../../src/lib/blux-frozen/frozen/${name}`, import.meta.url),
-    ),
+    fileURLToPath(new URL(`../../src/lib/blux-frozen/frozen/${name}`, import.meta.url)),
     "utf8",
   );
 const manifest = JSON.parse(artifact("home.slots.json")) as {
@@ -39,15 +37,11 @@ const template = artifact("home.html");
 // A failure here means "template and CMS are out of step", and the fix is to
 // republish rather than to edit this file. Deploying while it is red ships the
 // scrambled footer, so it is deliberately a gate and not a warning.
-test("committed template and published Prismic document agree", async ({
-  page,
-}) => {
+test("committed template and published Prismic document agree", async ({ page }) => {
   // The values the template's footer tokens expect, straight from the freeze
   // manifest — never hand-copied, so a future re-freeze updates them with it.
   const byKey = new Map(
-    manifest.slots
-      .filter((s) => s.kind === "text")
-      .map((s) => [s.key, s.text ?? ""]),
+    manifest.slots.filter((s) => s.kind === "text").map((s) => [s.key, s.text ?? ""]),
   );
   // Scoped to the FOOTER region of the template. The nav is the wrong probe:
   // `dropNavLinks` deletes three of its items and `rewriteNavLabels` renames a

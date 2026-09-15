@@ -5,9 +5,7 @@ import type { Presentation } from "$lib/blux/presentation";
 
 afterEach(() => cleanup());
 
-const content = [
-  { type: "paragraph", text: "Body copy from Prismic", spans: [] },
-];
+const content = [{ type: "paragraph", text: "Body copy from Prismic", spans: [] }];
 
 const slice = (primary: Record<string, unknown>) =>
   ({

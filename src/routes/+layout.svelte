@@ -11,10 +11,7 @@
   import Nav from "$lib/components/Nav.svelte";
   import Footer from "$lib/components/Footer.svelte";
   import { loadSiteConfig, footerColumns } from "$lib/blux/site-config";
-  import {
-    disableSmoothScroll,
-    restoreSmoothScroll,
-  } from "$lib/utils/instantNavScroll";
+  import { disableSmoothScroll, restoreSmoothScroll } from "$lib/utils/instantNavScroll";
 
   let { data, children } = $props();
 
@@ -57,11 +54,7 @@
        Each component applies its own page-data-over-config precedence, so
        existing routes are unaffected. -->
   <div class="flex flex-col min-h-screen">
-    <Nav
-      navLinks={page.data.navLinks}
-      items={siteConfig.nav.items}
-      logo={siteConfig.nav.logo}
-    />
+    <Nav navLinks={page.data.navLinks} items={siteConfig.nav.items} logo={siteConfig.nav.logo} />
 
     <main id="main-content" tabindex="-1" class="flex-1">
       {@render children?.()}

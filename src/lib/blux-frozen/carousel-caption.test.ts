@@ -1,9 +1,6 @@
 import { describe, it, expect } from "vitest";
 
-import {
-  restyleCarouselCaptions,
-  CAROUSEL_CAPTION_CSS,
-} from "./carousel-caption";
+import { restyleCarouselCaptions, CAROUSEL_CAPTION_CSS } from "./carousel-caption";
 import template from "./frozen/home.html?raw";
 
 describe("restyleCarouselCaptions", () => {
@@ -34,9 +31,7 @@ describe("restyleCarouselCaptions", () => {
 
 describe("CAROUSEL_CAPTION_CSS", () => {
   it("clears the baked white bar (inline, so !important)", () => {
-    expect(CAROUSEL_CAPTION_CSS).toContain(
-      "background-color:transparent!important",
-    );
+    expect(CAROUSEL_CAPTION_CSS).toContain("background-color:transparent!important");
   });
 
   it("stacks the mark over a left-aligned white caption, per Figma", () => {
@@ -57,9 +52,7 @@ describe("CAROUSEL_CAPTION_CSS", () => {
     // The preload, the readiness gate and the width cap all shorten that window
     // without closing it: the gate must give up eventually or a broken image
     // would freeze the slider.
-    const rule = /#page-block-8 \.blocks2\{([^}]*)\}/.exec(
-      CAROUSEL_CAPTION_CSS,
-    )?.[1];
+    const rule = /#page-block-8 \.blocks2\{([^}]*)\}/.exec(CAROUSEL_CAPTION_CSS)?.[1];
     expect(rule).toContain("background-color:rgb(63,62,40)");
     // Darker than either photograph's mean, so it never reads as a bright hole.
     const [r, g, b] = [63, 62, 40];
@@ -70,9 +63,7 @@ describe("CAROUSEL_CAPTION_CSS", () => {
   it("scrims the sides as well as the bottom, for the arrows", () => {
     // One pseudo-element carries all three gradients. The bottom one is the
     // caption's (Nicole, 51:27 + 51:30); the two side ones are the arrows'.
-    const rule = /#page-block-8 \.blocks2::after\{([^}]*)\}/.exec(
-      CAROUSEL_CAPTION_CSS,
-    )?.[1];
+    const rule = /#page-block-8 \.blocks2::after\{([^}]*)\}/.exec(CAROUSEL_CAPTION_CSS)?.[1];
     expect(rule, "the scrim rule moved").toBeTruthy();
     expect([...rule!.matchAll(/linear-gradient\(/g)]).toHaveLength(3);
     expect(rule).toContain("linear-gradient(to right,");

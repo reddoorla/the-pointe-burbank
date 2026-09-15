@@ -18,9 +18,7 @@ export const DEFAULT_IMAGE_WIDTHS = [480, 768, 1024, 1440, 1920, 2560];
  * Matches on the parsed hostname (not a substring) so a non-imgix URL that
  * merely mentions the host in its path can't be rewritten.
  */
-export function isPrismicImageUrl(
-  url: string | null | undefined,
-): url is string {
+export function isPrismicImageUrl(url: string | null | undefined): url is string {
   if (typeof url !== "string") return false;
   try {
     return new URL(url).hostname === PRISMIC_IMAGE_HOST;

@@ -8,8 +8,7 @@ import Nav from "./Nav.svelte";
 // users hit in production.
 function mockMatchMedia(reducedMotion: boolean) {
   window.matchMedia = vi.fn().mockImplementation((query: string) => ({
-    matches:
-      query === "(prefers-reduced-motion: reduce)" ? reducedMotion : false,
+    matches: query === "(prefers-reduced-motion: reduce)" ? reducedMotion : false,
     media: query,
     addEventListener: () => {},
     removeEventListener: () => {},
@@ -24,9 +23,7 @@ function mockMatchMedia(reducedMotion: boolean) {
 // trapFocus's getClientRects() filter keeps them.
 beforeEach(() => {
   mockMatchMedia(true);
-  vi.spyOn(Element.prototype, "getClientRects").mockImplementation(function (
-    this: Element,
-  ) {
+  vi.spyOn(Element.prototype, "getClientRects").mockImplementation(function (this: Element) {
     return (this.isConnected ? [{}] : []) as unknown as DOMRectList;
   });
 });
@@ -178,9 +175,7 @@ describe("Nav — mobile menu", () => {
     const { container } = render(Nav, { items: itemsWithDropdown });
     // The desktop dropdown toggle carries aria-controls (the mobile menu isn't
     // open, so it's the only such button).
-    const toggle = container.querySelector(
-      "button[aria-controls]",
-    ) as HTMLButtonElement;
+    const toggle = container.querySelector("button[aria-controls]") as HTMLButtonElement;
     expect(toggle).toBeTruthy();
     // No misleading aria-haspopup (the popup is a list of links, not a menu).
     expect(toggle.getAttribute("aria-haspopup")).toBeNull();

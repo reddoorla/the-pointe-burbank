@@ -35,8 +35,7 @@ declare global {
 }
 
 // `render=explicit` disables auto-rendering — we call `turnstile.render()` ourselves.
-const SCRIPT_SRC =
-  "https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit";
+const SCRIPT_SRC = "https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit";
 
 let loader: Promise<TurnstileApi> | undefined;
 
@@ -59,10 +58,7 @@ export function loadTurnstile(): Promise<TurnstileApi> {
     script.defer = true;
     script.onload = () => {
       if (window.turnstile) resolve(window.turnstile);
-      else
-        reject(
-          new Error("turnstile: api.js loaded but window.turnstile is missing"),
-        );
+      else reject(new Error("turnstile: api.js loaded but window.turnstile is missing"));
     };
     script.onerror = () => {
       loader = undefined; // allow a later mount to retry

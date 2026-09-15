@@ -32,8 +32,7 @@ class MockPlayer {
 
 function mockMatchMedia(reducedMotion: boolean) {
   window.matchMedia = vi.fn().mockImplementation((query: string) => ({
-    matches:
-      query === "(prefers-reduced-motion: reduce)" ? reducedMotion : false,
+    matches: query === "(prefers-reduced-motion: reduce)" ? reducedMotion : false,
     media: query,
     addEventListener: () => {},
     removeEventListener: () => {},
@@ -77,9 +76,7 @@ describe("ScreenWidthMedia video deferral", () => {
     await advancePastDefer();
     const iframe = container.querySelector("iframe")!;
     expect(iframe).toBeTruthy();
-    expect(iframe.getAttribute("src")).toContain(
-      "player.vimeo.com/video/76979871",
-    );
+    expect(iframe.getAttribute("src")).toContain("player.vimeo.com/video/76979871");
   });
 
   // Asserted here rather than on the a11y fixtures page: the iframe only

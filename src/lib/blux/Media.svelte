@@ -30,18 +30,14 @@
   // the-pointe-local edit.
   const fitStyle = $derived(
     [
-      media.fit
-        ? `object-fit:${media.fit === "auto" ? "none" : media.fit}`
-        : "",
+      media.fit ? `object-fit:${media.fit === "auto" ? "none" : media.fit}` : "",
       media.position ? `object-position:${media.position}` : "",
     ]
       .filter(Boolean)
       .join(";"),
   );
 
-  const style = $derived(
-    [sizeStyle, fitStyle].filter(Boolean).join(";") || undefined,
-  );
+  const style = $derived([sizeStyle, fitStyle].filter(Boolean).join(";") || undefined);
 
   // Video playback: an absent `playback` = an ambient background loop (the Blux
   // default). When the source carried attributes, honor them exactly — a source
@@ -61,11 +57,7 @@
   // A user-controlled video (no autoplay) is already paused, so this is a no-op
   // for it and only tames the ambient loops.
   $effect(() => {
-    if (
-      videoEl &&
-      vAutoplay &&
-      window.matchMedia("(prefers-reduced-motion: reduce)").matches
-    ) {
+    if (videoEl && vAutoplay && window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
       videoEl.pause();
     }
   });
@@ -85,11 +77,5 @@
     preload="metadata"
   ></video>
 {:else}
-  <img
-    src={media.url}
-    alt={media.alt ?? ""}
-    {loading}
-    class={passedClasses}
-    {style}
-  />
+  <img src={media.url} alt={media.alt ?? ""} {loading} class={passedClasses} {style} />
 {/if}

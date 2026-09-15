@@ -12,9 +12,7 @@ describe("loadSiteConfig", () => {
 });
 
 describe("footerColumns", () => {
-  const chromeCols = [
-    { items: [{ text: "Leasing: (555) 123-4567", href: "tel:5551234567" }] },
-  ];
+  const chromeCols = [{ items: [{ text: "Leasing: (555) 123-4567", href: "tel:5551234567" }] }];
   const configWithColumns: SiteConfig = {
     nav: { items: [] },
     footer: { socials: [], columns: chromeCols },

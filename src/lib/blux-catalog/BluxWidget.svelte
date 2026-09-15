@@ -7,11 +7,7 @@
   // old-pipeline component), but hydrates INTO the emitted markup rather than
   // building its own DOM: the mount (`#<mountId>`) and the legend chips
   // (`.map_icon`) already live in `widget_html`.
-  import {
-    loadMapsApi,
-    type GLayer,
-    type GMapsNS,
-  } from "$lib/blux/maps-loader";
+  import { loadMapsApi, type GLayer, type GMapsNS } from "$lib/blux/maps-loader";
 
   interface Props {
     kind?: string | null;
@@ -57,9 +53,7 @@
     const key = import.meta.env.VITE_GOOGLE_MAPS_KEY as string;
     const cfg = parseCfg(host);
     const mount =
-      cfg && cfg.mountId
-        ? host.querySelector<HTMLElement>(`#${CSS.escape(cfg.mountId)}`)
-        : null;
+      cfg && cfg.mountId ? host.querySelector<HTMLElement>(`#${CSS.escape(cfg.mountId)}`) : null;
     if (!cfg || !mount) return; // keyed but malformed html — static legend stays
 
     let cancelled = false;
@@ -72,8 +66,7 @@
     // clickMap semantics (verbatim from LocationMap.svelte): radio chips,
     // exactly one active; group 0 (the portfolio) is NEVER removed from the map.
     const applyToggle = (next: number, prev: number, map: unknown) => {
-      if (prev !== 0)
-        cfg.toggles[prev]?.layers.forEach((n) => layerObjs[n]?.setMap(null));
+      if (prev !== 0) cfg.toggles[prev]?.layers.forEach((n) => layerObjs[n]?.setMap(null));
       cfg.toggles[next]?.layers.forEach((n) => layerObjs[n]?.setMap(map));
     };
 
@@ -96,13 +89,9 @@
         // `initiallyVisible` seeds group 0; a non-zero default applies its group
         // so the pressed chip and the visible layers can't disagree on first paint.
         if (active !== 0) applyToggle(active, 0, map);
-        const chips = host!.querySelectorAll<HTMLElement>(
-          ".blux-map .map_icon",
-        );
+        const chips = host!.querySelectorAll<HTMLElement>(".blux-map .map_icon");
         const markPressed = () =>
-          chips.forEach((c, j) =>
-            c.setAttribute("aria-pressed", String(j === active)),
-          );
+          chips.forEach((c, j) => c.setAttribute("aria-pressed", String(j === active)));
         chips.forEach((chip, i) => {
           chip.style.cursor = "pointer";
           chip.setAttribute("role", "button");

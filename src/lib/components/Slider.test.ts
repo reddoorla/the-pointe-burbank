@@ -15,8 +15,7 @@ beforeEach(() => {
     matches: query.includes("prefers-reduced-motion") ? reducedMotion : false,
     media: query,
     addEventListener: (_: string, cb: MediaListener) => mediaListeners.add(cb),
-    removeEventListener: (_: string, cb: MediaListener) =>
-      mediaListeners.delete(cb),
+    removeEventListener: (_: string, cb: MediaListener) => mediaListeners.delete(cb),
   }));
 });
 
@@ -88,9 +87,7 @@ describe("Slider semantics", () => {
   it("announces a range when several cards are in view", () => {
     const { container } = renderSlider({ cardsPerView: 2 });
     const status = container.querySelector('[aria-live="polite"]');
-    expect(status?.textContent?.replace(/\s+/g, " ")).toContain(
-      "Slides 1 through 2 of 4",
-    );
+    expect(status?.textContent?.replace(/\s+/g, " ")).toContain("Slides 1 through 2 of 4");
   });
 });
 
@@ -100,20 +97,14 @@ describe("Slider navigation", () => {
     const next = getByLabelText("Next slide");
 
     await fireEvent.click(next);
-    expect(activeDot(container)?.getAttribute("aria-label")).toBe(
-      "Go to slide 2",
-    );
+    expect(activeDot(container)?.getAttribute("aria-label")).toBe("Go to slide 2");
 
     await fireEvent.click(next);
     await fireEvent.click(next); // past the end — wraps home
-    expect(activeDot(container)?.getAttribute("aria-label")).toBe(
-      "Go to slide 1",
-    );
+    expect(activeDot(container)?.getAttribute("aria-label")).toBe("Go to slide 1");
 
     await fireEvent.click(getByLabelText("Previous slide")); // wraps back
-    expect(activeDot(container)?.getAttribute("aria-label")).toBe(
-      "Go to slide 3",
-    );
+    expect(activeDot(container)?.getAttribute("aria-label")).toBe("Go to slide 3");
   });
 
   it("marks the arrows aria-disabled at the bounds when loop is off", async () => {
@@ -129,9 +120,7 @@ describe("Slider navigation", () => {
     expect(prev.getAttribute("aria-disabled")).toBe("true");
     expect(prev.disabled).toBe(false);
     await fireEvent.click(prev); // no-op at the start bound
-    expect(activeDot(container)?.getAttribute("aria-label")).toBe(
-      "Go to slide 1",
-    );
+    expect(activeDot(container)?.getAttribute("aria-label")).toBe("Go to slide 1");
 
     await fireEvent.click(next);
     expect(prev.getAttribute("aria-disabled")).toBeNull();
@@ -140,17 +129,13 @@ describe("Slider navigation", () => {
     await fireEvent.click(next);
     expect(next.getAttribute("aria-disabled")).toBe("true");
     await fireEvent.click(next); // no-op at the end bound
-    expect(activeDot(container)?.getAttribute("aria-label")).toBe(
-      "Go to slide 3",
-    );
+    expect(activeDot(container)?.getAttribute("aria-label")).toBe("Go to slide 3");
   });
 
   it("jumps directly via the dots", async () => {
     const { container, getByLabelText } = renderSlider();
     await fireEvent.click(getByLabelText("Go to slide 3"));
-    expect(activeDot(container)?.getAttribute("aria-label")).toBe(
-      "Go to slide 3",
-    );
+    expect(activeDot(container)?.getAttribute("aria-label")).toBe("Go to slide 3");
   });
 
   it("supports arrow keys on the controls", async () => {
@@ -158,14 +143,10 @@ describe("Slider navigation", () => {
     const next = getByLabelText("Next slide");
 
     await fireEvent.keyDown(next, { key: "ArrowRight" });
-    expect(activeDot(container)?.getAttribute("aria-label")).toBe(
-      "Go to slide 2",
-    );
+    expect(activeDot(container)?.getAttribute("aria-label")).toBe("Go to slide 2");
 
     await fireEvent.keyDown(next, { key: "ArrowLeft" });
-    expect(activeDot(container)?.getAttribute("aria-label")).toBe(
-      "Go to slide 1",
-    );
+    expect(activeDot(container)?.getAttribute("aria-label")).toBe("Go to slide 1");
   });
 
   it("renders no controls when everything already fits", () => {
@@ -228,14 +209,10 @@ describe("Slider autoplay", () => {
     const { container } = renderSlider({ itemCount: 3, autoplay: 1000 });
 
     await advance(1000);
-    expect(activeDot(container)?.getAttribute("aria-label")).toBe(
-      "Go to slide 2",
-    );
+    expect(activeDot(container)?.getAttribute("aria-label")).toBe("Go to slide 2");
 
     await advance(2000);
-    expect(activeDot(container)?.getAttribute("aria-label")).toBe(
-      "Go to slide 1",
-    );
+    expect(activeDot(container)?.getAttribute("aria-label")).toBe("Go to slide 1");
   });
 
   it("clears its interval on unmount", async () => {
@@ -258,13 +235,9 @@ describe("Slider autoplay", () => {
     await advance(600);
     await fireEvent.click(getByLabelText("Next slide")); // now on 2
     await advance(999); // old tick would have fired at 1000
-    expect(activeDot(container)?.getAttribute("aria-label")).toBe(
-      "Go to slide 2",
-    );
+    expect(activeDot(container)?.getAttribute("aria-label")).toBe("Go to slide 2");
     await advance(1);
-    expect(activeDot(container)?.getAttribute("aria-label")).toBe(
-      "Go to slide 3",
-    );
+    expect(activeDot(container)?.getAttribute("aria-label")).toBe("Go to slide 3");
   });
 
   it("pauses while hovered and resumes on leave", async () => {
@@ -274,15 +247,11 @@ describe("Slider autoplay", () => {
 
     await fireEvent(region, new Event("pointerenter"));
     await advance(3000);
-    expect(activeDot(container)?.getAttribute("aria-label")).toBe(
-      "Go to slide 1",
-    );
+    expect(activeDot(container)?.getAttribute("aria-label")).toBe("Go to slide 1");
 
     await fireEvent(region, new Event("pointerleave"));
     await advance(1000);
-    expect(activeDot(container)?.getAttribute("aria-label")).toBe(
-      "Go to slide 2",
-    );
+    expect(activeDot(container)?.getAttribute("aria-label")).toBe("Go to slide 2");
   });
 
   it("focus stops rotation for good — only the play control resumes it (APG)", async () => {
@@ -294,25 +263,16 @@ describe("Slider autoplay", () => {
 
     await fireEvent(region, new FocusEvent("focusin", { bubbles: true }));
     await advance(3000);
-    expect(activeDot(container)?.getAttribute("aria-label")).toBe(
-      "Go to slide 1",
-    );
+    expect(activeDot(container)?.getAttribute("aria-label")).toBe("Go to slide 1");
 
     // Leaving does NOT resume — the pause is sticky, not focus-tracked.
-    await fireEvent(
-      region,
-      new FocusEvent("focusout", { bubbles: true, relatedTarget: null }),
-    );
+    await fireEvent(region, new FocusEvent("focusout", { bubbles: true, relatedTarget: null }));
     await advance(3000);
-    expect(activeDot(container)?.getAttribute("aria-label")).toBe(
-      "Go to slide 1",
-    );
+    expect(activeDot(container)?.getAttribute("aria-label")).toBe("Go to slide 1");
 
     await fireEvent.click(getByLabelText("Play slides"));
     await advance(1000);
-    expect(activeDot(container)?.getAttribute("aria-label")).toBe(
-      "Go to slide 2",
-    );
+    expect(activeDot(container)?.getAttribute("aria-label")).toBe("Go to slide 2");
   });
 
   it("offers a pause control that stops rotation until played again", async () => {
@@ -321,15 +281,11 @@ describe("Slider autoplay", () => {
 
     await fireEvent.click(getByLabelText("Pause slides"));
     await advance(3000);
-    expect(activeDot(container)?.getAttribute("aria-label")).toBe(
-      "Go to slide 1",
-    );
+    expect(activeDot(container)?.getAttribute("aria-label")).toBe("Go to slide 1");
 
     await fireEvent.click(getByLabelText("Play slides"));
     await advance(1000);
-    expect(activeDot(container)?.getAttribute("aria-label")).toBe(
-      "Go to slide 2",
-    );
+    expect(activeDot(container)?.getAttribute("aria-label")).toBe("Go to slide 2");
   });
 
   it("mutes the live region while rotating, politely announces when paused", async () => {
@@ -347,9 +303,7 @@ describe("Slider autoplay", () => {
     const { container, queryByLabelText } = renderSlider({ autoplay: 1000 });
 
     await advance(5000);
-    expect(activeDot(container)?.getAttribute("aria-label")).toBe(
-      "Go to slide 1",
-    );
+    expect(activeDot(container)?.getAttribute("aria-label")).toBe("Go to slide 1");
     expect(queryByLabelText("Pause slides")).toBeNull();
   });
 
@@ -362,9 +316,7 @@ describe("Slider autoplay", () => {
     });
 
     await advance(5000);
-    expect(activeDot(container)?.getAttribute("aria-label")).toBe(
-      "Go to slide 3",
-    );
+    expect(activeDot(container)?.getAttribute("aria-label")).toBe("Go to slide 3");
     const next = getByLabelText("Next slide") as HTMLButtonElement;
     expect(next.getAttribute("aria-disabled")).toBe("true");
   });
@@ -379,9 +331,7 @@ describe("Slider autoplay", () => {
     });
     document.dispatchEvent(new Event("visibilitychange"));
     await advance(3000);
-    expect(activeDot(container)?.getAttribute("aria-label")).toBe(
-      "Go to slide 1",
-    );
+    expect(activeDot(container)?.getAttribute("aria-label")).toBe("Go to slide 1");
 
     Object.defineProperty(document, "visibilityState", {
       configurable: true,
@@ -389,8 +339,6 @@ describe("Slider autoplay", () => {
     });
     document.dispatchEvent(new Event("visibilitychange"));
     await advance(1000);
-    expect(activeDot(container)?.getAttribute("aria-label")).toBe(
-      "Go to slide 2",
-    );
+    expect(activeDot(container)?.getAttribute("aria-label")).toBe("Go to slide 2");
   });
 });

@@ -27,10 +27,7 @@ export interface FrozenPageData {
 /** Compose a committed artifact + a Prismic `frozen_page` doc into the render
  * shape `<FrozenPage>` wants. Slots are decoded via the shared mapper; SEO meta
  * comes from the doc (same keys as `pageMeta`); fontLinks come from the artifact. */
-export function buildFrozenData(
-  art: FrozenArtifact,
-  doc: FrozenPageDoc,
-): FrozenPageData {
+export function buildFrozenData(art: FrozenArtifact, doc: FrozenPageDoc): FrozenPageData {
   return {
     frozen: true,
     template: art.template,
@@ -67,8 +64,6 @@ export async function resolveFrozen(
 }
 
 /** Uids with a committed frozen artifact — the prerender entry list. */
-export function frozenUids(
-  artifacts: Record<string, FrozenArtifact> = frozenArtifacts,
-): string[] {
+export function frozenUids(artifacts: Record<string, FrozenArtifact> = frozenArtifacts): string[] {
   return Object.keys(artifacts);
 }

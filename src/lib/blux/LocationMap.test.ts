@@ -112,9 +112,7 @@ describe("LocationMap", () => {
   it("active tab shows a minus glyph, inactive tabs a plus", async () => {
     const { getAllByRole } = render(LocationMap, { props: { map: config } });
     const glyphs = () =>
-      getAllByRole("button").map((c) =>
-        c.querySelector("[aria-hidden]")?.textContent?.trim(),
-      );
+      getAllByRole("button").map((c) => c.querySelector("[aria-hidden]")?.textContent?.trim());
     expect(glyphs()).toEqual(["−", "+", "+"]);
     const chips = getAllByRole("button");
     const second = chips[1];
@@ -141,20 +139,12 @@ describe("LocationMap", () => {
   it("chips are radio-style: first pressed by default, click moves the press", async () => {
     const { getAllByRole } = render(LocationMap, { props: { map: config } });
     const chips = getAllByRole("button");
-    expect(chips.map((c) => c.getAttribute("aria-pressed"))).toEqual([
-      "true",
-      "false",
-      "false",
-    ]);
+    expect(chips.map((c) => c.getAttribute("aria-pressed"))).toEqual(["true", "false", "false"]);
     const second = chips[1];
     expect(second).toBeDefined();
     if (!second) throw new Error("missing chip");
     await fireEvent.click(second);
-    expect(chips.map((c) => c.getAttribute("aria-pressed"))).toEqual([
-      "false",
-      "true",
-      "false",
-    ]);
+    expect(chips.map((c) => c.getAttribute("aria-pressed"))).toEqual(["false", "true", "false"]);
   });
 });
 

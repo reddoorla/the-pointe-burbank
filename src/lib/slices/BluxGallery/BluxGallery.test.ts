@@ -27,12 +27,8 @@ describe("BluxGallery slice", () => {
     const { container, getAllByRole } = render(BluxGallery, {
       props: { slice },
     });
-    expect(
-      container.querySelector(".blux-gallery__cells[data-masonry='on']"),
-    ).not.toBeNull();
-    expect(
-      container.querySelectorAll(".blux-gallery__cells > .blux-cell"),
-    ).toHaveLength(3);
+    expect(container.querySelector(".blux-gallery__cells[data-masonry='on']")).not.toBeNull();
+    expect(container.querySelectorAll(".blux-gallery__cells > .blux-cell")).toHaveLength(3);
     expect(getAllByRole("heading", { level: 3 })).toHaveLength(3);
   });
 });

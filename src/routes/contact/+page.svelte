@@ -33,10 +33,7 @@
 
   <!-- One-and-done: on success the form unmounts. To allow another submission, keep the form mounted and reset the field state instead. -->
   {#if form?.success}
-    <p
-      role="status"
-      class="border-2 border-green-600 bg-green-50 rounded p-4 text-green-900"
-    >
+    <p role="status" class="border-2 border-green-600 bg-green-50 rounded p-4 text-green-900">
       Thanks — your message is on its way. We'll be in touch soon.
     </p>
   {:else}
@@ -53,10 +50,7 @@
     >
       <!-- Single top-level error; for multi-field validation summaries see $lib/components/Form.svelte. -->
       {#if form?.error}
-        <p
-          role="alert"
-          class="border-2 border-red-600 bg-red-50 rounded p-4 text-red-900"
-        >
+        <p role="alert" class="border-2 border-red-600 bg-red-50 rounded p-4 text-red-900">
           {form.error}
         </p>
       {/if}
@@ -73,13 +67,7 @@
         class="hidden"
       />
 
-      <Field
-        name="name"
-        label="Name"
-        autocomplete="name"
-        required
-        bind:value={name}
-      />
+      <Field name="name" label="Name" autocomplete="name" required bind:value={name} />
       <Field
         name="email"
         label="Email"
@@ -88,13 +76,7 @@
         required
         bind:value={email}
       />
-      <Field
-        name="phone"
-        label="Phone"
-        type="tel"
-        autocomplete="tel"
-        bind:value={phone}
-      />
+      <Field name="phone" label="Phone" type="tel" autocomplete="tel" bind:value={phone} />
       <Field
         name="message"
         label="Message"

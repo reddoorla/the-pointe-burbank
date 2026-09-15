@@ -16,9 +16,9 @@ const isPlaceholderRepo =
 // loudly on a genuine broken in-page anchor).
 let isFrozenSite = false;
 try {
-  isFrozenSite = readdirSync(
-    new URL("./src/lib/blux-frozen/frozen", import.meta.url),
-  ).some((f) => f.endsWith(".html"));
+  isFrozenSite = readdirSync(new URL("./src/lib/blux-frozen/frozen", import.meta.url)).some((f) =>
+    f.endsWith(".html"),
+  );
 } catch {
   // no frozen artifact dir → not a frozen site
 }
@@ -26,8 +26,7 @@ try {
 /** @type {import('@sveltejs/kit').Config} */
 const config = {
   compilerOptions: {
-    warningFilter: (warning) =>
-      warning.code !== "element_invalid_self_closing_tag",
+    warningFilter: (warning) => warning.code !== "element_invalid_self_closing_tag",
   },
   kit: {
     adapter: adapter(),

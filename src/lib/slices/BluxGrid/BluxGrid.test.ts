@@ -24,12 +24,8 @@ const slice = {
 describe("BluxGrid slice", () => {
   it("renders one cell per entry and reflects the column count", () => {
     const { container, getAllByRole } = render(BluxGrid, { props: { slice } });
-    expect(
-      container.querySelector(".blux-grid__cells[data-columns='4']"),
-    ).not.toBeNull();
-    expect(
-      container.querySelectorAll(".blux-grid__cells > .blux-cell"),
-    ).toHaveLength(3);
+    expect(container.querySelector(".blux-grid__cells[data-columns='4']")).not.toBeNull();
+    expect(container.querySelectorAll(".blux-grid__cells > .blux-cell")).toHaveLength(3);
     expect(getAllByRole("heading", { level: 3 })).toHaveLength(3);
   });
 
@@ -57,15 +53,9 @@ describe("BluxGrid slice", () => {
     const cellsEl = container.querySelector(".blux-grid__cells") as HTMLElement;
     expect(cellsEl.getAttribute("style")).toContain("max-width: 1100px");
     expect(cellsEl.getAttribute("style")).toContain("--band-pad: 80px 4%");
-    const cells = container.querySelectorAll<HTMLElement>(
-      ".blux-grid__cells > .blux-cell",
-    );
-    expect(cells[0].style.getPropertyValue("--cell-basis")).toBe(
-      "calc(50% - 2%)",
-    );
-    expect(cells[1].style.getPropertyValue("--cell-basis")).toBe(
-      "calc(70% - 2%)",
-    );
+    const cells = container.querySelectorAll<HTMLElement>(".blux-grid__cells > .blux-cell");
+    expect(cells[0].style.getPropertyValue("--cell-basis")).toBe("calc(50% - 2%)");
+    expect(cells[1].style.getPropertyValue("--cell-basis")).toBe("calc(70% - 2%)");
   });
 
   it("wraps the heading in its type-role container when heading_role is set", () => {

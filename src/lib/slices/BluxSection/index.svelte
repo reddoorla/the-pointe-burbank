@@ -11,9 +11,7 @@
   type Cell = Content.BluxSectionSliceDefaultPrimaryCellsItem;
   let cells = $derived((slice.primary.cells ?? []) as Cell[]);
   let bases = $derived(
-    cells.map((c) =>
-      gridCellBasis((c as BluxCellData).width || undefined, cells.length || 1),
-    ),
+    cells.map((c) => gridCellBasis((c as BluxCellData).width || undefined, cells.length || 1)),
   );
 
   let bandStyle = $derived(
@@ -21,9 +19,7 @@
       isFilled.keyText(slice.primary.background_color)
         ? `background-color:${slice.primary.background_color}`
         : "",
-      isFilled.keyText(slice.primary.min_height)
-        ? `min-height:${slice.primary.min_height}`
-        : "",
+      isFilled.keyText(slice.primary.min_height) ? `min-height:${slice.primary.min_height}` : "",
     ]
       .filter(Boolean)
       .join(";"),
@@ -40,9 +36,7 @@
       isFilled.keyText(slice.primary.content_padding_mobile)
         ? `--band-pad-m:${slice.primary.content_padding_mobile}`
         : "",
-      isFilled.select(slice.primary.text_align)
-        ? `text-align:${slice.primary.text_align}`
-        : "",
+      isFilled.select(slice.primary.text_align) ? `text-align:${slice.primary.text_align}` : "",
     ]
       .filter(Boolean)
       .join(";"),
@@ -73,19 +67,12 @@
       <PrismicRichText field={slice.primary.heading} />
     {/if}
   {/if}
-  <div
-    class="blux-section__cells"
-    data-align={slice.primary.vertical_align}
-    style={cellsStyle}
-  >
+  <div class="blux-section__cells" data-align={slice.primary.vertical_align} style={cellsStyle}>
     {#each cells as cell, i (cell)}
       <BluxCell cell={cell as unknown as BluxCellData} basis={bases[i]} />
     {/each}
   </div>
   {#if isFilled.keyText(slice.primary.widget_html)}
-    <BluxWidget
-      kind={slice.primary.widget_kind}
-      html={slice.primary.widget_html}
-    />
+    <BluxWidget kind={slice.primary.widget_kind} html={slice.primary.widget_html} />
   {/if}
 </section>

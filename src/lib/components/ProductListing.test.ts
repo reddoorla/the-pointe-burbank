@@ -13,17 +13,11 @@ const mk = (slug: string, subCategory: string, image = true): Product => ({
   dimensions: "",
   tags: [],
   disabled: false,
-  ...(image
-    ? { image: { assetId: slug, url: `https://cdn/${slug}.jpg` } }
-    : {}),
+  ...(image ? { image: { assetId: slug, url: `https://cdn/${slug}.jpg` } } : {}),
   gallery: [],
 });
 
-const products = [
-  mk("aria", "Lounge"),
-  mk("boca", "Lounge"),
-  mk("dorset", "Sofa"),
-];
+const products = [mk("aria", "Lounge"), mk("boca", "Lounge"), mk("dorset", "Sofa")];
 
 describe("ProductListing", () => {
   it("renders the category heading and a tile per product linking to its detail", () => {
@@ -31,9 +25,7 @@ describe("ProductListing", () => {
       category: "Upholstered",
       products,
     });
-    expect(getByRole("heading", { level: 1 }).textContent).toContain(
-      "Upholstered",
-    );
+    expect(getByRole("heading", { level: 1 }).textContent).toContain("Upholstered");
     const links = getAllByRole("link");
     expect(links).toHaveLength(3);
     expect(links[0]!.getAttribute("href")).toBe("/products/aria");
@@ -47,9 +39,7 @@ describe("ProductListing", () => {
     // Two sub-category groups (Lounge, Sofa) → anchors #lounge and #sofa.
     expect(container.querySelector("section#lounge")).toBeTruthy();
     expect(container.querySelector("section#sofa")).toBeTruthy();
-    const subHeadings = getAllByRole("heading", { level: 2 }).map(
-      (h) => h.textContent,
-    );
+    const subHeadings = getAllByRole("heading", { level: 2 }).map((h) => h.textContent);
     expect(subHeadings).toEqual(["Lounge", "Sofa"]);
   });
 

@@ -15,9 +15,7 @@
     context?: { presentation?: Presentation };
   } = $props();
 
-  const band = $derived(
-    bandFor(context?.presentation, slice.primary.band ?? null),
-  );
+  const band = $derived(bandFor(context?.presentation, slice.primary.band ?? null));
 </script>
 
 <!-- Standalone copy blocks are centered section openers and interstitial

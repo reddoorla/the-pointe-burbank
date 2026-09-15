@@ -6,14 +6,8 @@ import { createRequire } from "node:module";
 const require = createRequire(import.meta.url);
 const [, , repoRoot, libraryID, modelPath] = process.argv;
 const pnpmDir = path.join(repoRoot, "node_modules/.pnpm");
-const managerPkg = readdirSync(pnpmDir).find((d) =>
-  d.startsWith("@slicemachine+manager@"),
-);
-const entry = path.join(
-  pnpmDir,
-  managerPkg,
-  "node_modules/@slicemachine/manager/dist/index.cjs",
-);
+const managerPkg = readdirSync(pnpmDir).find((d) => d.startsWith("@slicemachine+manager@"));
+const entry = path.join(pnpmDir, managerPkg, "node_modules/@slicemachine/manager/dist/index.cjs");
 const { createSliceMachineManager } = require(entry);
 const model = JSON.parse(readFileSync(modelPath, "utf8"));
 const manager = createSliceMachineManager();

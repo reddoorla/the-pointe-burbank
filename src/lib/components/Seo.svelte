@@ -43,13 +43,9 @@
   }: Props = $props();
 
   const canonical = $derived(canonicalUrl(url));
-  const origin = $derived(
-    typeof url === "string" ? new URL(url).origin : url.origin,
-  );
+  const origin = $derived(typeof url === "string" ? new URL(url).origin : url.origin);
   const og = $derived(resolveOgImage(image, origin));
-  const jsonLdNodes = $derived(
-    jsonLd == null ? [] : Array.isArray(jsonLd) ? jsonLd : [jsonLd],
-  );
+  const jsonLdNodes = $derived(jsonLd == null ? [] : Array.isArray(jsonLd) ? jsonLd : [jsonLd]);
 </script>
 
 <svelte:head>

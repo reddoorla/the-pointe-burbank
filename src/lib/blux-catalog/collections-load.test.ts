@@ -42,10 +42,7 @@ describe("loadCollections", () => {
     const collections = await loadCollections(client, ["product", "person"]);
     expect(calls).toEqual(["product", "person"]);
     expect(Object.keys(collections)).toEqual(["product", "person"]);
-    expect(collections["product"]).toEqual([
-      { uid: "product-1" },
-      { uid: "product-2" },
-    ]);
+    expect(collections["product"]).toEqual([{ uid: "product-1" }, { uid: "product-2" }]);
   });
 
   it("tolerates a rejecting getAllByType: unknown types yield [] not a 500", async () => {

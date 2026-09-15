@@ -16,9 +16,7 @@
     context?: { presentation?: Presentation };
   };
   let { slice, context = {} }: Props = $props();
-  const band = $derived(
-    bandFor(context.presentation, slice.primary.band ?? null),
-  );
+  const band = $derived(bandFor(context.presentation, slice.primary.band ?? null));
   const media = $derived(band?.gallery ?? null);
   // Slider frames carry per-slide captions in the source. When present we can't
   // reduce the band to a single cover frame without dropping copy, so render the
@@ -28,11 +26,7 @@
 </script>
 
 {#if media && media.length > 0}
-  <SectionBand
-    {band}
-    sliceType={slice.slice_type}
-    sliceVariation={slice.variation}
-  >
+  <SectionBand {band} sliceType={slice.slice_type} sliceVariation={slice.variation}>
     {#if captioned}
       <BandContent {band}>
         <div class="flex w-full flex-wrap gap-y-8">
@@ -51,11 +45,7 @@
            at a time. Render the first frame full-bleed at 80vh to match the
            original's default view and height; frames 1+ stay in the manifest. -->
       <div data-gallery-cell class="w-full">
-        <Media
-          media={media[0]}
-          class="block h-[80vh] w-full object-cover"
-          loading="eager"
-        />
+        <Media media={media[0]} class="block h-[80vh] w-full object-cover" loading="eager" />
       </div>
     {/if}
   </SectionBand>

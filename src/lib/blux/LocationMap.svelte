@@ -74,11 +74,7 @@
     <div bind:this={mountEl} style:height="600px" class="w-full"></div>
   {:else}
     <!-- No Maps key in this environment (dev/test): keep the layout, skip the API. -->
-    <div
-      data-map-placeholder
-      style:height="600px"
-      class="w-full bg-neutral-100"
-    ></div>
+    <div data-map-placeholder style:height="600px" class="w-full bg-neutral-100"></div>
   {/if}
   {#if config.toggles.length > 0}
     <!-- The original's map_icon tab bar: equal-width tabs filling the content
@@ -100,9 +96,7 @@
           onclick={() => select(i)}
         >
           <span class="truncate">{t.label}</span>
-          <span aria-hidden="true" class="ml-2 shrink-0"
-            >{active === i ? "−" : "+"}</span
-          >
+          <span aria-hidden="true" class="ml-2 shrink-0">{active === i ? "−" : "+"}</span>
         </button>
       {/each}
     </div>

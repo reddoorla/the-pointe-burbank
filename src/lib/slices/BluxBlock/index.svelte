@@ -14,10 +14,7 @@
       <BluxNode node={root} />
     {/if}
     {#if isFilled.keyText(slice.primary.widget_html)}
-      <BluxWidget
-        kind={slice.primary.widget_kind}
-        html={slice.primary.widget_html}
-      />
+      <BluxWidget kind={slice.primary.widget_kind} html={slice.primary.widget_html} />
     {/if}
   </div>
 {/if}

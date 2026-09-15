@@ -61,13 +61,7 @@
       interacted = true;
       maybeMount();
     };
-    const events = [
-      "pointerdown",
-      "pointermove",
-      "wheel",
-      "keydown",
-      "touchstart",
-    ];
+    const events = ["pointerdown", "pointermove", "wheel", "keydown", "touchstart"];
     for (const ev of events) {
       window.addEventListener(ev, onFirst, { once: true, passive: true });
     }
@@ -143,10 +137,7 @@
   });
 </script>
 
-<section
-  bind:this={sectionEl}
-  class="w-screen aspect-video relative overflow-hidden bg-black"
->
+<section bind:this={sectionEl} class="w-screen aspect-video relative overflow-hidden bg-black">
   <!-- Poster (fallback: pre-play, reduced-motion, iOS suspension) -->
   <Img
     src={poster}

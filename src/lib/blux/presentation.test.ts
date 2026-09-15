@@ -34,15 +34,9 @@ describe("presentation", () => {
         about: { bands: { "0": { style: { "text-align": "left" } } } },
       },
     };
-    expect(
-      selectPresentation(multi, "home").bands["0"]?.style?.["text-align"],
-    ).toBe("center");
-    expect(
-      selectPresentation(multi, "about").bands["0"]?.style?.["text-align"],
-    ).toBe("left");
-    expect(selectPresentation(multi).bands["0"]?.style?.["text-align"]).toBe(
-      "center",
-    );
+    expect(selectPresentation(multi, "home").bands["0"]?.style?.["text-align"]).toBe("center");
+    expect(selectPresentation(multi, "about").bands["0"]?.style?.["text-align"]).toBe("left");
+    expect(selectPresentation(multi).bands["0"]?.style?.["text-align"]).toBe("center");
     expect(selectPresentation(multi, "ghost").bands).toEqual({});
     // The flat form passes through regardless of uid.
     const flat = { bands: { "3": { style: { "background-color": "#eef" } } } };
@@ -84,38 +78,29 @@ describe("presentation", () => {
     it("reserves an even share of the gutter from each cell of a 2-up row", () => {
       // 70/30 media|text (bands 6/12) — two cells share one line (k=2), so each
       // gives up half the 4% gutter (2%) and the pair still fits: 68+28+4=100.
-      expect(
-        rowCellBases([
-          cell({ cols: 2, ratio: 70 }),
-          cell({ cols: 2, ratio: 30 }),
-        ]),
-      ).toEqual(["calc(70% - 2%)", "calc(30% - 2%)"]);
+      expect(rowCellBases([cell({ cols: 2, ratio: 70 }), cell({ cols: 2, ratio: 30 })])).toEqual([
+        "calc(70% - 2%)",
+        "calc(30% - 2%)",
+      ]);
       // 20/80 icon|heading (band 3) reserves the same even 2% per cell.
-      expect(
-        rowCellBases([
-          cell({ cols: 2, ratio: 20 }),
-          cell({ cols: 2, ratio: 80 }),
-        ]),
-      ).toEqual(["calc(20% - 2%)", "calc(80% - 2%)"]);
+      expect(rowCellBases([cell({ cols: 2, ratio: 20 }), cell({ cols: 2, ratio: 80 })])).toEqual([
+        "calc(20% - 2%)",
+        "calc(80% - 2%)",
+      ]);
     });
 
     it("keys the reservation off cells-per-LINE (cols), not cell count", () => {
       // Band 14: 7 cells at cols=4 → 4 per line (25% each), NOT 7. Reserving
       // gutter/2 would wrap the 4th cell; the correct share is 4*(4-1)/4=3%.
       const cells = Array.from({ length: 7 }, () => cell({ cols: 4 }));
-      expect(rowCellBases(cells)).toEqual(
-        Array.from({ length: 7 }, () => "calc(25% - 3%)"),
-      );
+      expect(rowCellBases(cells)).toEqual(Array.from({ length: 7 }, () => "calc(25% - 3%)"));
     });
 
     it("leaves single-per-line rows (100% cells) untouched — no horizontal gutter", () => {
       // cols=1 stat stack (band 3): each cell is 100%, one per line, so there is
       // no adjacent cell to gutter against — bases pass through unchanged.
       expect(
-        rowCellBases([
-          cell({ cols: 1, spacing: 40 }),
-          cell({ cols: 1, spacing: 40 }),
-        ]),
+        rowCellBases([cell({ cols: 1, spacing: 40 }), cell({ cols: 1, spacing: 40 })]),
       ).toEqual(["100%", "100%"]);
     });
 
@@ -123,10 +108,7 @@ describe("presentation", () => {
       // Band 10 presenter logos: cols 'any' → content-width cells that flex
       // around the gap; there is no percentage basis to reserve from.
       expect(
-        rowCellBases([
-          cell({ cols: "any", spacing: 20 }),
-          cell({ cols: "any", spacing: 20 }),
-        ]),
+        rowCellBases([cell({ cols: "any", spacing: 20 }), cell({ cols: "any", spacing: 20 })]),
       ).toEqual(["auto", "auto"]);
     });
 
@@ -134,20 +116,12 @@ describe("presentation", () => {
       // Can't safely split a gutter across a fixed % and a content-width cell;
       // fall back to no reservation — the % cell keeps its basis, the auto cell
       // stays content-width and absorbs the gap.
-      expect(rowCellBases([cell({ cols: 2 }), cell({ cols: "any" })])).toEqual([
-        "50%",
-        "auto",
-      ]);
+      expect(rowCellBases([cell({ cols: 2 }), cell({ cols: "any" })])).toEqual(["50%", "auto"]);
     });
 
     it("honors a custom gutter and keeps calc precision for thirds", () => {
       // cols=3 → 33.3333% each, k=3, reserve = 6*(3-1)/3 = 4% at a 6% gutter.
-      expect(
-        rowCellBases(
-          [cell({ cols: 3 }), cell({ cols: 3 }), cell({ cols: 3 })],
-          6,
-        ),
-      ).toEqual([
+      expect(rowCellBases([cell({ cols: 3 }), cell({ cols: 3 }), cell({ cols: 3 })], 6)).toEqual([
         "calc(33.3333% - 4%)",
         "calc(33.3333% - 4%)",
         "calc(33.3333% - 4%)",

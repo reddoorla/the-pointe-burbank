@@ -26,9 +26,7 @@
     {#each Array(lines) as _, i (i)}
       <div
         class="rounded bg-light/30 animate-pulse"
-        style="height: {height || '1rem'}; width: {i === lines - 1 && lines > 1
-          ? '75%'
-          : '100%'};"
+        style="height: {height || '1rem'}; width: {i === lines - 1 && lines > 1 ? '75%' : '100%'};"
       ></div>
     {/each}
   </div>

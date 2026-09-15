@@ -38,9 +38,10 @@ import freezeDefaults from "./frozen/home.slots.json";
  * see raw `⟦t:…⟧` tokens and match nothing without it.
  */
 const freezeValues = new Map<string, SlotValue>(
-  (freezeDefaults.slots as { key: string; kind: string; text?: string }[]).map(
-    (s) => [s.key, s.kind === "image" ? {} : { text: s.text }],
-  ),
+  (freezeDefaults.slots as { key: string; kind: string; text?: string }[]).map((s) => [
+    s.key,
+    s.kind === "image" ? {} : { text: s.text },
+  ]),
 );
 
 describe("CMS_DIVERGENCES", () => {
@@ -109,9 +110,7 @@ describe("CMS_DIVERGENCES", () => {
     // because the artifact carries its token, while a SITE-DECLARED `x.` slot
     // has no token by definition (that is why it is declared) and must instead
     // appear in the extra-slots file the freeze pushes.
-    const declared = new Set(
-      (extra.slots as { key: string }[]).map((s) => s.key),
-    );
+    const declared = new Set((extra.slots as { key: string }[]).map((s) => s.key));
     for (const d of CMS_DIVERGENCES) {
       if (!d.slot) continue;
       if (d.slot.startsWith("x.")) {
@@ -131,9 +130,7 @@ describe("freeze invariants the render depends on", () => {
   // shortening the page. reddoor-maintenance 0.76.0 stopped tokenizing them;
   // this is the site-side guard that a future re-freeze does not undo it.
   it("tokenizes no whitespace-only leaf", () => {
-    const blank = (
-      freezeDefaults.slots as { key: string; kind: string; text?: string }[]
-    ).filter(
+    const blank = (freezeDefaults.slots as { key: string; kind: string; text?: string }[]).filter(
       (s) =>
         s.kind === "text" &&
         (s.text ?? "") !== "" &&
@@ -156,8 +153,7 @@ describe("freeze invariants the render depends on", () => {
 
 describe("rewriteHashlinks", () => {
   it("retargets the repurposed Contact link at the availability panel", () => {
-    const html =
-      '<a class="navigation0ullia data-hashlink" href="#footer0">C</a>';
+    const html = '<a class="navigation0ullia data-hashlink" href="#footer0">C</a>';
     expect(rewriteHashlinks(html)).toContain('href="#availability"');
   });
 
@@ -178,17 +174,13 @@ describe("rewriteHashlinks", () => {
 
   it("rewrites only the fragment, not a same-named path", () => {
     const html = '<a href="/footer0">p</a><a href="#footer0">f</a>';
-    expect(rewriteHashlinks(html)).toBe(
-      '<a href="/footer0">p</a><a href="#availability">f</a>',
-    );
+    expect(rewriteHashlinks(html)).toBe('<a href="/footer0">p</a><a href="#availability">f</a>');
   });
 });
 
 describe("decodeCfEmail", () => {
   it("decodes a real payload from the-pointe's footer", () => {
-    expect(decodeCfEmail("7e2a111a1a503a11101b073e1d1c0c1b501d1113")).toBe(
-      "Todd.Doney@cbre.com",
-    );
+    expect(decodeCfEmail("7e2a111a1a503a11101b073e1d1c0c1b501d1113")).toBe("Todd.Doney@cbre.com");
   });
 });
 
@@ -282,9 +274,7 @@ describe("dropNavLinks", () => {
   it("drops Vision and keeps the three items asked back in", () => {
     const out = dropNavLinks(nav);
     expect(out).toBe(
-      li("page-block-5", "Amenities") +
-        li("page-block-8", "Burbank") +
-        li("footer0", "Contact Us"),
+      li("page-block-5", "Amenities") + li("page-block-8", "Burbank") + li("footer0", "Contact Us"),
     );
   });
 
@@ -294,8 +284,7 @@ describe("dropNavLinks", () => {
   });
 
   it("does not touch the logo link, which has no hashlink", () => {
-    const logo =
-      '<li class="navigation0ulli"><a class="navigation0ullia" href="/">L</a></li>';
+    const logo = '<li class="navigation0ulli"><a class="navigation0ullia" href="/">L</a></li>';
     expect(dropNavLinks(logo)).toBe(logo);
   });
 });
@@ -338,8 +327,7 @@ describe("addContactNavItem", () => {
   });
 
   it("leaves markup with no Availability item alone", () => {
-    const logo =
-      '<li class="navigation0ulli"><a class="navigation0ullia" href="/">L</a></li>';
+    const logo = '<li class="navigation0ulli"><a class="navigation0ullia" href="/">L</a></li>';
     expect(addContactNavItem(logo)).toBe(logo);
   });
 });
@@ -393,9 +381,7 @@ describe("breakHeadingLine", () => {
 
   it("breaks before `of`, matching how the left heading breaks", () => {
     const out = breakHeadingLine(block("a city full of possibilities"));
-    expect(out).toContain(
-      '<h4 class="block-title text11">a city full<br>of possibilities</h4>',
-    );
+    expect(out).toContain('<h4 class="block-title text11">a city full<br>of possibilities</h4>');
   });
 
   it("inserts exactly one break", () => {
@@ -409,8 +395,7 @@ describe("breakHeadingLine", () => {
   });
 
   it("leaves a same-worded heading in a different block alone", () => {
-    const elsewhere =
-      '<div id="page-block-4-item-0"><h4>a city full of possibilities</h4></div>';
+    const elsewhere = '<div id="page-block-4-item-0"><h4>a city full of possibilities</h4></div>';
     expect(breakHeadingLine(elsewhere)).toBe(elsewhere);
   });
 
@@ -438,9 +423,7 @@ describe("addMainLandmark", () => {
     // contentinfo, which is the bug a naive "wrap everything" fix creates.
     expect(out.indexOf('<footer id="footer0"')).toBeGreaterThan(close);
     // The nav precedes it and must also stay outside.
-    expect(out.indexOf('<nav id="navigation0"')).toBeLessThan(
-      out.indexOf("<main"),
-    );
+    expect(out.indexOf('<nav id="navigation0"')).toBeLessThan(out.indexOf("<main"));
   });
 
   it("keeps the id the frozen CSS styles, and adds no extra element", () => {
@@ -452,8 +435,7 @@ describe("addMainLandmark", () => {
   });
 
   it("balances nested divs rather than closing at the first </div>", () => {
-    const html =
-      '<div id="page-content"><div><div>deep</div></div></div><footer>f</footer>';
+    const html = '<div id="page-content"><div><div>deep</div></div></div><footer>f</footer>';
     expect(addMainLandmark(html)).toBe(
       '<main id="page-content"><div><div>deep</div></div></main><footer>f</footer>',
     );
@@ -470,9 +452,7 @@ describe("addMainLandmark", () => {
 describe("nameBareLinks", () => {
   it("names both nameless links in the real artifact", () => {
     const out = nameBareLinks(template);
-    expect(out).toContain(
-      '<a class="navigation0ullia" href="/" aria-label="The Pointe — home">',
-    );
+    expect(out).toContain('<a class="navigation0ullia" href="/" aria-label="The Pointe — home">');
     expect(out).toContain(
       '<a class="footer0ullia" href="https://www.theburbankportfolio.com/"' +
         ' aria-label="The Burbank Portfolio">',
@@ -482,14 +462,10 @@ describe("nameBareLinks", () => {
   it("covers the logo link in both the desktop and mobile navs", () => {
     // The freeze emits it twice; axe only flags the visible one, so a
     // first-match-only fix would leave the other unnamed at mobile widths.
-    const before = [
-      ...template.matchAll(/<a class="navigation0ullia" href="\/">/g),
-    ];
+    const before = [...template.matchAll(/<a class="navigation0ullia" href="\/">/g)];
     expect(before.length).toBeGreaterThan(1);
     const out = nameBareLinks(template);
-    expect([...out.matchAll(/aria-label="The Pointe — home"/g)]).toHaveLength(
-      before.length,
-    );
+    expect([...out.matchAll(/aria-label="The Pointe — home"/g)]).toHaveLength(before.length);
   });
 
   it("leaves other links alone", () => {
@@ -516,8 +492,7 @@ describe("nameMenuToggle", () => {
 });
 
 describe("liftHeadingLevels", () => {
-  const levels = (html: string) =>
-    [...html.matchAll(/<h([1-6])\b/g)].map((m) => Number(m[1]));
+  const levels = (html: string) => [...html.matchAll(/<h([1-6])\b/g)].map((m) => Number(m[1]));
 
   it("leaves the real artifact's outline with no skipped levels", () => {
     const before = levels(template);
@@ -525,10 +500,7 @@ describe("liftHeadingLevels", () => {
     const after = levels(liftHeadingLevels(template));
     let prev = 0;
     for (const l of after) {
-      if (prev)
-        expect(l, `h${prev} -> h${l} skips a level`).toBeLessThanOrEqual(
-          prev + 1,
-        );
+      if (prev) expect(l, `h${prev} -> h${l} skips a level`).toBeLessThanOrEqual(prev + 1);
       prev = l;
     }
     expect(after).not.toContain(4);
@@ -545,8 +517,7 @@ describe("liftHeadingLevels", () => {
   });
 
   it("lifts a pre-section heading to h2 and a post-section one to h3", () => {
-    const html =
-      "<h1>Title</h1><h4>Subtitle</h4><h2>Section</h2><h5>Detail</h5>";
+    const html = "<h1>Title</h1><h4>Subtitle</h4><h2>Section</h2><h5>Detail</h5>";
     expect(liftHeadingLevels(html)).toBe(
       "<h1>Title</h1><h2>Subtitle</h2><h2>Section</h2><h3>Detail</h3>",
     );
@@ -555,23 +526,18 @@ describe("liftHeadingLevels", () => {
   it("preserves attributes, which carry all the visual styling", () => {
     const html = '<h5 class="block-title text5" style="padding:1px">x</h5>';
     const out = liftHeadingLevels(html);
-    expect(out).toBe(
-      '<h2 class="block-title text5" style="padding:1px">x</h2>',
-    );
+    expect(out).toBe('<h2 class="block-title text5" style="padding:1px">x</h2>');
   });
 
   it("pairs each open tag with its own level's close", () => {
     const html = "<h2>a</h2><h4>b</h4><h2>c</h2><h4>d</h4>";
-    expect(liftHeadingLevels(html)).toBe(
-      "<h2>a</h2><h3>b</h3><h2>c</h2><h3>d</h3>",
-    );
+    expect(liftHeadingLevels(html)).toBe("<h2>a</h2><h3>b</h3><h2>c</h2><h3>d</h3>");
   });
 });
 
 describe("addVideoPoster", () => {
   it("gives the frozen <video> the cover still", () => {
-    const html =
-      '<video src="x.mp4" playsinline="playsinline" controls></video>';
+    const html = '<video src="x.mp4" playsinline="playsinline" controls></video>';
     expect(addVideoPoster(html)).toContain(`<video poster="${VIDEO_POSTER}"`);
   });
 
@@ -610,10 +576,7 @@ describe("enhanceFrozenHtml + css", () => {
     // and Contact Us appended. Asserted end-to-end because the steps are
     // order-coupled — addContactNavItem run too early yields two Availability
     // links, which every per-function test above would still pass.
-    const out = enhanceFrozenHtml(
-      substitute(template, freezeValues),
-      freezeValues,
-    );
+    const out = enhanceFrozenHtml(substitute(template, freezeValues), freezeValues);
     const nav = out.slice(out.indexOf("<nav"), out.indexOf("</nav>"));
     const items = [
       ...nav.matchAll(
@@ -631,13 +594,8 @@ describe("enhanceFrozenHtml + css", () => {
   it("puts the Contact item in the same list as the others", () => {
     // A regex that appended after the wrong `</li>` could still produce the
     // right item order above while landing it outside the right `<ul>`.
-    const out = enhanceFrozenHtml(
-      substitute(template, freezeValues),
-      freezeValues,
-    );
-    const right = out.slice(
-      out.indexOf('<ul class="ibb navigation0section navigation0right">'),
-    );
+    const out = enhanceFrozenHtml(substitute(template, freezeValues), freezeValues);
+    const right = out.slice(out.indexOf('<ul class="ibb navigation0section navigation0right">'));
     const list = right.slice(0, right.indexOf("</ul>"));
     expect([...list.matchAll(/<li /g)]).toHaveLength(4);
     expect(list).toContain('href="#footer0">Contact Us<');
@@ -666,9 +624,7 @@ describe("enhanceFrozenHtml + css", () => {
   it("draws body link underlines in on scroll, wrap-safe and id-scoped", () => {
     // Nicole's 51:42 comment is pinned on a BODY link, so `.links` gets the
     // same gesture on the observer the rule marks already use.
-    expect(UNDERLINE_DRAW_CSS).toContain(
-      "#page-content .links.rd-fx-wait{background-size:0 1px",
-    );
+    expect(UNDERLINE_DRAW_CSS).toContain("#page-content .links.rd-fx-wait{background-size:0 1px");
     expect(UNDERLINE_DRAW_CSS).toContain(
       "#page-content .links.rd-fx-run{background-size:100% 1px;" +
         "transition:background-size .7s cubic-bezier(.2,.55,.88,.95)}",
@@ -681,9 +637,7 @@ describe("enhanceFrozenHtml + css", () => {
     );
     // Replaces app.css's text-decoration rather than doubling it, and must
     // out-specify that unlayered (0,1,0) rule rather than rely on source order.
-    expect(UNDERLINE_DRAW_CSS).toContain(
-      "#page-content .links{text-decoration:none",
-    );
+    expect(UNDERLINE_DRAW_CSS).toContain("#page-content .links{text-decoration:none");
     expect(UNDERLINE_DRAW_CSS).not.toMatch(/(^|})\.links\{/);
   });
 
@@ -691,18 +645,13 @@ describe("enhanceFrozenHtml + css", () => {
     // 1.137em + 4px reproduces the measured rows at both font sizes on the
     // page: 29px at 22px type and 24.5px at 18px. Guarded because a nudge here
     // moves every body underline off the row the design review signed off.
-    expect(UNDERLINE_DRAW_CSS).toContain(
-      "background-position:0 calc(1.137em + 4px)",
-    );
+    expect(UNDERLINE_DRAW_CSS).toContain("background-position:0 calc(1.137em + 4px)");
     expect(1.137 * 22 + 4).toBeCloseTo(29, 1);
     expect(1.137 * 18 + 4).toBeCloseTo(24.5, 1);
   });
 
   it("links MRKT and breaks the City heading in the real artifact", () => {
-    const out = enhanceFrozenHtml(
-      substitute(template, freezeValues),
-      freezeValues,
-    );
+    const out = enhanceFrozenHtml(substitute(template, freezeValues), freezeValues);
     expect(out).toContain(
       '<a class="links" href="https://mrktburbank.square.site/" ' +
         'target="_blank" rel="noopener">MRKT</a>',
@@ -760,17 +709,13 @@ describe("enhanceFrozenHtml + css", () => {
 
     // The 107px baseline is DISTINGUISHED_CSS's, so this stays true only while
     // that rule says 107 — assert it rather than trusting the comment.
-    expect(DISTINGUISHED_CSS).toContain(
-      ".block-media-holder>.ib.img{width:107px!important}",
-    );
+    expect(DISTINGUISHED_CSS).toContain(".block-media-holder>.ib.img{width:107px!important}");
     // The badge only ever gets smaller: every rule is under the 123px inline
     // width the freeze ships, and each regime is tighter than the last.
     expect(110.7).toBeLessThan(123);
     expect(72.8).toBeLessThan(110.7);
     // Its neighbours keep their own widths.
-    expect(FROZEN_ENHANCE_CSS).not.toContain(
-      "#page-block-3-item-1-item-0-item-2 .camediaload",
-    );
+    expect(FROZEN_ENHANCE_CSS).not.toContain("#page-block-3-item-1-item-0-item-2 .camediaload");
   });
 
   it("scrims the carousel image bottom-up, under the content", () => {
@@ -792,9 +737,7 @@ describe("enhanceFrozenHtml + css", () => {
   });
 
   it("re-centers the map plus/minus glyph relatively (both states)", () => {
-    expect(FROZEN_ENHANCE_CSS).toContain(
-      ".map_icon_plusm:before{top:calc(50% - 7px)",
-    );
+    expect(FROZEN_ENHANCE_CSS).toContain(".map_icon_plusm:before{top:calc(50% - 7px)");
     expect(FROZEN_ENHANCE_CSS).toContain(
       '.map_icon[data-clicked="1"] .map_icon_plusm:before{top:50%;height:0}',
     );
@@ -809,21 +752,15 @@ describe("enhanceFrozenHtml + css", () => {
 
   it("applies the Figma type scale (leading only) without touching mobile", () => {
     expect(FROZEN_ENHANCE_CSS).toContain(".text1{line-height:30px}");
-    expect(FROZEN_ENHANCE_CSS).toContain(
-      ".text11{font-size:50px;line-height:70px}",
-    );
-    expect(FROZEN_ENHANCE_CSS).toContain(
-      ".text12{font-size:80px;line-height:100px}",
-    );
+    expect(FROZEN_ENHANCE_CSS).toContain(".text11{font-size:50px;line-height:70px}");
+    expect(FROZEN_ENHANCE_CSS).toContain(".text12{font-size:80px;line-height:100px}");
     expect(FROZEN_ENHANCE_CSS).toContain("@media all and (max-width:700px)");
   });
 
   it("tightens the amenities heading block per Figma", () => {
     // Round 4 added page-block-11 to this same rule, so the amenities selector
     // is asserted as a member of it rather than as the whole declaration.
-    const rule = /#[^{}]*\{padding:20px 0 5px!important\}/.exec(
-      FROZEN_ENHANCE_CSS,
-    );
+    const rule = /#[^{}]*\{padding:20px 0 5px!important\}/.exec(FROZEN_ENHANCE_CSS);
     expect(rule, "no 20px 0 5px rule in the bundle").not.toBeNull();
     expect(rule![0]).toContain("#page-block-5-item-0-item-1>.blocks0container");
   });
@@ -838,9 +775,7 @@ describe("enhanceFrozenHtml + css", () => {
     // `.buttons2:before` is a 1px rule 4px below the box. Clearing `border`
     // and `text-decoration` does not touch it, so it has to go explicitly or a
     // stray hairline is drawn under the button.
-    expect(FROZEN_ENHANCE_CSS).toContain(
-      "#page-block-11 .buttons2:before{display:none}",
-    );
+    expect(FROZEN_ENHANCE_CSS).toContain("#page-block-11 .buttons2:before{display:none}");
   });
 
   it("inverts the button on hover and keyboard focus alike", () => {
@@ -853,9 +788,7 @@ describe("enhanceFrozenHtml + css", () => {
   it("keeps every button selector id-scoped, or the artifact outranks it", () => {
     // Base rule is (1,1,0); the freeze ships its own `.buttons2:hover` at
     // (0,2,0). Any bare `.buttons2…` rule here would silently lose.
-    const bare = [
-      ...FROZEN_ENHANCE_CSS.matchAll(/(^|[},])(\.buttons2[^{]*)\{/g),
-    ];
+    const bare = [...FROZEN_ENHANCE_CSS.matchAll(/(^|[},])(\.buttons2[^{]*)\{/g)];
     expect(bare.map((m) => m[2])).toEqual([]);
   });
 
@@ -865,9 +798,7 @@ describe("enhanceFrozenHtml + css", () => {
     );
     // cubic-bezier(.2,.55,.88,.95) is the export's entrance easing; it belongs
     // to the reveal/draw-in rules only, never to an interaction state.
-    const buttonRule = /#page-block-11 \.buttons2\{[^}]*\}/.exec(
-      FROZEN_ENHANCE_CSS,
-    )![0];
+    const buttonRule = /#page-block-11 \.buttons2\{[^}]*\}/.exec(FROZEN_ENHANCE_CSS)![0];
     expect(buttonRule).not.toContain("cubic-bezier");
   });
 
@@ -882,9 +813,7 @@ describe("enhanceFrozenHtml + css", () => {
   });
 
   it("gives the availability panel the same anchor offset as the bands", () => {
-    expect(FROZEN_ENHANCE_CSS).toContain(
-      '[id^="page-block-"],.rd-avail{scroll-margin-top:100px}',
-    );
+    expect(FROZEN_ENHANCE_CSS).toContain('[id^="page-block-"],.rd-avail{scroll-margin-top:100px}');
   });
 
   it("ships the availability panel styles", () => {
@@ -895,8 +824,6 @@ describe("enhanceFrozenHtml + css", () => {
     expect(FROZEN_ENHANCE_CSS).toContain(
       "#page-block-9>.block-holder>.blocks0container{padding-bottom:40px}",
     );
-    expect(FROZEN_ENHANCE_CSS).toContain(
-      "#page-block-10>.blocks0container{padding-top:40px}",
-    );
+    expect(FROZEN_ENHANCE_CSS).toContain("#page-block-10>.blocks0container{padding-top:40px}");
   });
 });

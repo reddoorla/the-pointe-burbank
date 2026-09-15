@@ -13,13 +13,7 @@
     sliceType?: string;
     sliceVariation?: string;
   };
-  let {
-    band,
-    children,
-    eagerBackground = false,
-    sliceType,
-    sliceVariation,
-  }: Props = $props();
+  let { band, children, eagerBackground = false, sliceType, sliceVariation }: Props = $props();
 
   // Band style carries a few keys that aren't valid CSS-as-is:
   //  - `_`-prefixed synthetic hints (e.g. `_contentPadding`, `_max-content-width`)
@@ -51,9 +45,7 @@
      optional background media; content sits above the background. -->
 <section
   id={band?.index != null ? String(band.index) : undefined}
-  class="relative isolate w-full scroll-mt-24 {centered
-    ? 'flex flex-col justify-center'
-    : ''}"
+  class="relative isolate w-full scroll-mt-24 {centered ? 'flex flex-col justify-center' : ''}"
   style={styleAttr}
   data-slice-type={sliceType}
   data-slice-variation={sliceVariation}

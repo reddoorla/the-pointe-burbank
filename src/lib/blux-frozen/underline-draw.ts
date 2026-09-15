@@ -74,6 +74,5 @@ export const UNDERLINE_DRAW_CSS = [
   // drives `.block-effects` and `.rd-rule`; anything already on screen keeps the
   // finished underline and never blinks.
   `${BODY_LINK}.rd-fx-wait{background-size:0 1px;transition:none}`,
-  `${BODY_LINK}.rd-fx-run{background-size:100% 1px;` +
-    `transition:background-size ${DRAW}}`,
+  `${BODY_LINK}.rd-fx-run{background-size:100% 1px;` + `transition:background-size ${DRAW}}`,
 ].join("");

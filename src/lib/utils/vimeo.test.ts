@@ -43,8 +43,6 @@ describe("checkVimeoVideo", () => {
     const url = new URL(requested);
     // The decoded param must round-trip the full inner URL — an unencoded
     // "&" would have split it into a second query param.
-    expect(url.searchParams.get("url")).toBe(
-      "https://vimeo.com/123/unlisted&hash",
-    );
+    expect(url.searchParams.get("url")).toBe("https://vimeo.com/123/unlisted&hash");
   });
 });

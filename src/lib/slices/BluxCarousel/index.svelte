@@ -15,20 +15,14 @@
       isFilled.keyText(slice.primary.background_color)
         ? `background-color:${slice.primary.background_color}`
         : "",
-      isFilled.keyText(slice.primary.min_height)
-        ? `min-height:${slice.primary.min_height}`
-        : "",
+      isFilled.keyText(slice.primary.min_height) ? `min-height:${slice.primary.min_height}` : "",
     ]
       .filter(Boolean)
       .join(";"),
   );
 </script>
 
-<section
-  class="blux-carousel"
-  data-overlay={slice.primary.overlay}
-  style={bandStyle}
->
+<section class="blux-carousel" data-overlay={slice.primary.overlay} style={bandStyle}>
   {#if isFilled.image(slice.primary.background_image)}
     <!-- Band backdrop: absolutely positioned and cover-filled, so genuinely 100vw. -->
     <PrismicImage
@@ -53,9 +47,6 @@
     {/each}
   </div>
   {#if isFilled.keyText(slice.primary.widget_html)}
-    <BluxWidget
-      kind={slice.primary.widget_kind}
-      html={slice.primary.widget_html}
-    />
+    <BluxWidget kind={slice.primary.widget_kind} html={slice.primary.widget_html} />
   {/if}
 </section>

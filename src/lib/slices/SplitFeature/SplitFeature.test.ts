@@ -34,15 +34,9 @@ describe("SplitFeature slice", () => {
     expect(cells).toHaveLength(2);
     // mediaSide right → text first, media second
     expect(cells[0]?.textContent).toContain("Manifest text");
-    expect(cells[1]?.querySelector("img")?.getAttribute("src")).toBe(
-      "https://cdn/split.jpg",
-    );
-    expect(
-      (cells[0] as HTMLElement).style.getPropertyValue("--cell-basis"),
-    ).toBe("60%");
-    expect(
-      (cells[1] as HTMLElement).style.getPropertyValue("--cell-basis"),
-    ).toBe("40%");
+    expect(cells[1]?.querySelector("img")?.getAttribute("src")).toBe("https://cdn/split.jpg");
+    expect((cells[0] as HTMLElement).style.getPropertyValue("--cell-basis")).toBe("60%");
+    expect((cells[1] as HTMLElement).style.getPropertyValue("--cell-basis")).toBe("40%");
     // Cells stack full-width on mobile; from md: up the ratio basis applies,
     // shrunk by half the column gutter so the two cells + gutter fit one line
     // instead of wrapping (Blux's ~4% column gutter, reserved here in the basis).
@@ -151,8 +145,6 @@ describe("SplitFeature slice", () => {
     expect(textCell.className).toContain("md:pt-20");
     expect(mediaCell.querySelector("div.relative")).toBeNull();
     expect(mediaCell.querySelector("img")?.className).toContain("w-full");
-    expect((mediaCell.parentElement as HTMLElement).className).toContain(
-      "items-center",
-    );
+    expect((mediaCell.parentElement as HTMLElement).className).toContain("items-center");
   });
 });

@@ -32,17 +32,11 @@ describe("TitleBand slice", () => {
     });
     // The subtitle is the large display line (the visual heading); the heading
     // field is the small eyebrow above it. Roles come from band.text.
-    expect(container.querySelector("h2")?.textContent).toBe(
-      "Every corner considered",
-    );
-    expect(container.querySelector("h2")?.className).toContain(
-      "txt-role-text12",
-    );
+    expect(container.querySelector("h2")?.textContent).toBe("Every corner considered");
+    expect(container.querySelector("h2")?.className).toContain("txt-role-text12");
     const eyebrow = container.querySelector("p.txt-role-text5");
     expect(eyebrow?.textContent).toContain("The Space");
-    expect(container.querySelector("section")?.style.backgroundColor).toBe(
-      "rgb(1, 2, 3)",
-    );
+    expect(container.querySelector("section")?.style.backgroundColor).toBe("rgb(1, 2, 3)");
   });
 
   it("renders a heading-only band without roles when the manifest has none", () => {

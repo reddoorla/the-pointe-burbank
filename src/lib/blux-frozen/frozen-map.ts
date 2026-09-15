@@ -31,10 +31,7 @@ export interface FrozenMapConfig {
  * Hydrate one map config against the current document. Returns a cleanup
  * function (always safe to call). No mount in the DOM or no key → no-op.
  */
-export function hydrateFrozenMap(
-  cfg: FrozenMapConfig,
-  key: string | undefined,
-): () => void {
+export function hydrateFrozenMap(cfg: FrozenMapConfig, key: string | undefined): () => void {
   const mount = document.getElementById(cfg.mountId);
   if (!mount || !key) return () => {};
 
@@ -58,9 +55,7 @@ export function hydrateFrozenMap(
     if (!band) return [];
     const need = Math.max(...cfg.toggles.map((t) => t.panelIndex)) + 1;
     const groups = new Map<HTMLElement, HTMLElement[]>();
-    for (const cell of band.querySelectorAll<HTMLElement>(
-      ".cagriditem.grid-1",
-    )) {
+    for (const cell of band.querySelectorAll<HTMLElement>(".cagriditem.grid-1")) {
       const parent = cell.parentElement;
       if (!parent) continue;
       const group = groups.get(parent) ?? [];
@@ -68,9 +63,8 @@ export function hydrateFrozenMap(
       groups.set(parent, group);
     }
     return (
-      [...groups.values()]
-        .filter((g) => g.length >= need)
-        .sort((a, b) => b.length - a.length)[0] ?? []
+      [...groups.values()].filter((g) => g.length >= need).sort((a, b) => b.length - a.length)[0] ??
+      []
     );
   };
   const panels = findPanels();
@@ -85,8 +79,7 @@ export function hydrateFrozenMap(
   // clickMap semantics (verbatim from LocationMap/BluxWidget): radio chips,
   // exactly one active; group 0 (the portfolio) is NEVER removed from the map.
   const applyToggle = (next: number, prev: number, map: unknown) => {
-    if (prev !== 0)
-      cfg.toggles[prev]?.layers.forEach((n) => layerObjs[n]?.setMap(null));
+    if (prev !== 0) cfg.toggles[prev]?.layers.forEach((n) => layerObjs[n]?.setMap(null));
     cfg.toggles[next]?.layers.forEach((n) => layerObjs[n]?.setMap(map));
   };
 

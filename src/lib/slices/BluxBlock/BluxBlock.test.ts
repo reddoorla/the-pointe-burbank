@@ -33,9 +33,9 @@ describe("BluxBlock fallback slice", () => {
     const { getByText, container } = render(BluxBlock, { props: { slice } });
     expect(getByText("Stacking Plan")).not.toBeNull();
     expect(getByText("Level 4")).not.toBeNull();
-    expect(
-      container.querySelector("img[alt='plan']")?.getAttribute("src"),
-    ).toBe("https://cdn.example/plan.png");
+    expect(container.querySelector("img[alt='plan']")?.getAttribute("src")).toBe(
+      "https://cdn.example/plan.png",
+    );
     expect(container.querySelector("section.band .row")).not.toBeNull();
   });
 
@@ -117,17 +117,15 @@ describe("BluxBlock fallback slice", () => {
       props: { slice: styled },
     });
     expect(getByText("Hello")).not.toBeNull();
-    expect(
-      container.querySelector("[style*='background-color']"),
-    ).not.toBeNull();
+    expect(container.querySelector("[style*='background-color']")).not.toBeNull();
   });
 });
 
 describe("styleString", () => {
   it("joins kebab-case style entries and handles undefined", () => {
-    expect(
-      styleString({ "background-color": "red", "min-height": "10px" }),
-    ).toBe("background-color:red;min-height:10px");
+    expect(styleString({ "background-color": "red", "min-height": "10px" })).toBe(
+      "background-color:red;min-height:10px",
+    );
     expect(styleString(undefined)).toBe("");
   });
 });

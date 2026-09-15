@@ -21,9 +21,7 @@
   };
   let { slice, context = {} }: Props = $props();
 
-  const band = $derived(
-    bandFor(context.presentation, slice.primary.band ?? null),
-  );
+  const band = $derived(bandFor(context.presentation, slice.primary.band ?? null));
 </script>
 
 <!-- A labelled lead paragraph: a small eyebrow above the opening copy. Plain,
@@ -36,9 +34,7 @@
   >
     {#if slice.primary.eyebrow}
       <!-- The eyebrow names the section → it's the section heading (h2). -->
-      <h2
-        class="mb-3 text-sm font-semibold tracking-wide text-secondary uppercase"
-      >
+      <h2 class="mb-3 text-sm font-semibold tracking-wide text-secondary uppercase">
         {slice.primary.eyebrow}
       </h2>
     {/if}
@@ -49,11 +45,7 @@
 {/snippet}
 
 {#if band}
-  <BluxSectionBand
-    {band}
-    sliceType={slice.slice_type}
-    sliceVariation={slice.variation}
-  >
+  <BluxSectionBand {band} sliceType={slice.slice_type} sliceVariation={slice.variation}>
     {@render content()}
   </BluxSectionBand>
 {:else}

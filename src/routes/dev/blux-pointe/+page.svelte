@@ -21,8 +21,4 @@
   {@html `<style>${themeCss}</style>`}
 </svelte:head>
 
-<SliceZone
-  slices={data.slices as never}
-  {components}
-  context={{ collections: data.collections }}
-/>
+<SliceZone slices={data.slices as never} {components} context={{ collections: data.collections }} />

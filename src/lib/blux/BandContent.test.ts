@@ -4,8 +4,7 @@ import { createRawSnippet } from "svelte";
 import BandContent from "./BandContent.svelte";
 
 afterEach(() => cleanup());
-const children = () =>
-  createRawSnippet(() => ({ render: () => "<p>copy</p>" }));
+const children = () => createRawSnippet(() => ({ render: () => "<p>copy</p>" }));
 
 describe("BandContent", () => {
   it("applies Blux blockcontainer defaults when the band gives no hints", () => {

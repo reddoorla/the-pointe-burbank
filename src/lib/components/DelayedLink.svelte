@@ -1,10 +1,7 @@
 <script lang="ts">
   import { goto } from "$app/navigation";
   import type { Snippet } from "svelte";
-  import type {
-    HTMLAnchorAttributes,
-    MouseEventHandler,
-  } from "svelte/elements";
+  import type { HTMLAnchorAttributes, MouseEventHandler } from "svelte/elements";
 
   interface DelayedLinkProps extends Omit<HTMLAnchorAttributes, "onclick"> {
     href: string;
@@ -51,11 +48,7 @@
 
   // Let the browser handle new-tab / new-window / download intents natively.
   const isModifiedClick = (event: MouseEvent): boolean =>
-    event.button !== 0 ||
-    event.metaKey ||
-    event.ctrlKey ||
-    event.shiftKey ||
-    event.altKey;
+    event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey;
 
   const handleClick: MouseEventHandler<HTMLAnchorElement> = async (event) => {
     if (isInternalLink(href) && !isPdfLink(href) && !isModifiedClick(event)) {

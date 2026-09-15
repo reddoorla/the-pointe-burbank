@@ -12,9 +12,7 @@ function field(...types: string[]): RichTextField {
 
 describe("buildHeadingLevelMap", () => {
   it("compresses a gap the editor left (h2 → h4) into consecutive levels", () => {
-    const map = buildHeadingLevelMap(
-      field("heading2", "paragraph", "heading4"),
-    );
+    const map = buildHeadingLevelMap(field("heading2", "paragraph", "heading4"));
     expect(map.get(2)).toBe(2);
     expect(map.get(4)).toBe(3);
   });
@@ -32,9 +30,7 @@ describe("buildHeadingLevelMap", () => {
   });
 
   it("maps duplicate uses of a level identically (distinct levels only)", () => {
-    const map = buildHeadingLevelMap(
-      field("heading3", "heading3", "heading6", "heading3"),
-    );
+    const map = buildHeadingLevelMap(field("heading3", "heading3", "heading6", "heading3"));
     expect(map.get(3)).toBe(2);
     expect(map.get(6)).toBe(3);
     expect(map.size).toBe(2);
@@ -42,14 +38,7 @@ describe("buildHeadingLevelMap", () => {
 
   it("handles all six levels, capping at 6", () => {
     const map = buildHeadingLevelMap(
-      field(
-        "heading1",
-        "heading2",
-        "heading3",
-        "heading4",
-        "heading5",
-        "heading6",
-      ),
+      field("heading1", "heading2", "heading3", "heading4", "heading5", "heading6"),
     );
     // 1→2, 2→3, 3→4, 4→5, 5→6, and 6 clamps at 6.
     expect([...map.entries()]).toEqual([

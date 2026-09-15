@@ -17,9 +17,7 @@ describe("FrozenPage", () => {
         ],
       },
     });
-    expect(container.querySelector("h1")?.textContent).toBe(
-      "Distinguished Design",
-    );
+    expect(container.querySelector("h1")?.textContent).toBe("Distinguished Design");
     expect(container.querySelector(".bg")?.getAttribute("style")).toContain(
       "url('https://img.prismic.io/x.jpg')",
     );
