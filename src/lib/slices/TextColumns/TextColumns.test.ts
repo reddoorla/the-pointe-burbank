@@ -26,12 +26,8 @@ describe("TextColumns slice", () => {
     const { container } = render(TextColumns, {
       props: { slice, context: {} },
     });
-    expect(container.querySelector("h2")?.textContent?.trim()).toBe(
-      "Our Solution",
-    );
-    const h3s = [...container.querySelectorAll("h3")].map((h) =>
-      h.textContent?.trim(),
-    );
+    expect(container.querySelector("h2")?.textContent?.trim()).toBe("Our Solution");
+    const h3s = [...container.querySelectorAll("h3")].map((h) => h.textContent?.trim());
     expect(h3s).toEqual(["One", "Two"]);
   });
 

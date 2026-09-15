@@ -10,8 +10,7 @@ import template from "./frozen/home.html?raw";
 // track is `overflow:hidden`, so a slide shown without its transform cleared
 // renders N widths to the left of it. Slide 0 sits at 0%, which is why it was
 // the only one that ever looked right.
-const parkedAt = (i: number) =>
-  i === 0 ? "translateX(0%)" : `translateX(-${i}00%)`;
+const parkedAt = (i: number) => (i === 0 ? "translateX(0%)" : `translateX(-${i}00%)`);
 
 // Each caption carries the double-rule mark that `restyleCarouselCaptions`
 // inserts, because redrawing it on every change is part of the contract now.
@@ -40,9 +39,7 @@ const visible = () => els().map((e) => e.style.display);
 const shownIndex = () => visible().findIndex((d) => d === "block");
 const click = (id: string) => document.getElementById(id)!.click();
 const marks = (i: number) =>
-  [...els()[i].querySelectorAll(".rd-rule")].map((m) =>
-    m.getAttribute("class"),
-  );
+  [...els()[i].querySelectorAll(".rd-rule")].map((m) => m.getAttribute("class"));
 
 /** Run the cross-fade to completion: one frame to arm, then its timeout. */
 const settle = async () => {
@@ -165,11 +162,7 @@ describe("hydrateCarousels", () => {
     hydrate();
     click("page-block-8-right");
     await settle();
-    expect(els().map((e) => e.getAttribute("aria-hidden"))).toEqual([
-      "true",
-      "false",
-      "true",
-    ]);
+    expect(els().map((e) => e.getAttribute("aria-hidden"))).toEqual(["true", "false", "true"]);
     // display:none is what actually removes them; aria-hidden states it too.
     expect(els()[0].style.display).toBe("none");
     expect(els()[0].style.pointerEvents).toBe("none");
@@ -204,9 +197,7 @@ describe("hydrateCarousels", () => {
       slide(0, true) +
       `</div><button id="page-block-99-right"></button></section>`;
     hydrate();
-    expect(
-      document.querySelector(".caslider")!.getAttribute("aria-roledescription"),
-    ).toBeNull();
+    expect(document.querySelector(".caslider")!.getAttribute("aria-roledescription")).toBeNull();
   });
 
   it("counts only direct children as slides, not nested grids", async () => {
@@ -223,9 +214,7 @@ describe("hydrateCarousels", () => {
     hydrate();
     click("page-block-8-right");
     await settle();
-    const top = [
-      ...document.querySelector(".caslider")!.children,
-    ] as HTMLElement[];
+    const top = [...document.querySelector(".caslider")!.children] as HTMLElement[];
     expect(top.filter((e) => e.style.display === "block")).toHaveLength(1);
     expect(top[1].style.display).toBe("block");
   });
@@ -313,8 +302,7 @@ describe("preloading the offscreen photographs", () => {
   const withPhotos = () => {
     document.body.innerHTML = markup();
     els().forEach((slide, i) => {
-      slide.querySelector<HTMLElement>("div")!.style.backgroundImage =
-        `url("${bg(i)}")`;
+      slide.querySelector<HTMLElement>("div")!.style.backgroundImage = `url("${bg(i)}")`;
     });
   };
 
@@ -573,27 +561,19 @@ describe("the artifact the hydration depends on", () => {
   it("ships three Lush Haven slides and both arrow buttons", () => {
     // If a re-freeze renames these, hydrateCarousels silently binds nothing —
     // so the shape is asserted against the real committed template.
-    const section = template.slice(
-      template.indexOf('<section id="page-block-8"'),
-    );
+    const section = template.slice(template.indexOf('<section id="page-block-8"'));
     const region = section.slice(0, section.indexOf("</section>"));
     expect(region).toContain("caslider");
-    expect([
-      ...region.matchAll(/class="block-subcontent cagriditem/g),
-    ]).toHaveLength(3);
+    expect([...region.matchAll(/class="block-subcontent cagriditem/g)]).toHaveLength(3);
     expect(template).toContain('id="page-block-8-left"');
     expect(template).toContain('id="page-block-8-right"');
   });
 
   it("settles exactly one slide visible, the rest display:none", () => {
-    const section = template.slice(
-      template.indexOf('<section id="page-block-8"'),
-    );
+    const section = template.slice(template.indexOf('<section id="page-block-8"'));
     const region = section.slice(0, section.indexOf("</section>"));
     const styles = [
-      ...region.matchAll(
-        /<div class="block-subcontent cagriditem[^"]*"([^>]*)>/g,
-      ),
+      ...region.matchAll(/<div class="block-subcontent cagriditem[^"]*"([^>]*)>/g),
     ].map((m) => m[1]);
     expect(styles.filter((s) => /display:block/.test(s))).toHaveLength(1);
     expect(styles.filter((s) => /display:none/.test(s))).toHaveLength(2);
@@ -603,19 +583,13 @@ describe("the artifact the hydration depends on", () => {
     // The premise of `show()`'s transform handling. If a re-freeze ever settles
     // with every slide at 0%, restoring the parked value becomes a no-op and
     // this test says so before anyone concludes the transform code is dead.
-    const section = template.slice(
-      template.indexOf('<section id="page-block-8"'),
-    );
+    const section = template.slice(template.indexOf('<section id="page-block-8"'));
     const region = section.slice(0, section.indexOf("</section>"));
     const transforms = [
       ...region.matchAll(
         /<div class="block-subcontent cagriditem[^"]*"[^>]*?transform:\s*(translateX\([^)]*\))/g,
       ),
     ].map((m) => m[1].replace(/\s/g, ""));
-    expect(transforms).toEqual([
-      "translateX(0%)",
-      "translateX(-100%)",
-      "translateX(-200%)",
-    ]);
+    expect(transforms).toEqual(["translateX(0%)", "translateX(-100%)", "translateX(-200%)"]);
   });
 });

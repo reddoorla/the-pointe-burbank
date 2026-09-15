@@ -75,14 +75,7 @@ export function assertAvailabilityData(
     fail("root", `must be an object (got ${JSON.stringify(value)})`);
   }
   const d = value as Record<string, unknown>;
-  for (const key of [
-    "mediaId",
-    "anchorId",
-    "caption",
-    "totalLabel",
-    "total",
-    "availableLabel",
-  ]) {
+  for (const key of ["mediaId", "anchorId", "caption", "totalLabel", "total", "availableLabel"]) {
     str(d[key], key);
   }
 
@@ -90,8 +83,7 @@ export function assertAvailabilityData(
     fail("suites", "must be a non-empty array");
   }
   (d.suites as unknown[]).forEach((s, i) => {
-    if (typeof s !== "object" || s === null)
-      fail(`suites[${i}]`, "must be an object");
+    if (typeof s !== "object" || s === null) fail(`suites[${i}]`, "must be an object");
     const suite = s as Record<string, unknown>;
     str(suite.name, `suites[${i}].name`);
     str(suite.area, `suites[${i}].area`);
@@ -113,9 +105,7 @@ export interface SlotLookup {
  * reader cannot drift. Keys carry the freeze's reserved `x.` prefix, which is
  * what keeps them from colliding with the export's derived slots.
  */
-export function availabilitySlots(
-  data: AvailabilityData,
-): { key: string; text: string }[] {
+export function availabilitySlots(data: AvailabilityData): { key: string; text: string }[] {
   return [
     { key: "x.avail.caption", text: data.caption },
     { key: "x.avail.totalLabel", text: data.totalLabel },
@@ -169,11 +159,7 @@ export function availabilityFromSlots(
 }
 
 const escapeHtml = (s: string): string =>
-  s
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;");
+  s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
 
 const row = (term: string, value: string, termClass: string): string =>
   `<tr><th scope="row" class="${termClass}">${escapeHtml(term)}</th>` +
@@ -211,10 +197,7 @@ export function renderAvailability(data: AvailabilityData): string {
  * asserts the swap fires against the real committed artifact, so a re-freeze
  * that renames the media fails loudly instead of silently keeping the image.
  */
-export function replaceAvailabilityImage(
-  html: string,
-  data: AvailabilityData,
-): string {
+export function replaceAvailabilityImage(html: string, data: AvailabilityData): string {
   const media = data.mediaId.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
   const imageBlock = new RegExp(
     `<div class="ib img imgfit camediaload"[^>]*data-media="${media}"[^>]*>` +
@@ -242,12 +225,10 @@ export const AVAILABILITY_CSS = [
   // the heading and all five suites ~11px down the block — visible against
   // Figma even though every individual row pitch measured correct.
   ".rd-avail-table .rd-avail-rule-row td{line-height:0}",
-  ".rd-avail-table tr:last-child th,.rd-avail-table tr:last-child td" +
-    "{padding-bottom:0}",
+  ".rd-avail-table tr:last-child th,.rd-avail-table tr:last-child td" + "{padding-bottom:0}",
   ".rd-avail-table th.rd-avail-term{font-weight:500;letter-spacing:.03em;" +
     "text-transform:uppercase;width:80px}",
-  ".rd-avail-table th.rd-avail-suite{font-weight:300;width:80px;" +
-    "white-space:nowrap}",
+  ".rd-avail-table th.rd-avail-suite{font-weight:300;width:80px;" + "white-space:nowrap}",
   // 95px border-box = Figma's 15px gutter + 80px column, putting the value's
   // right edge at 175px exactly. Measured: the widest value ("480,000 SF") sets
   // 72.86px in Montserrat Light 13px, so Figma's 80px holds without the wider

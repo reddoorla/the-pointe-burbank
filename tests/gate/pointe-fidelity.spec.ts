@@ -23,8 +23,7 @@ const ALLOWED_CONSOLE: RegExp[] = [
 
 function watchConsole(page: Page): string[] {
   const errors: string[] = [];
-  const allowed = (s: string) =>
-    !!s && ALLOWED_CONSOLE.some((re) => re.test(s));
+  const allowed = (s: string) => !!s && ALLOWED_CONSOLE.some((re) => re.test(s));
   page.on("console", (m: ConsoleMessage) => {
     if (m.type() !== "error") return;
     const text = m.text();
@@ -67,9 +66,7 @@ test("the-pointe catalog fixture renders faithfully; HTML dumped for coverage", 
 // layout (a real flex-basis grid, band padding, cover crops, type-role
 // wrapping, laid-out heights). A failure here is a REAL fidelity gap — fix the
 // render/emit, never weaken the assertion.
-test("catalog visual layer resolves grid, cover, padding, and type roles", async ({
-  page,
-}) => {
+test("catalog visual layer resolves grid, cover, padding, and type roles", async ({ page }) => {
   await page.setViewportSize({ width: 1280, height: 900 });
   await page.goto("/dev/blux-pointe");
 
@@ -84,9 +81,7 @@ test("catalog visual layer resolves grid, cover, padding, and type roles", async
   // MAX across wrappers — not the first, which may legitimately be 0.
   const pads = await page
     .locator(".blux-grid__cells, .blux-section__cells")
-    .evaluateAll((els) =>
-      els.map((el) => parseFloat(getComputedStyle(el).paddingLeft)),
-    );
+    .evaluateAll((els) => els.map((el) => parseFloat(getComputedStyle(el).paddingLeft)));
   expect(Math.max(...pads)).toBeGreaterThan(0);
 
   // Cover media crops via object-fit (only asserted when the fixture has
@@ -106,20 +101,14 @@ test("catalog visual layer resolves grid, cover, padding, and type roles", async
   // class; the theme vars did not resolve at runtime). Fix the emit/render/theme
   // if this fails — never weaken the assertion.
   const cellRoleSizes = await page
-    .locator(
-      ".blux-cell__body [class*='txt-role-text'] :is(h1,h2,h3,h4,h5,h6,p)",
-    )
-    .evaluateAll((els) =>
-      els.map((el) => parseFloat(getComputedStyle(el).fontSize)),
-    );
+    .locator(".blux-cell__body [class*='txt-role-text'] :is(h1,h2,h3,h4,h5,h6,p)")
+    .evaluateAll((els) => els.map((el) => parseFloat(getComputedStyle(el).fontSize)));
   expect(cellRoleSizes.length).toBeGreaterThan(0);
   expect(Math.max(...cellRoleSizes)).toBeGreaterThan(40); // default body ~18px; display roles 44–84px
 
   // The tallest band is at least the fold tall — a real, laid-out page.
   const tallest = await page
     .locator("section.blux-grid, section.blux-section")
-    .evaluateAll((els) =>
-      Math.max(...els.map((el) => el.getBoundingClientRect().height)),
-    );
+    .evaluateAll((els) => Math.max(...els.map((el) => el.getBoundingClientRect().height)));
   expect(tallest).toBeGreaterThan(600);
 });

@@ -38,25 +38,17 @@ describe("Grid (recursive fallback)", () => {
     expect(cells).toHaveLength(2);
     // The two 60/40 cells share one flex line (k=2), so each reserves half the
     // 4% column gutter (2%) out of its basis — the columns still fit one line.
-    expect(
-      (cells[0] as HTMLElement).style.getPropertyValue("--cell-basis"),
-    ).toBe("calc(60% - 2%)");
-    expect(
-      (cells[1] as HTMLElement).style.getPropertyValue("--cell-basis"),
-    ).toBe("calc(40% - 2%)");
+    expect((cells[0] as HTMLElement).style.getPropertyValue("--cell-basis")).toBe("calc(60% - 2%)");
+    expect((cells[1] as HTMLElement).style.getPropertyValue("--cell-basis")).toBe("calc(40% - 2%)");
     // Cells stack full-width on mobile; the token basis applies from md: up.
     expect((cells[0] as HTMLElement).className).toContain("basis-full");
-    expect((cells[0] as HTMLElement).className).toContain(
-      "md:basis-(--cell-basis)",
-    );
+    expect((cells[0] as HTMLElement).className).toContain("md:basis-(--cell-basis)");
     // The row carries the horizontal gutter (md: up) plus the vertical rhythm
     // for cells that wrap to their own line (mobile, stacked bands).
     const row = cells[0]?.parentElement as HTMLElement;
     expect(row.className).toContain("md:gap-x-[4%]");
     expect(row.className).toContain("gap-y-10");
-    expect(container.querySelector("img")?.getAttribute("src")).toBe(
-      "https://cdn/a.jpg",
-    );
+    expect(container.querySelector("img")?.getAttribute("src")).toBe("https://cdn/a.jpg");
     expect(container.textContent).toContain("Left copy");
   });
 
@@ -149,14 +141,10 @@ describe("Grid (recursive fallback)", () => {
     expect(img.className).toContain("absolute");
     // The caption panel overlays (absolute), hover-revealed, colored, over the image.
     const panel = [...box.children].find(
-      (c) =>
-        c !== img.parentElement &&
-        (c as HTMLElement).className.includes("group-hover"),
+      (c) => c !== img.parentElement && (c as HTMLElement).className.includes("group-hover"),
     ) as HTMLElement;
     expect(panel).toBeTruthy();
-    expect(panel.getAttribute("style")?.replace(/\s/g, "")).toContain(
-      "rgba(1,2,3,0.85)",
-    );
+    expect(panel.getAttribute("style")?.replace(/\s/g, "")).toContain("rgba(1,2,3,0.85)");
     expect(panel.textContent).toContain("Suite");
     // Reveals on hover (pointer), but stays visible on touch (no-hover) and on
     // keyboard focus — the caption is never permanently hidden from a visitor.
@@ -254,9 +242,7 @@ describe("Grid (recursive fallback)", () => {
       props: {
         node: {
           kind: "row",
-          cells: [
-            { token: { cols: "any" }, node: { kind: "subtitle", text: "s" } },
-          ],
+          cells: [{ token: { cols: "any" }, node: { kind: "subtitle", text: "s" } }],
         },
       },
     });
@@ -278,9 +264,7 @@ describe("Grid (recursive fallback)", () => {
     const rendered = container.querySelectorAll("[data-grid-cell]");
     expect(rendered).toHaveLength(7);
     for (const c of rendered) {
-      expect((c as HTMLElement).style.getPropertyValue("--cell-basis")).toBe(
-        "calc(25% - 3%)",
-      );
+      expect((c as HTMLElement).style.getPropertyValue("--cell-basis")).toBe("calc(25% - 3%)");
     }
   });
 
@@ -304,9 +288,7 @@ describe("Grid (recursive fallback)", () => {
     });
     const cells = container.querySelectorAll("[data-grid-cell]");
     for (const c of cells) {
-      expect((c as HTMLElement).style.getPropertyValue("--cell-basis")).toBe(
-        "100%",
-      );
+      expect((c as HTMLElement).style.getPropertyValue("--cell-basis")).toBe("100%");
     }
   });
 
@@ -316,9 +298,7 @@ describe("Grid (recursive fallback)", () => {
         node: {
           kind: "row",
           style: { "background-color": "rgb(255, 255, 255)" },
-          cells: [
-            { token: { cols: 1 }, node: { kind: "subtitle", text: "s" } },
-          ],
+          cells: [{ token: { cols: 1 }, node: { kind: "subtitle", text: "s" } }],
         },
       },
     });
@@ -331,9 +311,7 @@ describe("Grid (recursive fallback)", () => {
       props: {
         node: {
           kind: "row",
-          cells: [
-            { token: { cols: 1 }, node: { kind: "subtitle", text: "s" } },
-          ],
+          cells: [{ token: { cols: 1 }, node: { kind: "subtitle", text: "s" } }],
         },
       },
     });
@@ -383,8 +361,7 @@ describe("Grid (recursive fallback)", () => {
           kind: "stack",
           style: {
             "min-height": "80vh",
-            background:
-              "linear-gradient(45deg, rgb(82, 102, 126), rgb(175, 173, 168))",
+            background: "linear-gradient(45deg, rgb(82, 102, 126), rgb(175, 173, 168))",
             _valign: "middle",
           },
           children: [
@@ -449,9 +426,7 @@ describe("Grid (recursive fallback)", () => {
         node: {
           kind: "row",
           style: { "min-height": "80vh", _valign: "middle" },
-          cells: [
-            { token: { cols: 1 }, node: { kind: "subtitle", text: "a" } },
-          ],
+          cells: [{ token: { cols: 1 }, node: { kind: "subtitle", text: "a" } }],
         },
       },
     });
@@ -463,15 +438,13 @@ describe("Grid (recursive fallback)", () => {
       props: {
         node: {
           kind: "row",
-          cells: [
-            { token: { cols: 1 }, node: { kind: "subtitle", text: "b" } },
-          ],
+          cells: [{ token: { cols: 1 }, node: { kind: "subtitle", text: "b" } }],
         },
       },
     });
-    expect(
-      (c2.querySelector("[data-grid-row]") as HTMLElement).className,
-    ).not.toContain("content-center");
+    expect((c2.querySelector("[data-grid-row]") as HTMLElement).className).not.toContain(
+      "content-center",
+    );
   });
 
   it("a _valign stack WITHOUT a min-height keeps the plain flow-root (row-cell centering only)", () => {
@@ -522,8 +495,8 @@ describe("Grid (recursive fallback)", () => {
     };
     const { container, getByRole } = render(Grid, { props: { node, map } });
     const panelCells = () =>
-      [...container.querySelectorAll("[data-panels] > [data-grid-cell]")].map(
-        (c) => (c as HTMLElement).className.includes("hidden"),
+      [...container.querySelectorAll("[data-panels] > [data-grid-cell]")].map((c) =>
+        (c as HTMLElement).className.includes("hidden"),
       );
     expect(panelCells()).toEqual([false, true]);
     await fireEvent.click(getByRole("button", { name: "Offices" }));
@@ -531,9 +504,9 @@ describe("Grid (recursive fallback)", () => {
     // The panel fade-in rides a :global data-attribute selector, so the cells
     // stay hash-free: exactly `hidden` or nothing. (A scoped selector would
     // stamp Svelte's scope class on every dynamic-class element here.)
-    const classes = [
-      ...container.querySelectorAll("[data-panels] > [data-grid-cell]"),
-    ].map((c) => (c as HTMLElement).className);
+    const classes = [...container.querySelectorAll("[data-panels] > [data-grid-cell]")].map(
+      (c) => (c as HTMLElement).className,
+    );
     expect(classes.sort()).toEqual(["", "hidden"]);
   });
 
@@ -543,15 +516,11 @@ describe("Grid (recursive fallback)", () => {
         node: {
           kind: "row",
           panels: true,
-          cells: [
-            { token: { cols: 1 }, node: { kind: "subtitle", text: "only" } },
-          ],
+          cells: [{ token: { cols: 1 }, node: { kind: "subtitle", text: "only" } }],
         },
       },
     });
-    const cells = container.querySelectorAll(
-      "[data-panels] > [data-grid-cell]",
-    );
+    const cells = container.querySelectorAll("[data-panels] > [data-grid-cell]");
     expect(cells).toHaveLength(1);
     expect((cells[0] as HTMLElement).className).not.toContain("hidden");
     expect(container.textContent).toContain("only");

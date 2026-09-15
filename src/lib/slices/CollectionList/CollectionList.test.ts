@@ -48,9 +48,7 @@ describe("CollectionList slice", () => {
     const { getByRole, getAllByRole } = render(CollectionList, {
       props: { slice, context },
     });
-    expect(getByRole("heading", { level: 2 }).textContent).toContain(
-      "Products",
-    );
+    expect(getByRole("heading", { level: 2 }).textContent).toContain("Products");
     expect(getAllByRole("heading", { level: 3 })).toHaveLength(2);
   });
 

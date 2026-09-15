@@ -135,9 +135,7 @@ export function organizationJsonLd(input: OrganizationInput): object {
   return {
     "@context": "https://schema.org",
     "@type": type ?? "Organization",
-    ...Object.fromEntries(
-      Object.entries(rest).filter(([, v]) => v != null && v !== ""),
-    ),
+    ...Object.fromEntries(Object.entries(rest).filter(([, v]) => v != null && v !== "")),
     ...(sameAs && sameAs.length > 0 ? { sameAs } : {}),
     ...(address
       ? {

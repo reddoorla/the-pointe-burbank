@@ -21,9 +21,7 @@ export const GET: RequestHandler = async ({ fetch, url }) => {
       ? []
       : (await createClient({ fetch }).getAllByType("page")).map((page) => ({
           path: page.uid === "home" ? "/" : `/${page.uid}`,
-          lastmod: new Date(
-            page.last_publication_date ?? Date.now(),
-          ).toISOString(),
+          lastmod: new Date(page.last_publication_date ?? Date.now()).toISOString(),
         }));
 
   const urls = entries.map(

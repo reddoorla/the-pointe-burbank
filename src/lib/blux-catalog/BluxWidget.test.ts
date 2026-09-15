@@ -18,9 +18,7 @@ describe("BluxWidget", () => {
     const { container } = render(BluxWidget, {
       props: { kind: "divider", html: "<hr class='x'>" },
     });
-    expect(
-      container.querySelector(".blux-widget[data-widget='divider'] hr.x"),
-    ).not.toBeNull();
+    expect(container.querySelector(".blux-widget[data-widget='divider'] hr.x")).not.toBeNull();
     // a non-map widget never gets the map placeholder marker
     expect(container.querySelector("[data-map-placeholder]")).toBeNull();
   });
@@ -36,9 +34,7 @@ describe("BluxWidget", () => {
     const { container, getByText } = render(BluxWidget, {
       props: { kind: "map", html: mapHtml },
     });
-    expect(
-      container.querySelector(".blux-widget[data-widget='map']"),
-    ).not.toBeNull();
+    expect(container.querySelector(".blux-widget[data-widget='map']")).not.toBeNull();
     // the emitted mount and legend render statically
     expect(container.querySelector("#burbank_map")).not.toBeNull();
     expect(getByText("The Burbank Portfolio")).not.toBeNull();

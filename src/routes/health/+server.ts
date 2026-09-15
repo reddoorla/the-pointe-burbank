@@ -14,18 +14,13 @@ type PrismicHealth = "ok" | "error" | "skipped";
 // endpoint (getRepository — no token), time-boxed, and returns ONLY a status
 // string. The repository body is never included: /health is public and
 // unauthenticated, so it exposes booleans and status strings, nothing more.
-async function probePrismic(
-  fetch: typeof globalThis.fetch,
-): Promise<PrismicHealth> {
+async function probePrismic(fetch: typeof globalThis.fetch): Promise<PrismicHealth> {
   if (isPlaceholderRepo) return "skipped";
   const client = createClient({ fetch });
   let timer: ReturnType<typeof setTimeout> | undefined;
   try {
     const timeout = new Promise<never>((_, reject) => {
-      timer = setTimeout(
-        () => reject(new Error("prismic health probe timed out")),
-        5000,
-      );
+      timer = setTimeout(() => reject(new Error("prismic health probe timed out")), 5000);
     });
     await Promise.race([client.getRepository(), timeout]);
     return "ok";

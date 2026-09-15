@@ -1,9 +1,6 @@
 import { error, redirect } from "@sveltejs/kit";
 
-import {
-  collectionTypesOf,
-  loadCollections,
-} from "$lib/blux-catalog/collections-load";
+import { collectionTypesOf, loadCollections } from "$lib/blux-catalog/collections-load";
 import {
   getAllPageDocs,
   getPageDoc,
@@ -29,10 +26,7 @@ export async function load({ params, fetch, cookies }) {
 
     // Entity documents for any blux_collection slices on this page — slices
     // never fetch; SliceZone hands these down as context.collections.
-    const collections = await loadCollections(
-      client,
-      collectionTypesOf(page.data.slices as never),
-    );
+    const collections = await loadCollections(client, collectionTypesOf(page.data.slices as never));
 
     return { page, collections, ...pageMeta(page) };
   } catch {

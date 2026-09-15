@@ -1,14 +1,5 @@
-import {
-  fade as svelteFade,
-  fly as svelteFly,
-  slide as svelteSlide,
-} from "svelte/transition";
-import type {
-  FadeParams,
-  FlyParams,
-  SlideParams,
-  TransitionConfig,
-} from "svelte/transition";
+import { fade as svelteFade, fly as svelteFly, slide as svelteSlide } from "svelte/transition";
+import type { FadeParams, FlyParams, SlideParams, TransitionConfig } from "svelte/transition";
 
 // Svelte's JS-driven transitions (Web Animations API) do NOT honor the CSS
 // `prefers-reduced-motion` reset in app.css. These thin wrappers do: when the
@@ -27,25 +18,13 @@ export const prefersReducedMotion = (): boolean =>
   window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
 export function fade(node: Element, params: FadeParams = {}): TransitionConfig {
-  return svelteFade(
-    node,
-    prefersReducedMotion() ? { ...params, duration: 0, delay: 0 } : params,
-  );
+  return svelteFade(node, prefersReducedMotion() ? { ...params, duration: 0, delay: 0 } : params);
 }
 
 export function fly(node: Element, params: FlyParams = {}): TransitionConfig {
-  return svelteFly(
-    node,
-    prefersReducedMotion() ? { ...params, duration: 0, delay: 0 } : params,
-  );
+  return svelteFly(node, prefersReducedMotion() ? { ...params, duration: 0, delay: 0 } : params);
 }
 
-export function slide(
-  node: Element,
-  params: SlideParams = {},
-): TransitionConfig {
-  return svelteSlide(
-    node,
-    prefersReducedMotion() ? { ...params, duration: 0, delay: 0 } : params,
-  );
+export function slide(node: Element, params: SlideParams = {}): TransitionConfig {
+  return svelteSlide(node, prefersReducedMotion() ? { ...params, duration: 0, delay: 0 } : params);
 }

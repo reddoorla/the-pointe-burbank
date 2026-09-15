@@ -78,8 +78,7 @@
 
   onMount(() => {
     pageHidden = document.visibilityState === "hidden";
-    const onVisibility = () =>
-      (pageHidden = document.visibilityState === "hidden");
+    const onVisibility = () => (pageHidden = document.visibilityState === "hidden");
     document.addEventListener("visibilitychange", onVisibility);
     return () => document.removeEventListener("visibilitychange", onVisibility);
   });
@@ -109,12 +108,8 @@
   // Autoplay wants a pause/play control (WCAG 2.2.2) — but only when rotation
   // can actually happen. Under reduced motion it never starts, so the control
   // would be a dead button.
-  const autoplayEligible = $derived(
-    autoplay > 0 && maxSlide > 0 && !reducedMotion,
-  );
-  const autoRotating = $derived(
-    autoplayEligible && !userPaused && !hovered && !pageHidden,
-  );
+  const autoplayEligible = $derived(autoplay > 0 && maxSlide > 0 && !reducedMotion);
+  const autoRotating = $derived(autoplayEligible && !userPaused && !hovered && !pageHidden);
 
   // Re-key the interval on swipe navigation so a gesture restarts the full
   // delay instead of racing the in-flight tick. (Click/keyboard nav focuses
@@ -233,8 +228,7 @@
       <div class="grid">
         {#each Array(itemCount) as _, i (i)}
           <div
-            class="col-start-1 row-start-1 transition-opacity {transitionClass} {currentSlide ===
-            i
+            class="col-start-1 row-start-1 transition-opacity {transitionClass} {currentSlide === i
               ? 'opacity-100'
               : 'opacity-0 pointer-events-none'}"
             role="group"
@@ -252,11 +246,7 @@
 
   <!-- Announce position to screen readers only when the user is driving;
        a rotating carousel announcing every few seconds is noise (APG). -->
-  <div
-    class="sr-only"
-    aria-live={autoRotating ? "off" : "polite"}
-    aria-atomic="true"
-  >
+  <div class="sr-only" aria-live={autoRotating ? "off" : "polite"} aria-atomic="true">
     {#if responsiveCardsPerView > 1}
       Slides {currentSlide + 1} through {currentSlide + responsiveCardsPerView} of
       {itemCount}
@@ -298,12 +288,7 @@
           class="w-8 h-8 rounded-full text-gray-700 hover:bg-gray-200 transition-colors duration-200 flex items-center justify-center aria-disabled:opacity-40 aria-disabled:hover:bg-transparent aria-disabled:cursor-default {arrowClass}"
           aria-label="Previous slide"
         >
-          <svg
-            class="w-6 h-6"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path
               stroke-linecap="round"
               stroke-linejoin="round"
@@ -322,8 +307,7 @@
               type="button"
               onclick={() => goToSlide(i)}
               onkeydown={handleKeydown}
-              class="group h-6 min-w-6 flex items-center justify-center {currentSlide ===
-              i
+              class="group h-6 min-w-6 flex items-center justify-center {currentSlide === i
                 ? 'cursor-default'
                 : ''}"
               aria-label="Go to slide {i + 1}"
@@ -349,12 +333,7 @@
           class="w-8 h-8 rounded-full text-gray-700 hover:bg-gray-200 transition-colors duration-200 flex items-center justify-center aria-disabled:opacity-40 aria-disabled:hover:bg-transparent aria-disabled:cursor-default {arrowClass}"
           aria-label="Next slide"
         >
-          <svg
-            class="w-6 h-6"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path
               stroke-linecap="round"
               stroke-linejoin="round"

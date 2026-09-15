@@ -14,11 +14,7 @@
     class?: string;
   }
 
-  let {
-    items = [],
-    allowMultiple = true,
-    class: passedClasses = "",
-  }: Props = $props();
+  let { items = [], allowMultiple = true, class: passedClasses = "" }: Props = $props();
 
   const openIndexes = new SvelteSet<number>();
   const uid = $props.id();

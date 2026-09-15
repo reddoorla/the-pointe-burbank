@@ -128,10 +128,7 @@ export const slices = [
     slice_type: "carousel",
     variation: "default",
     primary: { band: 2, label: "Fixture slideshow" },
-    items: [
-      { caption: "a quiet courtyard" },
-      { caption: "sunset from the roof" },
-    ],
+    items: [{ caption: "a quiet courtyard" }, { caption: "sunset from the roof" }],
   },
   {
     slice_type: "title_band",

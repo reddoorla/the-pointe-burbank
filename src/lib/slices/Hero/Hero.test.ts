@@ -23,12 +23,8 @@ const slice = {
 describe("Hero slice", () => {
   it("renders the heading and a labelled CTA", () => {
     const { getByRole } = render(Hero, { props: { slice } });
-    expect(getByRole("heading", { level: 1 }).textContent).toContain(
-      "The Pinnacle",
-    );
-    expect(getByRole("link", { name: "Explore" }).getAttribute("href")).toBe(
-      "https://example.com",
-    );
+    expect(getByRole("heading", { level: 1 }).textContent).toContain("The Pinnacle");
+    expect(getByRole("link", { name: "Explore" }).getAttribute("href")).toBe("https://example.com");
   });
 
   it("sets slice data attributes", () => {

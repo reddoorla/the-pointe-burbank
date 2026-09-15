@@ -44,8 +44,6 @@ describe("BluxSection renders an emit-shaped (resolved) document", () => {
     expect(getByText("Pool")).not.toBeNull();
     expect(getByText("Heated")).not.toBeNull();
     expect(getByText("Gym")).not.toBeNull();
-    expect(
-      container.querySelectorAll(".blux-section__cells > .blux-cell"),
-    ).toHaveLength(2);
+    expect(container.querySelectorAll(".blux-section__cells > .blux-cell")).toHaveLength(2);
   });
 });

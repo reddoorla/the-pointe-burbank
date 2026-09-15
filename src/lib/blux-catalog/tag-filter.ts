@@ -17,9 +17,7 @@ const termMatchesTag = (term: string, tag: string): boolean =>
  * OR group has ALL its terms present (singular/plural-insensitive, see
  * `termMatchesTag`). Leading/empty terms (`&&metal&&sofa`) are ignored.
  * Case-insensitive. An empty/absent expression matches all. */
-export function tagFilter(
-  expr: string | undefined,
-): (tags: string[]) => boolean {
+export function tagFilter(expr: string | undefined): (tags: string[]) => boolean {
   const groups = (expr ?? "")
     .split("||")
     .map((g) =>
@@ -32,8 +30,6 @@ export function tagFilter(
   if (!groups.length) return () => true;
   return (tags) => {
     const set = tags.map((t) => t.toLowerCase());
-    return groups.some((g) =>
-      g.every((term) => set.some((tag) => termMatchesTag(term, tag))),
-    );
+    return groups.some((g) => g.every((term) => set.some((tag) => termMatchesTag(term, tag))));
   };
 }

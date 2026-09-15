@@ -76,16 +76,12 @@ describe("BluxCollection slice", () => {
       },
     });
     // Both metal-tagged docs survive; the wood one is filtered out.
-    expect(container.querySelectorAll(".blux-collection__card")).toHaveLength(
-      2,
-    );
+    expect(container.querySelectorAll(".blux-collection__card")).toHaveLength(2);
     expect(getByText("Steel Chair")).not.toBeNull();
     expect(getByText("Iron Lamp")).not.toBeNull();
     expect(queryByText("Oak Table")).toBeNull();
     // The card with media renders an img.
-    expect(
-      container.querySelector(".blux-collection__card img"),
-    ).not.toBeNull();
+    expect(container.querySelector(".blux-collection__card img")).not.toBeNull();
   });
 
   it("limit truncates the filtered list", () => {
@@ -100,9 +96,7 @@ describe("BluxCollection slice", () => {
         context: { collections: { product: docs } },
       },
     });
-    expect(container.querySelectorAll(".blux-collection__card")).toHaveLength(
-      1,
-    );
+    expect(container.querySelectorAll(".blux-collection__card")).toHaveLength(1);
   });
 
   it("card-link contract: only the external Web link gets an <a>, others none", () => {
@@ -114,15 +108,11 @@ describe("BluxCollection slice", () => {
     });
     const anchors = container.querySelectorAll("a");
     expect(anchors).toHaveLength(1);
-    expect(anchors[0].getAttribute("href")).toBe(
-      "https://vendor.example/iron-lamp",
-    );
+    expect(anchors[0].getAttribute("href")).toBe("https://vendor.example/iron-lamp");
     // The linked card is the external-link one.
     expect(anchors[0].textContent).toContain("Iron Lamp");
     // All three enabled cards render (no filter, no limit; disabled hidden).
-    expect(container.querySelectorAll(".blux-collection__card")).toHaveLength(
-      3,
-    );
+    expect(container.querySelectorAll(".blux-collection__card")).toHaveLength(3);
   });
 
   it("hides disabled records from the listing (live-site parity)", () => {
@@ -148,8 +138,6 @@ describe("BluxCollection slice", () => {
       },
     });
     expect(container.querySelector("section.blux-collection")).not.toBeNull();
-    expect(container.querySelectorAll(".blux-collection__card")).toHaveLength(
-      0,
-    );
+    expect(container.querySelectorAll(".blux-collection__card")).toHaveLength(0);
   });
 });

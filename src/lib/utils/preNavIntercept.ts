@@ -36,10 +36,7 @@ export interface PreNavState {
  * - our own deferred goto arriving at its target: intercepting again would
  *   loop forever.
  */
-export function shouldIntercept(
-  nav: NavigationLike,
-  state: PreNavState = {},
-): boolean {
+export function shouldIntercept(nav: NavigationLike, state: PreNavState = {}): boolean {
   if (state.reducedMotion) return false;
   if (nav.willUnload || nav.type === "popstate") return false;
   if (!nav.to?.route.id) return false;

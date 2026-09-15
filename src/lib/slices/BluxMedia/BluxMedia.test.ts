@@ -23,9 +23,7 @@ describe("BluxMedia slice", () => {
       },
     } as unknown as Content.BluxMediaSlice;
     const { container, getByText } = render(BluxMedia, { props: { slice } });
-    expect(
-      container.querySelector(".blux-media[data-ratio='4:3'] img"),
-    ).not.toBeNull();
+    expect(container.querySelector(".blux-media[data-ratio='4:3'] img")).not.toBeNull();
     expect(getByText("A view")).not.toBeNull();
   });
 

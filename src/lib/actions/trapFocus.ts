@@ -141,11 +141,7 @@ export function trapFocus(node: HTMLElement, options: TrapFocusOptions = {}) {
       // never steal it from a successor overlay's trap or from anything the
       // user has focused in the meantime.
       const current = document.activeElement;
-      if (
-        current === null ||
-        current === document.body ||
-        node.contains(current)
-      ) {
+      if (current === null || current === document.body || node.contains(current)) {
         target.focus();
       }
     });

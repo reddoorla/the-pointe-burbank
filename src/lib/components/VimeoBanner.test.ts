@@ -37,8 +37,7 @@ class FakeIntersectionObserver {
 
 function mockMatchMedia(reducedMotion: boolean) {
   window.matchMedia = vi.fn().mockImplementation((query: string) => ({
-    matches:
-      query === "(prefers-reduced-motion: reduce)" ? reducedMotion : false,
+    matches: query === "(prefers-reduced-motion: reduce)" ? reducedMotion : false,
     media: query,
     addEventListener: () => {},
     removeEventListener: () => {},
@@ -99,8 +98,7 @@ function vimeoMessage(
 
 /** The component iframe's contentWindow, typed for MessageEvent init. */
 function sourceOf(container: HTMLElement): MessageEventSource {
-  return container.querySelector("iframe")!
-    .contentWindow as unknown as MessageEventSource;
+  return container.querySelector("iframe")!.contentWindow as unknown as MessageEventSource;
 }
 
 describe("VimeoBanner", () => {
@@ -118,9 +116,7 @@ describe("VimeoBanner", () => {
     await tick();
     const iframe = container.querySelector("iframe")!;
     expect(iframe).toBeTruthy();
-    expect(iframe.getAttribute("src")).toContain(
-      "player.vimeo.com/video/76979871",
-    );
+    expect(iframe.getAttribute("src")).toContain("player.vimeo.com/video/76979871");
     expect(iframe.getAttribute("tabindex")).toBe("-1");
   });
 
@@ -141,9 +137,7 @@ describe("VimeoBanner", () => {
     const wrapper = container.querySelector("iframe")!.parentElement!;
     expect(wrapper.className).toContain("opacity-0");
 
-    window.dispatchEvent(
-      vimeoMessage("playProgress", { source: sourceOf(container) }),
-    );
+    window.dispatchEvent(vimeoMessage("playProgress", { source: sourceOf(container) }));
     await tick();
     expect(wrapper.className).toContain("opacity-100");
   });
@@ -204,9 +198,7 @@ describe("VimeoBanner", () => {
     const source = sourceOf(container);
 
     // `new URL("null")` throws — a sandboxed-iframe message must not crash the handler.
-    window.dispatchEvent(
-      new MessageEvent("message", { origin: "null", source, data: "{}" }),
-    );
+    window.dispatchEvent(new MessageEvent("message", { origin: "null", source, data: "{}" }));
     window.dispatchEvent(
       new MessageEvent("message", {
         origin: "https://player.vimeo.com",
@@ -227,21 +219,13 @@ describe("VimeoBanner", () => {
 
   it("falls back to the poster when heartbeats stop (iOS autoplay suspension)", async () => {
     vi.useFakeTimers({
-      toFake: [
-        "setTimeout",
-        "clearTimeout",
-        "setInterval",
-        "clearInterval",
-        "performance",
-      ],
+      toFake: ["setTimeout", "clearTimeout", "setInterval", "clearInterval", "performance"],
     });
     const { container } = render(VimeoBanner, props);
     await engageAndIntersect();
     const wrapper = container.querySelector("iframe")!.parentElement!;
 
-    window.dispatchEvent(
-      vimeoMessage("playProgress", { source: sourceOf(container) }),
-    );
+    window.dispatchEvent(vimeoMessage("playProgress", { source: sourceOf(container) }));
     await tick();
     expect(wrapper.className).toContain("opacity-100");
 

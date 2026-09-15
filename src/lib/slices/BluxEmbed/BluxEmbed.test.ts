@@ -16,9 +16,7 @@ describe("BluxEmbed slice", () => {
       },
     } as unknown as Content.BluxEmbedSlice;
     const { container } = render(BluxEmbed, { props: { slice } });
-    expect(
-      container.querySelector(".blux-embed[data-embed-kind='custom'] .mc"),
-    ).not.toBeNull();
+    expect(container.querySelector(".blux-embed[data-embed-kind='custom'] .mc")).not.toBeNull();
   });
 
   it("renders nothing when embed_html is empty", () => {

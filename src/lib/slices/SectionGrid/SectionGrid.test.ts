@@ -39,9 +39,7 @@ describe("SectionGrid slice", () => {
     const { getByRole, getAllByRole } = render(SectionGrid, {
       props: { slice },
     });
-    expect(getByRole("heading", { level: 2 }).textContent).toContain(
-      "Features",
-    );
+    expect(getByRole("heading", { level: 2 }).textContent).toContain("Features");
     expect(getAllByRole("heading", { level: 3 })).toHaveLength(2);
   });
 

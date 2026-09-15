@@ -18,9 +18,7 @@ describe("BrandIcon", () => {
   it("aliases twitter to the x glyph", () => {
     const twitter = render(BrandIcon, { platform: "twitter" });
     const x = render(BrandIcon, { platform: "x" });
-    const twitterD = twitter.container
-      .querySelector("svg path")
-      ?.getAttribute("d");
+    const twitterD = twitter.container.querySelector("svg path")?.getAttribute("d");
     const xD = x.container.querySelector("svg path")?.getAttribute("d");
     expect(twitterD).toBeTruthy();
     expect(twitterD).toBe(xD);
@@ -40,14 +38,10 @@ describe("BrandIcon", () => {
 
   it("defaults to a fill-the-wrapper class and accepts an override", () => {
     const fallback = render(BrandIcon, { platform: "x" });
-    expect(fallback.container.querySelector("svg")?.getAttribute("class")).toBe(
-      "h-full w-full",
-    );
+    expect(fallback.container.querySelector("svg")?.getAttribute("class")).toBe("h-full w-full");
 
     const custom = render(BrandIcon, { platform: "x", class: "h-6 w-6" });
-    expect(custom.container.querySelector("svg")?.getAttribute("class")).toBe(
-      "h-6 w-6",
-    );
+    expect(custom.container.querySelector("svg")?.getAttribute("class")).toBe("h-6 w-6");
   });
 });
 it("renders nothing for prototype-chain member names fed from content", () => {

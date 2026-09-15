@@ -110,15 +110,8 @@ describe("getAllPageDocs", () => {
 
 describe("toPrerenderEntries", () => {
   it("emits one entry per doc, excluding home (which renders at the root route)", () => {
-    const docs = [
-      { uid: "home" },
-      { uid: "about" },
-      { uid: "contact" },
-    ] as PageDocument[];
-    expect(toPrerenderEntries(docs)).toEqual([
-      { uid: "about" },
-      { uid: "contact" },
-    ]);
+    const docs = [{ uid: "home" }, { uid: "about" }, { uid: "contact" }] as PageDocument[];
+    expect(toPrerenderEntries(docs)).toEqual([{ uid: "about" }, { uid: "contact" }]);
   });
 
   it("never emits {uid:'home'} — that would prerender /home as a 308 dup of /", () => {

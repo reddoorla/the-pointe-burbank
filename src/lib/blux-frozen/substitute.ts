@@ -22,16 +22,10 @@ export const ANY_TOKEN_RE = /⟦[ti]:[^⟧]+⟧/;
  * key resolves to empty (never leaves a raw token). CSS `url(...)` image tokens
  * are quoted so query-string commas (`?auto=format,compress`) stay valid.
  */
-export function substitute(
-  template: string,
-  values: Map<string, SlotValue>,
-): string {
+export function substitute(template: string, values: Map<string, SlotValue>): string {
   return template
     .replace(TEXT_RE, (_, key: string) => values.get(key)?.text ?? "")
-    .replace(
-      IMG_URL_RE,
-      (_, key: string) => `url('${values.get(key)?.url ?? ""}')`,
-    )
+    .replace(IMG_URL_RE, (_, key: string) => `url('${values.get(key)?.url ?? ""}')`)
     .replace(IMG_BARE_RE, (_, key: string) => values.get(key)?.url ?? "");
 }
 

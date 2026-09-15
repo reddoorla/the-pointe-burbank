@@ -308,8 +308,7 @@ function pause(s: Slider): void {
   s.auto = null;
 }
 
-const wrap = (s: Slider, step: number): number =>
-  (s.at + step + s.slides.length) % s.slides.length;
+const wrap = (s: Slider, step: number): number => (s.at + step + s.slides.length) % s.slides.length;
 
 /**
  * One slide's photograph: a request that can be started, and a promise that
@@ -339,9 +338,7 @@ function warmSlide(slide: HTMLElement): Warm | null {
   const el = [...slide.querySelectorAll<HTMLElement>("*")].find((e) =>
     /url\(/.test(e.style.backgroundImage),
   );
-  const url = el
-    ? /url\("?([^"')]+)"?\)/.exec(el.style.backgroundImage)?.[1]
-    : undefined;
+  const url = el ? /url\("?([^"')]+)"?\)/.exec(el.style.backgroundImage)?.[1] : undefined;
   if (!url) return null;
 
   let resolve!: () => void;
@@ -416,8 +413,7 @@ function preloadSlides(warms: (Warm | null)[]): () => void {
 export function hydrateCarousels(root: ParentNode = document): () => void {
   const cleanups: (() => void)[] = [];
   const reduced =
-    typeof matchMedia !== "undefined" &&
-    matchMedia("(prefers-reduced-motion: reduce)").matches;
+    typeof matchMedia !== "undefined" && matchMedia("(prefers-reduced-motion: reduce)").matches;
 
   for (const track of root.querySelectorAll<HTMLElement>(".caslider")) {
     // Direct children only: a slide's own content can contain nested grids, and
@@ -499,9 +495,7 @@ export function hydrateCarousels(root: ParentNode = document): () => void {
     // A background tab should not burn through the slides unseen.
     const onVisibility = () => (document.hidden ? pause(s) : resume(s));
     document.addEventListener("visibilitychange", onVisibility);
-    cleanups.push(() =>
-      document.removeEventListener("visibilitychange", onVisibility),
-    );
+    cleanups.push(() => document.removeEventListener("visibilitychange", onVisibility));
 
     // The controls are real <button>s carrying aria-labels already, so keyboard
     // activation comes free and no roles are added. What the markup does NOT

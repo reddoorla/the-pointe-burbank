@@ -263,11 +263,7 @@ main > section.hero-band:first-child {
     left: 0;
     right: 0;
     bottom: 0;
-    background-image: radial-gradient(
-      circle,
-      rgba(255, 255, 255, 0.05) 0.5px,
-      transparent 0.5px
-    );
+    background-image: radial-gradient(circle, rgba(255, 255, 255, 0.05) 0.5px, transparent 0.5px);
     background-size: 1px 1px;
     opacity: 0.4;
     pointer-events: none;

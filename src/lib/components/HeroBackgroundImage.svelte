@@ -30,8 +30,7 @@
   let {
     image,
     altFallback = "",
-    class:
-      passedClasses = "absolute bottom-0 left-0 h-full w-full object-cover",
+    class: passedClasses = "absolute bottom-0 left-0 h-full w-full object-cover",
     preload = true,
   }: Props = $props();
 

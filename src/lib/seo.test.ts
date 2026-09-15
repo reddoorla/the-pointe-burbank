@@ -47,27 +47,21 @@ describe("jsonLdScript", () => {
 
 describe("canonicalUrl", () => {
   it("drops the query string and hash", () => {
-    expect(
-      canonicalUrl(new URL("https://acme.com/about?utm_source=x#top")),
-    ).toBe("https://acme.com/about");
+    expect(canonicalUrl(new URL("https://acme.com/about?utm_source=x#top"))).toBe(
+      "https://acme.com/about",
+    );
   });
 
   it("strips the /preview route segment", () => {
-    expect(canonicalUrl(new URL("https://acme.com/preview/work"))).toBe(
-      "https://acme.com/work",
-    );
+    expect(canonicalUrl(new URL("https://acme.com/preview/work"))).toBe("https://acme.com/work");
   });
 
   it("maps a bare /preview to the home page", () => {
-    expect(canonicalUrl(new URL("https://acme.com/preview"))).toBe(
-      "https://acme.com/",
-    );
+    expect(canonicalUrl(new URL("https://acme.com/preview"))).toBe("https://acme.com/");
   });
 
   it("leaves a normal path untouched", () => {
-    expect(canonicalUrl(new URL("https://acme.com/team/jane"))).toBe(
-      "https://acme.com/team/jane",
-    );
+    expect(canonicalUrl(new URL("https://acme.com/team/jane"))).toBe("https://acme.com/team/jane");
   });
 
   it("does not strip paths that merely start with the word preview", () => {
@@ -98,10 +92,7 @@ describe("resolveOgImage", () => {
   });
 
   it("passes an absolute non-Prismic URL through without dimensions", () => {
-    const og = resolveOgImage(
-      "https://cdn.example.com/card.jpg",
-      "https://acme.com",
-    );
+    const og = resolveOgImage("https://cdn.example.com/card.jpg", "https://acme.com");
     expect(og).toEqual({ url: "https://cdn.example.com/card.jpg" });
   });
 
@@ -112,12 +103,8 @@ describe("resolveOgImage", () => {
   });
 
   it("rejects a non-http(s) scheme instead of emitting it as a card", () => {
-    expect(
-      resolveOgImage("javascript:alert(1)", "https://acme.com"),
-    ).toBeUndefined();
-    expect(
-      resolveOgImage("data:image/png;base64,AAAA", "https://acme.com"),
-    ).toBeUndefined();
+    expect(resolveOgImage("javascript:alert(1)", "https://acme.com")).toBeUndefined();
+    expect(resolveOgImage("data:image/png;base64,AAAA", "https://acme.com")).toBeUndefined();
   });
 });
 

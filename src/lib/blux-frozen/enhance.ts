@@ -9,10 +9,7 @@ import {
 import { replaceRuleMarks, RULE_MARK_CSS } from "./rule-mark";
 import { UNDERLINE_DRAW_CSS } from "./underline-draw";
 import { DISTINGUISHED_CSS } from "./distinguished";
-import {
-  restyleCarouselCaptions,
-  CAROUSEL_CAPTION_CSS,
-} from "./carousel-caption";
+import { restyleCarouselCaptions, CAROUSEL_CAPTION_CSS } from "./carousel-caption";
 
 // Render-time enhancements for frozen Blux markup. The freeze strips Blux's
 // runtime JS, which leaves two kinds of dead links in the settled DOM; both are
@@ -22,10 +19,7 @@ import {
 
 // Validated at module load, so a bad hand-edit fails the build rather than
 // shipping a panel with a blank row.
-const availabilityData = assertAvailabilityData(
-  rawAvailability,
-  "frozen/home.availability.json",
-);
+const availabilityData = assertAvailabilityData(rawAvailability, "frozen/home.availability.json");
 
 /** Nav deep-link target for the suite availability panel. */
 export const AVAILABILITY_ANCHOR = availabilityData.anchorId;
@@ -103,8 +97,7 @@ export const CMS_DIVERGENCES: CmsDivergence[] = [
   {
     slot: "h.t1",
     what: 'Nav "Vision" (#page-block-1) — dropped, renders nothing',
-    resolve:
-      "remove 'page-block-1' from NAV_LINKS_DROPPED to bring the item back",
+    resolve: "remove 'page-block-1' from NAV_LINKS_DROPPED to bring the item back",
   },
   {
     slot: "h.t4",
@@ -165,10 +158,7 @@ export function rewriteNavLabels(
  */
 export const NAV_LINKS_DROPPED = ["page-block-1"];
 
-export function dropNavLinks(
-  html: string,
-  targets: string[] = NAV_LINKS_DROPPED,
-): string {
+export function dropNavLinks(html: string, targets: string[] = NAV_LINKS_DROPPED): string {
   let out = html;
   for (const id of targets) {
     out = out.replace(
@@ -281,16 +271,12 @@ export const MRKT_LINK: CopyLink = {
 };
 
 export function linkCopyWord(html: string, link: CopyLink = MRKT_LINK): string {
-  const body = new RegExp(
-    `(<div class="${link.bodyClass}"[^>]*>)([^<]*)(</div>)`,
-    "g",
-  );
+  const body = new RegExp(`(<div class="${link.bodyClass}"[^>]*>)([^<]*)(</div>)`, "g");
   const word = new RegExp(`\\b${link.word}\\b`);
   return html.replace(body, (whole, open: string, text: string, close) => {
     if (!word.test(text)) return whole;
     const anchor =
-      `<a class="links" href="${link.href}" target="_blank" ` +
-      `rel="noopener">${link.word}</a>`;
+      `<a class="links" href="${link.href}" target="_blank" ` + `rel="noopener">${link.word}</a>`;
     return open + text.replace(word, anchor) + close;
   });
 }
@@ -328,11 +314,7 @@ export function breakHeadingLine(html: string, spec = CITY_HEADING): string {
   const broken = m[3].replace(new RegExp(`\\s+(${spec.before}\\s)`), "<br>$1");
   if (broken === m[3]) return html;
   const rebuilt = `<h${m[1]}${m[2]}>${broken}</h${m[1]}>`;
-  return (
-    html.slice(0, at + m.index) +
-    rebuilt +
-    html.slice(at + m.index + m[0].length)
-  );
+  return html.slice(0, at + m.index) + rebuilt + html.slice(at + m.index + m[0].length);
 }
 
 /**
@@ -363,8 +345,7 @@ export function rewriteCfEmails(html: string): string {
     )
     .replace(
       /(<[^>]*data-cfemail="([0-9a-fA-F]+)"[^>]*>)[^<]*(<)/g,
-      (_, open: string, hex: string, close: string) =>
-        `${open}${decodeCfEmail(hex)}${close}`,
+      (_, open: string, hex: string, close: string) => `${open}${decodeCfEmail(hex)}${close}`,
     );
 }
 
@@ -383,10 +364,7 @@ const LINKS_OPEN = String.raw`<a\b[^>]*\bclass="[^"]*\blinks\b[^"]*"[^>]*>`;
 export function restoreLinkSpacing(html: string): string {
   return html
     .replace(new RegExp(`([A-Za-z0-9])(${LINKS_OPEN})`, "g"), "$1 $2")
-    .replace(
-      new RegExp(`(${LINKS_OPEN}[\\s\\S]*?</a>)(?=[A-Za-z0-9])`, "g"),
-      "$1 ",
-    );
+    .replace(new RegExp(`(${LINKS_OPEN}[\\s\\S]*?</a>)(?=[A-Za-z0-9])`, "g"), "$1 ");
 }
 
 /**
@@ -398,14 +376,8 @@ export function restoreLinkSpacing(html: string): string {
  */
 export const VIDEO_POSTER = "/worthe-aerial-labelled.jpg";
 
-export function addVideoPoster(
-  html: string,
-  poster: string = VIDEO_POSTER,
-): string {
-  return html.replace(
-    /<video\b(?![^>]*\bposter=)/g,
-    `<video poster="${poster}"`,
-  );
+export function addVideoPoster(html: string, poster: string = VIDEO_POSTER): string {
+  return html.replace(/<video\b(?![^>]*\bposter=)/g, `<video poster="${poster}"`);
 }
 
 /**
@@ -469,8 +441,7 @@ export const LINK_LABELS: { match: string; label: string }[] = [
     label: "The Pointe — home",
   },
   {
-    match:
-      '<a class="footer0ullia" href="https://www.theburbankportfolio.com/">',
+    match: '<a class="footer0ullia" href="https://www.theburbankportfolio.com/">',
     label: "The Burbank Portfolio",
   },
 ];
@@ -493,12 +464,8 @@ export function nameBareLinks(
  * checkbox. Left alone if the freeze ever starts emitting one.
  */
 export function nameMenuToggle(html: string, label = "Menu"): string {
-  return html.replace(
-    /<input\b([^>]*\bid="[^"]*-menuicon"[^>]*)>/g,
-    (whole, attrs: string) =>
-      /\baria-label=/.test(attrs)
-        ? whole
-        : `<input${attrs} aria-label="${label}">`,
+  return html.replace(/<input\b([^>]*\bid="[^"]*-menuicon"[^>]*)>/g, (whole, attrs: string) =>
+    /\baria-label=/.test(attrs) ? whole : `<input${attrs} aria-label="${label}">`,
   );
 }
 

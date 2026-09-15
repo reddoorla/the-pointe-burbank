@@ -4,8 +4,7 @@ import type { FrozenArtifact } from "./artifacts";
 import type { FrozenPageDoc } from "./frozen-page-doc";
 
 const art: FrozenArtifact = {
-  template:
-    "<div>⟦t:s0.t0⟧<i style='background-image:url(⟦i:s0.i0⟧)'></i></div>",
+  template: "<div>⟦t:s0.t0⟧<i style='background-image:url(⟦i:s0.i0⟧)'></i></div>",
   styleCss: ".x{color:red}",
   fontLinks: ["https://fonts.googleapis.com/css2?family=X"],
 };
@@ -45,9 +44,7 @@ describe("buildFrozenData", () => {
     expect(d.meta_description).toBe("desc");
     expect(d.meta_image).toBe("https://images.prismic.io/og.jpg");
     expect(d.meta_image_alt).toBe("Storefront");
-    expect(d.slots.find((s) => s.key === "s0.i0")?.url).toBe(
-      "https://images.prismic.io/x.jpg",
-    );
+    expect(d.slots.find((s) => s.key === "s0.i0")?.url).toBe("https://images.prismic.io/x.jpg");
     expect(d.slots.find((s) => s.key === "s0.t0")?.text).toBe("Hi");
   });
 });
@@ -63,13 +60,7 @@ describe("resolveFrozen — the Blux-only fall-through guarantee", () => {
   it("returns null with NO query for prototype-member uids on a non-frozen repo", async () => {
     // A plain-object map inherits Object.prototype names; the own-key guard must
     // still treat these as "no artifact" (no spurious frozen_page query).
-    for (const uid of [
-      "toString",
-      "constructor",
-      "__proto__",
-      "hasOwnProperty",
-      "valueOf",
-    ]) {
+    for (const uid of ["toString", "constructor", "__proto__", "hasOwnProperty", "valueOf"]) {
       let queried = false;
       const spy = {
         getByUID: async () => {
@@ -112,9 +103,6 @@ describe("resolveFrozen — the Blux-only fall-through guarantee", () => {
 
 describe("frozenUids", () => {
   it("lists the uids that have a committed artifact", () => {
-    expect(frozenUids({ home: art, about: art }).sort()).toEqual([
-      "about",
-      "home",
-    ]);
+    expect(frozenUids({ home: art, about: art }).sort()).toEqual(["about", "home"]);
   });
 });

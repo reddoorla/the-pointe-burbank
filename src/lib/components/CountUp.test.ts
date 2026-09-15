@@ -47,8 +47,7 @@ beforeEach(() => {
 
 afterEach(() => cleanup());
 
-const visible = (c: HTMLElement) =>
-  c.querySelector('[aria-hidden="true"]')?.textContent;
+const visible = (c: HTMLElement) => c.querySelector('[aria-hidden="true"]')?.textContent;
 const forAT = (c: HTMLElement) => c.querySelector(".sr-only")?.textContent;
 
 const base = { value: 1234, locale: "en-US" };

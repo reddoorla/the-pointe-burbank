@@ -56,9 +56,7 @@ describe("ProductDetail", () => {
     expect(fb.getAttribute("href")).toContain(enc);
     expect(fb.getAttribute("href")).toContain("facebook.com/sharer");
     expect(fb.getAttribute("target")).toBe("_blank");
-    expect(getByLabelText("Share on Twitter").getAttribute("href")).toContain(
-      "twitter.com/share",
-    );
+    expect(getByLabelText("Share on Twitter").getAttribute("href")).toContain("twitter.com/share");
     expect(getByLabelText("Share on Pinterest").getAttribute("href")).toContain(
       "pinterest.com/pin/create",
     );
@@ -66,12 +64,9 @@ describe("ProductDetail", () => {
 
   it("omits the image column and thumbnails for an imageless product", () => {
     const noImage: Product = { ...product, image: undefined, gallery: [] };
-    const { queryByAltText, queryAllByRole, getByRole } = render(
-      ProductDetail,
-      {
-        product: noImage,
-      },
-    );
+    const { queryByAltText, queryAllByRole, getByRole } = render(ProductDetail, {
+      product: noImage,
+    });
     expect(queryByAltText("Aria")).toBeNull();
     expect(queryAllByRole("button", { name: /View image/ })).toHaveLength(0);
     // Title + share row still render.

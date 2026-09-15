@@ -19,8 +19,7 @@
   let { field }: { field: RichTextField } = $props();
 
   const levelMap = $derived(buildHeadingLevelMap(field));
-  const lookup: HeadingLevelLookup = (original) =>
-    levelMap.get(original) ?? defaultLevel(original);
+  const lookup: HeadingLevelLookup = (original) => levelMap.get(original) ?? defaultLevel(original);
   setContext(RT_HEADING_CTX, lookup);
 
   const headingComponents: RichTextComponents = {

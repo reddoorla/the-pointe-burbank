@@ -9,11 +9,7 @@ async function freshLoader() {
 }
 
 function mapsScripts(): HTMLScriptElement[] {
-  return Array.from(
-    document.querySelectorAll<HTMLScriptElement>(
-      'script[src*="maps.googleapis"]',
-    ),
-  );
+  return Array.from(document.querySelectorAll<HTMLScriptElement>('script[src*="maps.googleapis"]'));
 }
 
 /** Simulate the JS API arriving: invoke the callback global from the src. */

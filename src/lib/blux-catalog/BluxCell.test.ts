@@ -25,9 +25,7 @@ describe("BluxCell visual fields", () => {
     });
     const el = container.querySelector(".blux-cell") as HTMLElement;
     expect(el.style.getPropertyValue("--cell-basis")).toBe("calc(30% - 2%)");
-    expect(el.getAttribute("style")).toContain(
-      "background-color: rgb(255, 255, 255)",
-    );
+    expect(el.getAttribute("style")).toContain("background-color: rgb(255, 255, 255)");
     expect(el.getAttribute("style")).toContain("padding: 100px 4% 80px");
     expect(el.getAttribute("data-valign")).toBe("on");
   });
@@ -40,9 +38,7 @@ describe("BluxCell visual fields", () => {
       media_ratio: "3:2",
     } as unknown as BluxCellData;
     const { container } = render(BluxCell, { props: { cell, basis: "100%" } });
-    expect(
-      container.querySelector(".blux-cell__media[data-cover='on']"),
-    ).not.toBeNull();
+    expect(container.querySelector(".blux-cell__media[data-cover='on']")).not.toBeNull();
   });
 
   it("wraps the title in its role container and renders roled body_html via {@html}", () => {
@@ -54,9 +50,7 @@ describe("BluxCell visual fields", () => {
     } as unknown as BluxCellData;
     const { container } = render(BluxCell, { props: { cell, basis: "100%" } });
     expect(container.querySelector(".txt-role-text11 h3")).not.toBeNull();
-    expect(
-      container.querySelector(".blux-cell__body .txt-role-text1 p"),
-    ).not.toBeNull();
+    expect(container.querySelector(".blux-cell__body .txt-role-text1 p")).not.toBeNull();
   });
 
   it("gives each subgrid cell its own basis for a row of that many cells", () => {
@@ -68,13 +62,9 @@ describe("BluxCell visual fields", () => {
       ],
     } as unknown as BluxCellData;
     const { container } = render(BluxCell, { props: { cell, basis: "100%" } });
-    const subCells = container.querySelectorAll<HTMLElement>(
-      ".blux-subgrid > .blux-cell",
-    );
+    const subCells = container.querySelectorAll<HTMLElement>(".blux-subgrid > .blux-cell");
     expect(subCells).toHaveLength(2);
-    expect(subCells[0].style.getPropertyValue("--cell-basis")).toBe(
-      "calc(50% - 2%)",
-    );
+    expect(subCells[0].style.getPropertyValue("--cell-basis")).toBe("calc(50% - 2%)");
   });
 });
 
@@ -82,8 +72,7 @@ describe("BluxCell image_embed (doubly-nested subgrid media)", () => {
   it("renders image_embed inside .blux-cell__media with cover + ratio", () => {
     const cell = {
       kind: "media",
-      image_embed:
-        '<img src="https://images.prismic.io/repo/u1.jpg" alt="Pool">',
+      image_embed: '<img src="https://images.prismic.io/repo/u1.jpg" alt="Pool">',
       media_ratio: "4:3",
       cover: "on",
     } as unknown as BluxCellData;
@@ -93,9 +82,7 @@ describe("BluxCell image_embed (doubly-nested subgrid media)", () => {
     expect(wrap.getAttribute("data-cover")).toBe("on");
     expect(wrap.getAttribute("data-ratio")).toBe("4:3");
     const im = wrap.querySelector("img") as HTMLImageElement;
-    expect(im.getAttribute("src")).toBe(
-      "https://images.prismic.io/repo/u1.jpg",
-    );
+    expect(im.getAttribute("src")).toBe("https://images.prismic.io/repo/u1.jpg");
     expect(im.getAttribute("alt")).toBe("Pool");
   });
 });

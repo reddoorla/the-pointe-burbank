@@ -5,9 +5,7 @@ import { trapFocus, type TrapFocusOptions } from "./trapFocus";
 // action's visibility filter would reject everything. Treat connected
 // elements as visible.
 beforeEach(() => {
-  vi.spyOn(Element.prototype, "getClientRects").mockImplementation(function (
-    this: Element,
-  ) {
+  vi.spyOn(Element.prototype, "getClientRects").mockImplementation(function (this: Element) {
     return (this.isConnected ? [{}] : []) as unknown as DOMRectList;
   });
   // Run rAF callbacks synchronously so mount-focus and restore-focus are
@@ -85,9 +83,7 @@ describe("trapFocus — initial focus", () => {
   it("skips children hidden from layout (empty client rects)", () => {
     const { overlay, buttons } = overlayWithButtons(["hidden", "visible"]);
     const hidden = buttons[0];
-    vi.spyOn(Element.prototype, "getClientRects").mockImplementation(function (
-      this: Element,
-    ) {
+    vi.spyOn(Element.prototype, "getClientRects").mockImplementation(function (this: Element) {
       return (this === hidden ? [] : [{}]) as unknown as DOMRectList;
     });
     mountTrap(overlay);

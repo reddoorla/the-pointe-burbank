@@ -1,9 +1,5 @@
 <script lang="ts">
-  import {
-    PrismicImage,
-    PrismicLink,
-    PrismicRichText,
-  } from "@prismicio/svelte";
+  import { PrismicImage, PrismicLink, PrismicRichText } from "@prismicio/svelte";
   import { isFilled } from "@prismicio/client";
   import type { BluxCellData } from "$lib/blux-catalog/cell";
   import { gridCellBasis } from "$lib/blux-catalog/layout";
@@ -12,14 +8,10 @@
 
   let { cell, basis }: { cell: BluxCellData; basis?: string } = $props();
   let sub = $derived(cell.subgrid ?? []);
-  let subBases = $derived(
-    sub.map((s) => gridCellBasis(s.width || undefined, sub.length || 1)),
-  );
+  let subBases = $derived(sub.map((s) => gridCellBasis(s.width || undefined, sub.length || 1)));
 
   // "H:W"/"W:H" ratio string → a CSS aspect-ratio; used only by cover media.
-  let mediaRatio = $derived(
-    cell.media_ratio ? cell.media_ratio.replace(":", " / ") : undefined,
-  );
+  let mediaRatio = $derived(cell.media_ratio ? cell.media_ratio.replace(":", " / ") : undefined);
 
   let style = $derived(
     [
@@ -33,12 +25,7 @@
   );
 </script>
 
-<div
-  class="blux-cell"
-  data-kind={cell.kind}
-  data-valign={cell.valign || undefined}
-  {style}
->
+<div class="blux-cell" data-kind={cell.kind} data-valign={cell.valign || undefined} {style}>
   {#if isFilled.image(cell.media)}
     <div
       class="blux-cell__media"

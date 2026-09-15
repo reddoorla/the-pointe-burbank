@@ -10,9 +10,7 @@ describe("Footer", () => {
   it("default: renders the hardcoded copyright (fleet behavior unchanged)", () => {
     const { container } = render(Footer);
     expect(container.querySelector("footer")).not.toBeNull();
-    expect(container.querySelector("footer")?.textContent).toContain(
-      "Company Name",
-    );
+    expect(container.querySelector("footer")?.textContent).toContain("Company Name");
   });
 
   it("columns prop renders text items with tel/mailto links", () => {
@@ -65,17 +63,13 @@ describe("Footer", () => {
         ],
       },
     });
-    const linked = container.querySelector(
-      "a[href='https://www.theburbankportfolio.com/'] img",
-    );
+    const linked = container.querySelector("a[href='https://www.theburbankportfolio.com/'] img");
     expect(linked?.getAttribute("src")).toBe("https://cdn/logo.png");
     expect((linked as HTMLElement)?.style.maxWidth).toBe("300px");
     expect(linked?.getAttribute("alt")).toBe("Burbank Portfolio");
 
     // http(s) logo link opens in a new tab with the safe rel.
-    const anchor = container.querySelector(
-      "a[href='https://www.theburbankportfolio.com/']",
-    );
+    const anchor = container.querySelector("a[href='https://www.theburbankportfolio.com/']");
     expect(anchor?.getAttribute("target")).toBe("_blank");
     expect(anchor?.getAttribute("rel")).toBe("noopener noreferrer");
 
@@ -109,9 +103,7 @@ describe("Footer", () => {
 
   it("default branch when columns is empty/undefined (fleet default preserved)", () => {
     const { container } = render(Footer, { props: { columns: [] } });
-    expect(container.querySelector("footer")?.textContent).toContain(
-      "Company Name",
-    );
+    expect(container.querySelector("footer")?.textContent).toContain("Company Name");
   });
 
   // --- socials/text chrome (site-config default; used when no columns) ---

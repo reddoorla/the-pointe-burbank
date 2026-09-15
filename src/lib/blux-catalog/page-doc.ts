@@ -35,10 +35,7 @@ type PageReadClient = {
 /** Resolve one page by uid, trying each page type in order. Rejects (like
  * `getByUID`) only when NO page type has the uid — the loaders turn that into a
  * 404. */
-export async function getPageDoc(
-  client: PageReadClient,
-  uid: string,
-): Promise<PageDocument> {
+export async function getPageDoc(client: PageReadClient, uid: string): Promise<PageDocument> {
   let lastError: unknown;
   for (const type of PAGE_DOC_TYPES) {
     try {
@@ -56,13 +53,9 @@ export async function getPageDoc(
  * `getFirst` throws on zero results), so this is safe on both fresh and migrated
  * repos WITHOUT swallowing errors: a genuine query failure rejects and fails the
  * prerender build loudly, exactly as the native page-only flow did before. */
-export async function getAllPageDocs(
-  client: PageReadClient,
-): Promise<PageDocument[]> {
+export async function getAllPageDocs(client: PageReadClient): Promise<PageDocument[]> {
   const groups = await Promise.all(
-    PAGE_DOC_TYPES.map(
-      async (type) => (await client.getAllByType(type)) as PageDocument[],
-    ),
+    PAGE_DOC_TYPES.map(async (type) => (await client.getAllByType(type)) as PageDocument[]),
   );
   return groups.flat();
 }
@@ -70,9 +63,7 @@ export async function getAllPageDocs(
 /** The dynamic `[uid]` route's prerender entries: one per page document, with
  * "home" excluded (it renders at the root route, so /home would duplicate it). */
 export function toPrerenderEntries(docs: PageDocument[]): { uid: string }[] {
-  return docs
-    .filter((doc) => doc.uid !== "home")
-    .map((doc) => ({ uid: doc.uid }));
+  return docs.filter((doc) => doc.uid !== "home").map((doc) => ({ uid: doc.uid }));
 }
 
 /** The layout's SEO/head payload for a page document. `catalog_page` docs carry

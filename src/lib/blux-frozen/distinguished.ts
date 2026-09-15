@@ -133,8 +133,7 @@ export const DISTINGUISHED_CSS = [
   "#page-block-3-item-0>.blocks0container>.block-content>.ib.img" +
     "{width:50%!important;position:relative;z-index:1}",
   // Figma puts the table 658.32px into a 1064px band, 71px below its top.
-  "#page-block-3-item-0-item-0{position:absolute;left:61.9%;top:38.2%;" +
-    "z-index:1}",
+  "#page-block-3-item-0-item-0{position:absolute;left:61.9%;top:38.2%;" + "z-index:1}",
   "#page-block-3-item-0-item-0>.blocks0container{padding:0!important}",
 
   // — 4. The list, scaled to the band it now sits in (comment 7) —
@@ -156,8 +155,7 @@ export const DISTINGUISHED_CSS = [
   // ~18% smaller there than it renders at 1440. The proportional argument is
   // the real one, and it lands in the same direction.
   "#page-block-3 .rd-avail-table{font-size:14px;line-height:17px}",
-  "#page-block-3 .rd-avail-table th,#page-block-3 .rd-avail-table td" +
-    "{padding-bottom:11px}",
+  "#page-block-3 .rd-avail-table th,#page-block-3 .rd-avail-table td" + "{padding-bottom:11px}",
   // The base rule that trims the last row is `.rd-avail-table tr:last-child th`
   // at (0,2,1) — the id above outranks it, so without this the table keeps a
   // trailing 11px and stands a full row taller than it should.
@@ -165,15 +163,13 @@ export const DISTINGUISHED_CSS = [
     "#page-block-3 .rd-avail-table tr:last-child td{padding-bottom:0}",
   "#page-block-3 .rd-avail-table th.rd-avail-term," +
     "#page-block-3 .rd-avail-table th.rd-avail-suite{width:88px}",
-  "#page-block-3 .rd-avail-table td.rd-avail-value" +
-    "{width:104px;padding-left:16px}",
+  "#page-block-3 .rd-avail-table td.rd-avail-value" + "{width:104px;padding-left:16px}",
   // The mark's width is inline (it carries the aspect ratio with it), so this
   // has to win on !important rather than specificity. `--rd-rule-len` is emitted
   // inline BESIDE that width precisely so the two cannot drift: it is the
   // draw-in dash, resolved in screen pixels via `non-scaling-stroke`, so
   // widening the box without it finishes the animation with a hole in the line.
-  "#page-block-3 .rd-avail .rd-rule-box" +
-    "{width:22.9px!important;--rd-rule-len:22.9!important}",
+  "#page-block-3 .rd-avail .rd-rule-box" + "{width:22.9px!important;--rd-rule-len:22.9!important}",
 
   "}",
 ].join("");

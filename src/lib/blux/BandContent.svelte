@@ -29,9 +29,7 @@
       "margin-inline:auto",
       // With a mobile override the padding rides `--band-pad`/`--band-pad-m` for
       // the `.band-pad` class to consume; otherwise it stays a fixed inline value.
-      padMobile
-        ? `--band-pad:${padValue};--band-pad-m:${padMobile}`
-        : `padding:${padValue}`,
+      padMobile ? `--band-pad:${padValue};--band-pad-m:${padMobile}` : `padding:${padValue}`,
       align ? `text-align:${align}` : "",
     ]
       .filter(Boolean)

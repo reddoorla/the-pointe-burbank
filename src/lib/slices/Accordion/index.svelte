@@ -22,9 +22,7 @@
   };
   let { slice, context = {} }: Props = $props();
 
-  const band = $derived(
-    bandFor(context.presentation, slice.primary.band ?? null),
-  );
+  const band = $derived(bandFor(context.presentation, slice.primary.band ?? null));
   const items = $derived(
     (slice.primary.items ?? []).map((i) => ({
       label: i.title ?? "",
@@ -44,11 +42,7 @@
 {/snippet}
 
 {#if band}
-  <BluxSectionBand
-    {band}
-    sliceType={slice.slice_type}
-    sliceVariation={slice.variation}
-  >
+  <BluxSectionBand {band} sliceType={slice.slice_type} sliceVariation={slice.variation}>
     {@render content()}
   </BluxSectionBand>
 {:else}

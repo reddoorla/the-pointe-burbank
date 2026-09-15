@@ -42,8 +42,7 @@
   const items = [
     {
       label: "What is this page?",
-      content:
-        "A fixtures page exercising accessible component primitives for axe testing.",
+      content: "A fixtures page exercising accessible component primitives for axe testing.",
     },
     {
       label: "What does it cover?",
@@ -154,9 +153,7 @@
     variation: "default",
     primary: {
       eyebrow: "The Challenge",
-      body: rtx(
-        "They needed an identity on a tight timeline to communicate that message.",
-      ),
+      body: rtx("They needed an identity on a tight timeline to communicate that message."),
       band: null,
     },
   };
@@ -198,8 +195,8 @@
   <header class="space-y-2">
     <h1 class="text-3xl font-bold">Accessibility fixtures</h1>
     <p class="text-secondary">
-      Used by the Playwright + axe-core CI gate. Every primitive on this page is
-      expected to pass WCAG 2.2 AA.
+      Used by the Playwright + axe-core CI gate. Every primitive on this page is expected to pass
+      WCAG 2.2 AA.
     </p>
   </header>
 
@@ -239,9 +236,7 @@
   </section>
 
   <section aria-labelledby="rich-text-heading" class="space-y-4">
-    <h2 id="rich-text-heading" class="text-xl font-semibold">
-      Rich text heading levels
-    </h2>
+    <h2 id="rich-text-heading" class="text-xl font-semibold">Rich text heading levels</h2>
     <RichTextBody field={richTextField} />
   </section>
 
@@ -295,26 +290,13 @@
         required
         bind:value={email}
       />
-      <Field
-        name="message"
-        label="Message"
-        type="textarea"
-        required
-        bind:value={message}
-      />
-      <button
-        type="submit"
-        class="px-4 py-2 bg-primary text-white rounded bump"
-      >
-        Send
-      </button>
+      <Field name="message" label="Message" type="textarea" required bind:value={message} />
+      <button type="submit" class="px-4 py-2 bg-primary text-white rounded bump"> Send </button>
     </Form>
   </section>
 
   <section aria-labelledby="form-errors-heading" class="space-y-4">
-    <h2 id="form-errors-heading" class="text-xl font-semibold">
-      Form with errors
-    </h2>
+    <h2 id="form-errors-heading" class="text-xl font-semibold">Form with errors</h2>
     <Form
       method="POST"
       class="space-y-4"
@@ -323,13 +305,7 @@
         message: "Message must be at least 10 characters.",
       }}
     >
-      <Field
-        name="email"
-        label="Email"
-        type="email"
-        required
-        error="Email is required."
-      />
+      <Field name="email" label="Email" type="email" required error="Email is required." />
       <Field
         name="message"
         label="Message"
@@ -337,19 +313,12 @@
         required
         error="Message must be at least 10 characters."
       />
-      <button
-        type="submit"
-        class="px-4 py-2 bg-primary text-white rounded bump"
-      >
-        Send
-      </button>
+      <button type="submit" class="px-4 py-2 bg-primary text-white rounded bump"> Send </button>
     </Form>
   </section>
 
   <section aria-labelledby="hero-image-heading" class="space-y-4">
-    <h2 id="hero-image-heading" class="text-xl font-semibold">
-      Hero background image
-    </h2>
+    <h2 id="hero-image-heading" class="text-xl font-semibold">Hero background image</h2>
     <div class="relative h-40 overflow-hidden">
       <HeroBackgroundImage image={heroImage} altFallback="Placeholder hero" />
     </div>
@@ -361,27 +330,19 @@
   </section>
 
   <section aria-labelledby="vimeo-banner-heading" class="space-y-4">
-    <h2 id="vimeo-banner-heading" class="text-xl font-semibold">
-      Vimeo banner
-    </h2>
+    <h2 id="vimeo-banner-heading" class="text-xl font-semibold">Vimeo banner</h2>
     <!-- No real video plays in CI: the iframe mounts only after genuine input,
          so axe sees the poster-only state. -->
     <VimeoBanner vimeoId="1" poster={runImport} alt="Placeholder banner reel" />
   </section>
 
   <section aria-labelledby="screen-width-media-heading" class="space-y-4">
-    <h2 id="screen-width-media-heading" class="text-xl font-semibold">
-      Screen-width media
-    </h2>
+    <h2 id="screen-width-media-heading" class="text-xl font-semibold">Screen-width media</h2>
     <!-- Poster-only (no vimeoId) so the fixture makes no external requests:
          the video iframe needs a live player.vimeo.com src, so its a11y
          attributes (tabindex="-1", aria-hidden) are asserted in
          ScreenWidthMedia.test.ts instead. -->
-    <ScreenWidthMedia
-      src={pixel}
-      altText="Placeholder background"
-      percentHeight={30}
-    />
+    <ScreenWidthMedia src={pixel} altText="Placeholder background" percentHeight={30} />
   </section>
 
   <section aria-labelledby="slider-heading" class="space-y-4">
@@ -396,9 +357,7 @@
   </section>
 
   <section aria-labelledby="slider-autoplay-heading" class="space-y-4">
-    <h2 id="slider-autoplay-heading" class="text-xl font-semibold">
-      Slider (autoplay)
-    </h2>
+    <h2 id="slider-autoplay-heading" class="text-xl font-semibold">Slider (autoplay)</h2>
     <!-- Rotation is live during the axe run so the pause/play control and the
          muted live region are what get audited — the moving state is the one
          users hit. -->

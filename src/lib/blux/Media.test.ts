@@ -41,9 +41,7 @@ describe("Media", () => {
         loading: "eager",
       },
     });
-    expect(container.querySelector("img")?.getAttribute("loading")).toBe(
-      "eager",
-    );
+    expect(container.querySelector("img")?.getAttribute("loading")).toBe("eager");
   });
 
   it("renders no style at all when the media carries no sizing or fit hints", () => {
@@ -113,9 +111,7 @@ describe("Media", () => {
   it("pauses the ambient video when prefers-reduced-motion is reduce", () => {
     mockMatchMedia(true);
     // jsdom media elements don't really play; observe the pause() call.
-    const pause = vi
-      .spyOn(HTMLMediaElement.prototype, "pause")
-      .mockImplementation(() => {});
+    const pause = vi.spyOn(HTMLMediaElement.prototype, "pause").mockImplementation(() => {});
     const { container } = render(Media, {
       props: { media: { kind: "video", url: "https://cdn/x.mp4" } },
     });

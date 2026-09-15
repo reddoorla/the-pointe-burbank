@@ -43,9 +43,7 @@
           {group.subCategory}
         </h2>
       {/if}
-      <ul
-        class="grid grid-cols-2 gap-x-6 gap-y-10 sm:grid-cols-3 lg:grid-cols-4"
-      >
+      <ul class="grid grid-cols-2 gap-x-6 gap-y-10 sm:grid-cols-3 lg:grid-cols-4">
         {#each group.items as product (product.slug)}
           <li>
             <a href={`/products/${product.slug}`} class="group block">

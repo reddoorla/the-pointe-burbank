@@ -41,9 +41,7 @@
     <div
       class="mt-copy {hasMedia
         ? 'lg:col-span-4'
-        : 'text-center lg:col-span-8 lg:col-start-3'} {reverse
-        ? 'lg:order-2'
-        : ''}"
+        : 'text-center lg:col-span-8 lg:col-start-3'} {reverse ? 'lg:order-2' : ''}"
     >
       {#if hasHeading}
         <PrismicRichText field={slice.primary.heading} />

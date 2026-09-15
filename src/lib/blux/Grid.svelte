@@ -37,9 +37,7 @@
       : [];
     if (mr) decls.push(`--node-mr:${mr}`);
     return {
-      class: [roleClass(role), mr ? "md:mr-(--node-mr)" : ""]
-        .filter(Boolean)
-        .join(" "),
+      class: [roleClass(role), mr ? "md:mr-(--node-mr)" : ""].filter(Boolean).join(" "),
       style: decls.length ? decls.join(";") : undefined,
     };
   };
@@ -60,14 +58,12 @@
 
   // Does a cell's node carry the `_valign: middle` hint (a peeled valignmiddle
   // wrapper)? Only container/text nodes have a style slot.
-  const valignMiddle = (n: RenderNode) =>
-    "style" in n && n.style?.["_valign"] === "middle";
+  const valignMiddle = (n: RenderNode) => "style" in n && n.style?.["_valign"] === "middle";
 
   // `_fill: column` — the node sits in a cagridFlexHeight grid cell: the
   // original stretches the cell's block to the full row height, so its paint
   // covers the whole column, not just the content box.
-  const fillColumn = (n: RenderNode) =>
-    "style" in n && n.style?.["_fill"] === "column";
+  const fillColumn = (n: RenderNode) => "style" in n && n.style?.["_fill"] === "column";
 </script>
 
 <!-- Render-faithful fallback: reconstructs a band's parsed node tree.
@@ -79,12 +75,7 @@
   <!-- Toggle-switched map panels: exactly one cell (the active toggle's panel)
        is visible; the rest stay mounted but hidden — mirroring the original's
        display:none siblings so lazily-loaded panel images survive switching. -->
-  <div
-    class="w-full"
-    style={containerStyle(node.style)}
-    data-grid-row
-    data-panels
-  >
+  <div class="w-full" style={containerStyle(node.style)} data-grid-row data-panels>
     {#each node.cells as cell, i (i)}
       <div data-grid-cell class={i === panels.active ? "" : "hidden"}>
         <Grid node={cell.node} {map} panelState={panels} />
@@ -118,9 +109,7 @@
            original's side captions sit centered on their photos. -->
       <div
         data-grid-cell
-        class="min-w-0 basis-full md:basis-(--cell-basis) {valignMiddle(
-          cell.node,
-        )
+        class="min-w-0 basis-full md:basis-(--cell-basis) {valignMiddle(cell.node)
           ? 'self-center'
           : ''}"
         style:--cell-basis={bases[i] ?? "auto"}
@@ -156,10 +145,7 @@
       style="aspect-ratio: {node.style['_overlay'].replace(':', ' / ')}"
     >
       {#if mediaChild}
-        <Media
-          media={mediaChild.media}
-          class="absolute inset-0 h-full w-full object-cover"
-        />
+        <Media media={mediaChild.media} class="absolute inset-0 h-full w-full object-cover" />
       {/if}
       <!-- Hover-reveals on pointer devices (faithful to the source's
            layout:behind). But hover never fires on touch (the dominant traffic
@@ -170,8 +156,7 @@
           .style['_overlayValign'] === 'top'
           ? 'justify-start'
           : 'justify-center'}"
-        style="background: {node.style['_overlayColor'] ??
-          'rgba(0,0,0,0.55)'}; color: #fff"
+        style="background: {node.style['_overlayColor'] ?? 'rgba(0,0,0,0.55)'}; color: #fff"
       >
         {#each captionChildren as child, i (i)}
           <Grid node={child} {map} panelState={panels} />
@@ -193,10 +178,7 @@
       <div class="w-full flow-root">{@render stackChildren()}</div>
     </div>
   {:else}
-    <div
-      class="flow-root {fillColumn(node) ? 'h-full' : ''}"
-      style={containerStyle(node.style)}
-    >
+    <div class="flow-root {fillColumn(node) ? 'h-full' : ''}" style={containerStyle(node.style)}>
       {@render stackChildren()}
     </div>
   {/if}
@@ -224,14 +206,8 @@
     <!-- A feed grid's cropped tile: the image fills a fixed-aspect box with
          object-cover, so gallery/portfolio tiles are uniform (the source's
          `mediaRatio`, e.g. 4:3) instead of flowing at their natural height. -->
-    <div
-      class="relative w-full"
-      style="aspect-ratio: {node.media.cropRatio.replace(':', ' / ')}"
-    >
-      <Media
-        media={node.media}
-        class="absolute inset-0 h-full w-full object-cover"
-      />
+    <div class="relative w-full" style="aspect-ratio: {node.media.cropRatio.replace(':', ' / ')}">
+      <Media media={node.media} class="absolute inset-0 h-full w-full object-cover" />
     </div>
   {:else}
     <!-- Media follows inherited text-align: an `inline-block` image inside a

@@ -1,11 +1,5 @@
 import { describe, it, expect } from "vitest";
-import {
-  allProducts,
-  getProduct,
-  productSlugs,
-  categorySlugs,
-  getCategory,
-} from "./products";
+import { allProducts, getProduct, productSlugs, categorySlugs, getCategory } from "./products";
 import { categorySlug } from "./product-types";
 
 describe("products loader", () => {

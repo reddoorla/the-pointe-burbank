@@ -9,8 +9,7 @@
 
   // PrismicRichText renders this for every heading node, passing the node and a
   // snippet for its inner content.
-  let { node, children }: { node: { type: string }; children: Snippet } =
-    $props();
+  let { node, children }: { node: { type: string }; children: Snippet } = $props();
 
   // "heading3" -> 3 ("heading" is 7 chars).
   const original = $derived(Number(node.type.slice(7)));
@@ -21,6 +20,4 @@
   const level = $derived(lookup ? lookup(original) : defaultLevel(original));
 </script>
 
-<svelte:element this={`h${original}`} aria-level={level}
-  >{@render children()}</svelte:element
->
+<svelte:element this={`h${original}`} aria-level={level}>{@render children()}</svelte:element>

@@ -21,9 +21,7 @@
     ),
   );
   let listClass = $derived(
-    slice.variation === "list"
-      ? "flex flex-col gap-6"
-      : "grid grid-cols-1 gap-8 md:grid-cols-3",
+    slice.variation === "list" ? "flex flex-col gap-6" : "grid grid-cols-1 gap-8 md:grid-cols-3",
   );
 </script>
 

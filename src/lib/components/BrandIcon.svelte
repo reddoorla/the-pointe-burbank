@@ -37,12 +37,7 @@
 </script>
 
 {#if d}
-  <svg
-    viewBox="0 0 24 24"
-    fill="currentColor"
-    class={passedClasses}
-    aria-hidden="true"
-  >
+  <svg viewBox="0 0 24 24" fill="currentColor" class={passedClasses} aria-hidden="true">
     <path {d} />
   </svg>
 {/if}

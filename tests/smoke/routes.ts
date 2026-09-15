@@ -31,8 +31,7 @@ export type SmokeRoute = {
 // Same resolution order as src/lib/prismicio.ts (VITE_PRISMIC_ENVIRONMENT
 // override, then slicemachine.config.json). This file runs in the Playwright
 // process, so read process.env rather than import.meta.env.
-const repositoryName =
-  process.env.VITE_PRISMIC_ENVIRONMENT || slicemachineConfig.repositoryName;
+const repositoryName = process.env.VITE_PRISMIC_ENVIRONMENT || slicemachineConfig.repositoryName;
 const isPlaceholderRepo = repositoryName === "your-prismic-repo-name";
 
 export const smokeRoutes: SmokeRoute[] = [

@@ -18,15 +18,11 @@ export type BluxNode = {
   children?: BluxNode[];
 };
 
-export function parseBluxPayload(
-  payload: string | null | undefined,
-): BluxNode | null {
+export function parseBluxPayload(payload: string | null | undefined): BluxNode | null {
   if (!payload) return null;
   try {
     const node = JSON.parse(payload) as BluxNode;
-    return node && typeof node === "object" && !Array.isArray(node)
-      ? node
-      : null;
+    return node && typeof node === "object" && !Array.isArray(node) ? node : null;
   } catch {
     return null;
   }

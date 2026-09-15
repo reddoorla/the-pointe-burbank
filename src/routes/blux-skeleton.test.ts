@@ -44,18 +44,14 @@ const slices = [
     slice_type: "blux_gallery",
     variation: "default",
     primary: {
-      cells: [
-        { kind: "text", title: rt("heading3", "GalleryCell"), subgrid: [] },
-      ],
+      cells: [{ kind: "text", title: rt("heading3", "GalleryCell"), subgrid: [] }],
     },
   },
   {
     slice_type: "blux_carousel",
     variation: "default",
     primary: {
-      cells: [
-        { kind: "text", title: rt("heading3", "CarouselCell"), subgrid: [] },
-      ],
+      cells: [{ kind: "text", title: rt("heading3", "CarouselCell"), subgrid: [] }],
     },
   },
   {
@@ -120,8 +116,6 @@ describe("Blux catalog walking skeleton", () => {
       props: { slices: slices as never, components },
     });
     expect(container.querySelector("section.blux-collection")).not.toBeNull();
-    expect(container.querySelectorAll(".blux-collection__card")).toHaveLength(
-      0,
-    );
+    expect(container.querySelectorAll(".blux-collection__card")).toHaveLength(0);
   });
 });

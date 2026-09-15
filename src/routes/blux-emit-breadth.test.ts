@@ -148,32 +148,18 @@ describe("breadth emit shapes render through the registered catalog slices", () 
     const { container } = render(SliceZone, {
       props: { slices: slices as never, components },
     });
+    expect(container.querySelector(".blux-grid__cells[data-columns='2']")).not.toBeNull();
+    expect(container.querySelectorAll(".blux-gallery__cells > .blux-cell img")).toHaveLength(2);
     expect(
-      container.querySelector(".blux-grid__cells[data-columns='2']"),
+      container.querySelector(".blux-carousel__track[data-columns-visible='2']"),
     ).not.toBeNull();
-    expect(
-      container.querySelectorAll(".blux-gallery__cells > .blux-cell img"),
-    ).toHaveLength(2);
-    expect(
-      container.querySelector(
-        ".blux-carousel__track[data-columns-visible='2']",
-      ),
-    ).not.toBeNull();
-    expect(
-      container.querySelector(".blux-media-text[data-media-side='right']"),
-    ).not.toBeNull();
+    expect(container.querySelector(".blux-media-text[data-media-side='right']")).not.toBeNull();
     expect(container.querySelector(".blux-media img")).not.toBeNull();
     // The nested subgrid renders its media one level down.
-    expect(
-      container.querySelector(".blux-grid__cells .blux-subgrid img"),
-    ).not.toBeNull();
+    expect(container.querySelector(".blux-grid__cells .blux-subgrid img")).not.toBeNull();
     // Fix-round contracts: leaf backgrounds, video-as-embed, BluxBlock payload.
-    expect(
-      container.querySelector(".blux-media-text img.blux-media-text__bg"),
-    ).not.toBeNull();
+    expect(container.querySelector(".blux-media-text img.blux-media-text__bg")).not.toBeNull();
     expect(container.querySelector("video.cell-vid")).not.toBeNull();
-    expect(
-      container.querySelector("img[src='https://cdn.example/block-img.jpg']"),
-    ).not.toBeNull();
+    expect(container.querySelector("img[src='https://cdn.example/block-img.jpg']")).not.toBeNull();
   });
 });

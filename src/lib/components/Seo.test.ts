@@ -5,8 +5,7 @@ import Seo from "./Seo.svelte";
 afterEach(() => cleanup());
 
 const head = document.head;
-const attr = (sel: string, name = "content") =>
-  head.querySelector(sel)?.getAttribute(name) ?? null;
+const attr = (sel: string, name = "content") => head.querySelector(sel)?.getAttribute(name) ?? null;
 
 const base = {
   title: "About us",
@@ -17,9 +16,7 @@ describe("Seo head output", () => {
   it("renders the title and a query-stripped canonical", () => {
     render(Seo, base);
     expect(head.querySelector("title")?.textContent).toBe("About us");
-    expect(attr('link[rel="canonical"]', "href")).toBe(
-      "https://acme.com/about",
-    );
+    expect(attr('link[rel="canonical"]', "href")).toBe("https://acme.com/about");
     expect(attr('meta[property="og:url"]')).toBe("https://acme.com/about");
   });
 
@@ -33,9 +30,7 @@ describe("Seo head output", () => {
     render(Seo, base);
     // The bug the fleet repeats: og:* under name= is ignored by OG parsers.
     expect(head.querySelector('meta[name="og:title"]')).toBeNull();
-    expect(
-      head.querySelector('meta[property="og:type"]')?.getAttribute("content"),
-    ).toBe("website");
+    expect(head.querySelector('meta[property="og:type"]')?.getAttribute("content")).toBe("website");
     expect(attr('meta[property="og:site_name"]')).toBe("Reddoor");
     expect(attr('meta[property="og:locale"]')).toBe("en_US");
   });
@@ -84,9 +79,7 @@ describe("Seo head output", () => {
 
   it("omits width/height for an absolute non-Prismic image", () => {
     render(Seo, { ...base, image: "https://cdn.example.com/card.jpg" });
-    expect(attr('meta[property="og:image"]')).toBe(
-      "https://cdn.example.com/card.jpg",
-    );
+    expect(attr('meta[property="og:image"]')).toBe("https://cdn.example.com/card.jpg");
     expect(head.querySelector('meta[property="og:image:width"]')).toBeNull();
   });
 
@@ -117,16 +110,12 @@ describe("Seo head output", () => {
       ...base,
       jsonLd: { "@type": "LocalBusiness", name: "Acme" },
     });
-    expect(
-      head.querySelectorAll('script[type="application/ld+json"]'),
-    ).toHaveLength(1);
+    expect(head.querySelectorAll('script[type="application/ld+json"]')).toHaveLength(1);
   });
 
   it("strips the /preview segment from the canonical", () => {
     render(Seo, { ...base, url: new URL("https://acme.com/preview/about") });
-    expect(attr('link[rel="canonical"]', "href")).toBe(
-      "https://acme.com/about",
-    );
+    expect(attr('link[rel="canonical"]', "href")).toBe("https://acme.com/about");
   });
 
   it("accepts a string url", () => {

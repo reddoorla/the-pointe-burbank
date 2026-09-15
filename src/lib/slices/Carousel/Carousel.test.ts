@@ -62,9 +62,7 @@ describe("Carousel slice", () => {
     });
     const section = container.querySelector("section");
     expect(section?.getAttribute("id")).toBe("8");
-    expect(getByRole("region").getAttribute("aria-roledescription")).toBe(
-      "carousel",
-    );
+    expect(getByRole("region").getAttribute("aria-roledescription")).toBe("carousel");
   });
 
   it("zips caption text from the slice items by slide index", () => {
@@ -75,9 +73,7 @@ describe("Carousel slice", () => {
     // The empty third caption renders no figcaption.
     expect(captions).toHaveLength(2);
     expect(captions[0]?.textContent?.trim()).toBe("a place to sit and breathe");
-    expect(captions[1]?.textContent?.trim()).toBe(
-      "a calm escape right outside your door",
-    );
+    expect(captions[1]?.textContent?.trim()).toBe("a calm escape right outside your door");
     // The caption's txt-role comes from the manifest's caption metadata (on
     // its own inner span, so a subcaption can share the bar as a second line).
     const roleSpan = [...captions[0]!.querySelectorAll("span")].find((s) =>
@@ -90,9 +86,7 @@ describe("Carousel slice", () => {
     const { getByRole } = render(Carousel, {
       props: { slice: makeSlice(), context: { presentation } },
     });
-    expect(getByRole("region").getAttribute("aria-label")).toBe(
-      "Photo slideshow",
-    );
+    expect(getByRole("region").getAttribute("aria-label")).toBe("Photo slideshow");
   });
 
   it("uses the editable label when present", () => {
@@ -102,8 +96,6 @@ describe("Carousel slice", () => {
         context: { presentation },
       },
     });
-    expect(getByRole("region").getAttribute("aria-label")).toBe(
-      "Building tour",
-    );
+    expect(getByRole("region").getAttribute("aria-label")).toBe("Building tour");
   });
 });

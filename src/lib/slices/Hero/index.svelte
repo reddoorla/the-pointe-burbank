@@ -31,15 +31,10 @@
     context?: { presentation?: Presentation };
   } = $props();
 
-  let hasImage = $derived(
-    slice.variation === "default" && !!slice.primary.background_image?.url,
-  );
+  let hasImage = $derived(slice.variation === "default" && !!slice.primary.background_image?.url);
 
   const band = $derived(
-    bandFor(
-      context?.presentation,
-      (slice.primary as { band?: number | null }).band ?? null,
-    ),
+    bandFor(context?.presentation, (slice.primary as { band?: number | null }).band ?? null),
   );
 </script>
 
@@ -78,10 +73,7 @@
   >
     {#snippet background()}
       {#if hasImage}
-        <HeroBackgroundImage
-          image={slice.primary.background_image}
-          preload={false}
-        />
+        <HeroBackgroundImage image={slice.primary.background_image} preload={false} />
       {/if}
     {/snippet}
     <PrismicRichText field={slice.primary.heading} />

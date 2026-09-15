@@ -6,11 +6,7 @@
   let { node }: { node: BluxNode } = $props();
 </script>
 
-<svelte:element
-  this={node.tag || "div"}
-  class={node.className}
-  style={styleString(node.style)}
->
+<svelte:element this={node.tag || "div"} class={node.className} style={styleString(node.style)}>
   {#if node.image?.url}
     <img
       src={node.image.url}

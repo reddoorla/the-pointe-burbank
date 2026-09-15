@@ -27,12 +27,8 @@ describe("GridBand slice", () => {
     const { container } = render(GridBand, {
       props: { slice: slice(5), context: { presentation } },
     });
-    expect(container.querySelector("h3")?.textContent).toBe(
-      "From the manifest",
-    );
-    expect(container.querySelector("section")?.style.backgroundColor).toBe(
-      "rgb(10, 20, 30)",
-    );
+    expect(container.querySelector("h3")?.textContent).toBe("From the manifest");
+    expect(container.querySelector("section")?.style.backgroundColor).toBe("rgb(10, 20, 30)");
     // Slice-identity parity with the generated slices.
     const section = container.querySelector("section");
     expect(section?.getAttribute("data-slice-type")).toBe("grid_band");

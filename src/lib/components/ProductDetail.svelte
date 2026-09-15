@@ -15,15 +15,10 @@
     `/products/${categorySlug(product.category)}` +
       (product.subCategory ? `#${categorySlug(product.subCategory)}` : ""),
   );
-  const backLabel = $derived(
-    [product.category, product.subCategory].filter(Boolean).join(" "),
-  );
+  const backLabel = $derived([product.category, product.subCategory].filter(Boolean).join(" "));
 
   // All images, the main one first; the thumbnail rail swaps which is shown.
-  const images = $derived([
-    ...(product.image ? [product.image] : []),
-    ...product.gallery,
-  ]);
+  const images = $derived([...(product.image ? [product.image] : []), ...product.gallery]);
   let activeIndex = $state(0);
   const active = $derived(images[activeIndex]);
 
@@ -53,10 +48,7 @@
 
 <!-- Back-link band. The top padding clears the fixed nav (matches Blux). -->
 <div class="w-full bg-light px-4 pt-32 pb-6 text-center">
-  <a
-    href={backHref}
-    class="text-sm font-medium tracking-widest uppercase hover:opacity-70"
-  >
+  <a href={backHref} class="text-sm font-medium tracking-widest uppercase hover:opacity-70">
     <span aria-hidden="true">‹</span>
     {backLabel}
   </a>
@@ -68,11 +60,7 @@
   <!-- Image first on mobile; the 30% info column on the left at md+ — but
        full width when the product has no image, so it isn't crammed into 30%
        with dead space. -->
-  <div
-    class="order-2 flex flex-col gap-6 md:order-1 {active
-      ? 'md:w-[30%]'
-      : 'md:w-full'}"
-  >
+  <div class="order-2 flex flex-col gap-6 md:order-1 {active ? 'md:w-[30%]' : 'md:w-full'}">
     <div>
       <h1 class="text-accent text-3xl leading-tight font-light">
         {product.title}
@@ -95,12 +83,7 @@
               aria-pressed={i === activeIndex}
               onclick={() => (activeIndex = i)}
             >
-              <img
-                src={img.url}
-                alt=""
-                loading="lazy"
-                class="h-full w-full object-cover"
-              />
+              <img src={img.url} alt="" loading="lazy" class="h-full w-full object-cover" />
             </button>
           </li>
         {/each}
@@ -130,11 +113,7 @@
   <!-- The 70% image column. -->
   {#if active}
     <div class="order-1 flex-1 md:order-2 md:w-[70%]">
-      <img
-        src={active.url}
-        alt={product.title}
-        class="h-auto w-full object-contain"
-      />
+      <img src={active.url} alt={product.title} class="h-auto w-full object-contain" />
     </div>
   {/if}
 </article>

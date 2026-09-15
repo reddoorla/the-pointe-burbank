@@ -102,23 +102,15 @@ for (const m of measured) {
   }
   for (const key of keys) {
     const prev = boxes[key];
-    if (!prev || m.w > prev.w)
-      boxes[key] = { w: m.w, h: m.h, source: m.source };
+    if (!prev || m.w > prev.w) boxes[key] = { w: m.w, h: m.h, source: m.source };
   }
 }
 
-const sorted = Object.fromEntries(
-  Object.entries(boxes).sort(([a], [b]) => a.localeCompare(b)),
-);
-writeFileSync(
-  OUT,
-  `${JSON.stringify({ viewport: VIEWPORT.width, boxes: sorted }, null, 2)}\n`,
-);
+const sorted = Object.fromEntries(Object.entries(boxes).sort(([a], [b]) => a.localeCompare(b)));
+writeFileSync(OUT, `${JSON.stringify({ viewport: VIEWPORT.width, boxes: sorted }, null, 2)}\n`);
 
 const zero = Object.values(sorted).filter((b) => b.w === 0).length;
-console.log(
-  `measured ${measured.length} painted backgrounds at ${VIEWPORT.width}px`,
-);
+console.log(`measured ${measured.length} painted backgrounds at ${VIEWPORT.width}px`);
 console.log(`wrote ${Object.keys(sorted).length} slot boxes -> ${OUT}`);
 if (unmatched) console.log(`WARNING: ${unmatched} urls matched no slot`);
 if (zero) console.log(`WARNING: ${zero} slots still measured 0 wide`);

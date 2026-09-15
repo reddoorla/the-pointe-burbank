@@ -53,12 +53,8 @@ const slice = {
 describe("BluxSection slice", () => {
   it("renders the band heading and one node per cell", () => {
     const { getByRole, container } = render(BluxSection, { props: { slice } });
-    expect(getByRole("heading", { level: 2 }).textContent).toContain(
-      "Amenities",
-    );
-    expect(
-      container.querySelectorAll(".blux-section__cells > .blux-cell"),
-    ).toHaveLength(2);
+    expect(getByRole("heading", { level: 2 }).textContent).toContain("Amenities");
+    expect(container.querySelectorAll(".blux-section__cells > .blux-cell")).toHaveLength(2);
   });
 
   it("renders nested subgrid cells", () => {
@@ -69,16 +65,14 @@ describe("BluxSection slice", () => {
   it("renders the inline widget html and background color", () => {
     const { container } = render(BluxSection, { props: { slice } });
     expect(
-      container.querySelector(
-        ".blux-widget[data-widget='Two White Lines'] hr.divider",
-      ),
+      container.querySelector(".blux-widget[data-widget='Two White Lines'] hr.divider"),
     ).not.toBeNull();
     // jsdom's CSSOM normalizes hex colors when the style attribute is parsed,
     // so the serialized attribute reads back as rgb(), same as the
     // established convention in GridBand.test.ts (.style.backgroundColor).
-    expect(
-      container.querySelector(".blux-section")?.getAttribute("style"),
-    ).toContain("background-color: rgb(17, 17, 17)");
+    expect(container.querySelector(".blux-section")?.getAttribute("style")).toContain(
+      "background-color: rgb(17, 17, 17)",
+    );
     expect(container.querySelector(".blux-section__bg")).not.toBeNull();
   });
 
@@ -102,9 +96,7 @@ describe("BluxSection slice", () => {
     const { container, getByText } = render(BluxSection, {
       props: { slice: embedSlice },
     });
-    expect(container.querySelector(".promo")?.textContent).toContain(
-      "Book now",
-    );
+    expect(container.querySelector(".promo")?.textContent).toContain("Book now");
     const link = getByText("Details");
     expect(link.closest("a")?.getAttribute("href")).toBe("https://ex.com");
   });
@@ -128,20 +120,12 @@ describe("BluxSection slice", () => {
       },
     } as unknown as Content.BluxSectionSlice;
     const { container } = render(BluxSection, { props: { slice: twoCol } });
-    const cellsEl = container.querySelector(
-      ".blux-section__cells",
-    ) as HTMLElement;
+    const cellsEl = container.querySelector(".blux-section__cells") as HTMLElement;
     expect(cellsEl.getAttribute("style")).toContain("max-width: 1100px");
     expect(cellsEl.getAttribute("style")).toContain("--band-pad: 80px 4%");
-    const cells = container.querySelectorAll<HTMLElement>(
-      ".blux-section__cells > .blux-cell",
-    );
-    expect(cells[0].style.getPropertyValue("--cell-basis")).toBe(
-      "calc(50% - 2%)",
-    );
-    expect(cells[1].style.getPropertyValue("--cell-basis")).toBe(
-      "calc(70% - 2%)",
-    );
+    const cells = container.querySelectorAll<HTMLElement>(".blux-section__cells > .blux-cell");
+    expect(cells[0].style.getPropertyValue("--cell-basis")).toBe("calc(50% - 2%)");
+    expect(cells[1].style.getPropertyValue("--cell-basis")).toBe("calc(70% - 2%)");
   });
 
   it("wraps the heading in its type-role container when heading_role is set", () => {

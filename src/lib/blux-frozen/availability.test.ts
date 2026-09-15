@@ -28,9 +28,7 @@ describe("renderAvailability", () => {
   });
 
   it("stacks one row per suite, in the Figma order", () => {
-    const names = [...html.matchAll(/rd-avail-suite">([^<]+)</g)].map(
-      (m) => m[1],
-    );
+    const names = [...html.matchAll(/rd-avail-suite">([^<]+)</g)].map((m) => m[1]);
     expect(names).toEqual(site.suites.map((s) => s.name));
   });
 
@@ -91,11 +89,7 @@ describe("assertAvailabilityData", () => {
     ["a mistyped value", { ...site, total: 480000 }, /total /],
     ["no suites at all", { ...site, suites: [] }, /suites/],
     ["suites as an object", { ...site, suites: {} }, /suites/],
-    [
-      "a suite missing its area",
-      { ...site, suites: [{ name: "Suite 300" }] },
-      /suites\[0\]\.area/,
-    ],
+    ["a suite missing its area", { ...site, suites: [{ name: "Suite 300" }] }, /suites\[0\]\.area/],
     [
       "a suite naming the wrong key",
       { ...site, suites: [{ name: "Suite 300", sf: "18,000 SF" }] },
@@ -112,9 +106,9 @@ describe("assertAvailabilityData", () => {
   }
 
   it("names the source file so the error points at what to fix", () => {
-    expect(() =>
-      assertAvailabilityData({}, "frozen/home.availability.json"),
-    ).toThrow(/^frozen\/home\.availability\.json: mediaId/);
+    expect(() => assertAvailabilityData({}, "frozen/home.availability.json")).toThrow(
+      /^frozen\/home\.availability\.json: mediaId/,
+    );
   });
 });
 
@@ -150,9 +144,7 @@ describe("home.extra-slots.json", () => {
 
   it("declares exactly the availability slots the render reads, plus the poster", () => {
     const avail = declared.filter((s) => s.key.startsWith("x.avail."));
-    expect(avail.map((s) => ({ key: s.key, text: s.text }))).toEqual(
-      availabilitySlots(site),
-    );
+    expect(avail.map((s) => ({ key: s.key, text: s.text }))).toEqual(availabilitySlots(site));
     expect(declared.filter((s) => s.key === POSTER_SLOT)).toHaveLength(1);
     expect(declared).toHaveLength(avail.length + 1);
   });
@@ -184,10 +176,7 @@ describe("availabilityFromSlots", () => {
   });
 
   it("falls back per-key, so a partly-migrated CMS still renders", () => {
-    const out = availabilityFromSlots(
-      site,
-      lookup({ "x.avail.total": "500,000 SF" }),
-    );
+    const out = availabilityFromSlots(site, lookup({ "x.avail.total": "500,000 SF" }));
     expect(out.total).toBe("500,000 SF");
     expect(out.totalLabel).toBe(site.totalLabel); // absent → committed
     expect(out.suites).toEqual(site.suites);
@@ -214,10 +203,7 @@ describe("availabilityFromSlots", () => {
   });
 
   it("keeps a suite when only one field is blank, rather than losing the row", () => {
-    const out = availabilityFromSlots(
-      site,
-      lookup({ "x.avail.suite2.area": "" }),
-    );
+    const out = availabilityFromSlots(site, lookup({ "x.avail.suite2.area": "" }));
     expect(out.suites).toHaveLength(site.suites.length);
     expect(out.suites[1]).toEqual({ name: site.suites[1]!.name, area: "" });
   });

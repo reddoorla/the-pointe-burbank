@@ -18,8 +18,7 @@ beforeEach(() => {
 });
 
 afterEach(() => cleanup());
-const children = () =>
-  createRawSnippet(() => ({ render: () => "<p>content</p>" }));
+const children = () => createRawSnippet(() => ({ render: () => "<p>content</p>" }));
 
 describe("SectionBand", () => {
   it("applies the style record inline and renders children", () => {
@@ -44,13 +43,9 @@ describe("SectionBand", () => {
         children: children(),
       },
     });
-    expect(container.querySelector("video")?.getAttribute("src")).toBe(
-      "https://cdn/bg.mp4",
-    );
+    expect(container.querySelector("video")?.getAttribute("src")).toBe("https://cdn/bg.mp4");
     // Decorative background media must stay out of the a11y tree.
-    expect(
-      container.querySelector("[aria-hidden='true'] video"),
-    ).not.toBeNull();
+    expect(container.querySelector("[aria-hidden='true'] video")).not.toBeNull();
   });
 
   it("passes eager loading to the background image when eagerBackground is set", () => {
@@ -61,9 +56,7 @@ describe("SectionBand", () => {
         children: children(),
       },
     });
-    expect(container.querySelector("img")?.getAttribute("loading")).toBe(
-      "eager",
-    );
+    expect(container.querySelector("img")?.getAttribute("loading")).toBe("eager");
   });
 
   it("background image stays lazy by default", () => {
@@ -73,9 +66,7 @@ describe("SectionBand", () => {
         children: children(),
       },
     });
-    expect(container.querySelector("img")?.getAttribute("loading")).toBe(
-      "lazy",
-    );
+    expect(container.querySelector("img")?.getAttribute("loading")).toBe("lazy");
   });
 
   it("carries slice identity data-attrs when given, omits them when not", () => {
@@ -130,9 +121,7 @@ describe("SectionBand", () => {
     });
     // The hero is above the fold and the LCP — it must not start hidden.
     expect(container.querySelector("section > div.w-full")).toBeNull();
-    expect(container.querySelector("section")?.textContent).toContain(
-      "content",
-    );
+    expect(container.querySelector("section")?.textContent).toContain("content");
   });
 
   it("does not hide content under prefers-reduced-motion", () => {

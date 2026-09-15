@@ -7,9 +7,7 @@
   <meta name="robots" content="noindex" />
 </svelte:head>
 
-<div
-  class="flex flex-col items-center justify-center min-h-[60vh] text-center px-8"
->
+<div class="flex flex-col items-center justify-center min-h-[60vh] text-center px-8">
   <h1>{page.status}</h1>
   <p class="mt-4 text-lg opacity-70">
     {page.error?.message ?? "Something went wrong"}

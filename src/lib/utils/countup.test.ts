@@ -14,16 +14,12 @@ describe("formatCount", () => {
 
   it("applies prefix and suffix around the number", () => {
     expect(formatCount(38, { suffix: "%", locale: "en-US" })).toBe("38%");
-    expect(
-      formatCount(1200, { prefix: "$", decimals: 0, locale: "en-US" }),
-    ).toBe("$1,200");
+    expect(formatCount(1200, { prefix: "$", decimals: 0, locale: "en-US" })).toBe("$1,200");
     expect(formatCount(50, { suffix: "+", locale: "en-US" })).toBe("50+");
   });
 
   it("can turn grouping off", () => {
-    expect(formatCount(1000000, { useGrouping: false, locale: "en-US" })).toBe(
-      "1000000",
-    );
+    expect(formatCount(1000000, { useGrouping: false, locale: "en-US" })).toBe("1000000");
   });
 
   it("handles zero and negatives", () => {
@@ -32,8 +28,6 @@ describe("formatCount", () => {
   });
 
   it("respects the locale's grouping and decimal marks", () => {
-    expect(formatCount(1234.5, { decimals: 1, locale: "de-DE" })).toBe(
-      "1.234,5",
-    );
+    expect(formatCount(1234.5, { decimals: 1, locale: "de-DE" })).toBe("1.234,5");
   });
 });

@@ -27,14 +27,10 @@ export function defaultLevel(originalLevel: number): number {
  * body using {h3, h5} → {3→2, 5→3}; {h2} → {2→2}. Returns an empty map for a
  * field with no headings.
  */
-export function buildHeadingLevelMap(
-  field: RichTextField | null | undefined,
-): Map<number, number> {
+export function buildHeadingLevelMap(field: RichTextField | null | undefined): Map<number, number> {
   const levels = new Set<number>();
   for (const node of field ?? []) {
-    const match = /^heading([1-6])$/.exec(
-      (node as { type?: string }).type ?? "",
-    );
+    const match = /^heading([1-6])$/.exec((node as { type?: string }).type ?? "");
     if (match) levels.add(Number(match[1]));
   }
   const sorted = [...levels].sort((a, b) => a - b);

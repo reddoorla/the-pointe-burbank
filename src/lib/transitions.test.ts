@@ -3,8 +3,7 @@ import { fade, fly, slide } from "./transitions";
 
 function mockMatchMedia(reducedMotion: boolean) {
   window.matchMedia = vi.fn().mockImplementation((query: string) => ({
-    matches:
-      query === "(prefers-reduced-motion: reduce)" ? reducedMotion : false,
+    matches: query === "(prefers-reduced-motion: reduce)" ? reducedMotion : false,
     media: query,
     addEventListener: () => {},
     removeEventListener: () => {},

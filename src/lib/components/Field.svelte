@@ -1,15 +1,7 @@
 <script lang="ts">
   import type { HTMLInputAttributes } from "svelte/elements";
 
-  type FieldType =
-    | "text"
-    | "email"
-    | "tel"
-    | "url"
-    | "password"
-    | "number"
-    | "search"
-    | "textarea";
+  type FieldType = "text" | "email" | "tel" | "url" | "password" | "number" | "search" | "textarea";
 
   interface Props {
     name: string;
@@ -51,9 +43,8 @@
   const errorId = `${uid}-error`;
 
   const describedBy = $derived(
-    [description ? descriptionId : null, error ? errorId : null]
-      .filter(Boolean)
-      .join(" ") || undefined,
+    [description ? descriptionId : null, error ? errorId : null].filter(Boolean).join(" ") ||
+      undefined,
   );
 </script>
 

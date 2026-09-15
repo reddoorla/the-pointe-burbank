@@ -37,17 +37,14 @@ function makeNav(
     type,
     willUnload: false,
     from: { url: new URL(fromPath, "https://example.com") },
-    to: toPath
-      ? { url: new URL(toPath, "https://example.com"), route: { id: toPath } }
-      : null,
+    to: toPath ? { url: new URL(toPath, "https://example.com"), route: { id: toPath } } : null,
     cancel: vi.fn(),
   };
 }
 
 function mockMatchMedia(reducedMotion: boolean) {
   window.matchMedia = vi.fn().mockImplementation((query: string) => ({
-    matches:
-      query === "(prefers-reduced-motion: reduce)" ? reducedMotion : false,
+    matches: query === "(prefers-reduced-motion: reduce)" ? reducedMotion : false,
     media: query,
     addEventListener: () => {},
     removeEventListener: () => {},
@@ -87,8 +84,7 @@ afterEach(() => {
   vi.useRealTimers();
 });
 
-const overlay = (container: HTMLElement) =>
-  container.querySelector('[aria-hidden="true"]');
+const overlay = (container: HTMLElement) => container.querySelector('[aria-hidden="true"]');
 
 describe("PreNavTransition", () => {
   it("cancels a cross-page nav, shows the overlay, re-issues goto after the fade", async () => {

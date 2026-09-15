@@ -26,12 +26,8 @@ describe("BluxMediaText slice", () => {
     const { container, getByText } = render(BluxMediaText, {
       props: { slice },
     });
-    expect(
-      container.querySelector(".blux-media-text[data-media-side='right']"),
-    ).not.toBeNull();
-    expect(
-      container.querySelector(".blux-media-text__media img"),
-    ).not.toBeNull();
+    expect(container.querySelector(".blux-media-text[data-media-side='right']")).not.toBeNull();
+    expect(container.querySelector(".blux-media-text__media img")).not.toBeNull();
     expect(getByText("Split")).not.toBeNull();
   });
 });

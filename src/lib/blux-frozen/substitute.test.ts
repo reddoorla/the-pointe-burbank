@@ -1,19 +1,11 @@
 import { describe, expect, it } from "vitest";
-import {
-  substitute,
-  styleTag,
-  ANY_TOKEN_RE,
-  type SlotValue,
-} from "./substitute";
+import { substitute, styleTag, ANY_TOKEN_RE, type SlotValue } from "./substitute";
 
 const vals = (o: Record<string, SlotValue>) => new Map(Object.entries(o));
 
 describe("substitute", () => {
   it("replaces text tokens", () => {
-    const out = substitute(
-      "<h1>⟦t:s0.t0⟧</h1>",
-      vals({ "s0.t0": { text: "Hello" } }),
-    );
+    const out = substitute("<h1>⟦t:s0.t0⟧</h1>", vals({ "s0.t0": { text: "Hello" } }));
     expect(out).toBe("<h1>Hello</h1>");
   });
 

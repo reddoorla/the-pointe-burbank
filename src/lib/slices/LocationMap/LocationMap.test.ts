@@ -37,9 +37,7 @@ describe("LocationMap slice", () => {
     const { container } = render(LocationMap, {
       props: { slice, context: { presentation } },
     });
-    const section = container.querySelector(
-      'section[data-slice-type="location_map"]',
-    );
+    const section = container.querySelector('section[data-slice-type="location_map"]');
     expect(section).not.toBeNull();
     expect(section?.querySelector("[data-map-placeholder]")).not.toBeNull();
   });

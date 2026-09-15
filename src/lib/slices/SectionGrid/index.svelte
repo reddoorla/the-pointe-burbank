@@ -1,11 +1,7 @@
 <script lang="ts">
   import RichTextBody from "$lib/components/RichTextBody.svelte";
   import ContentBand from "$lib/components/ContentBand.svelte";
-  import {
-    PrismicImage,
-    PrismicLink,
-    PrismicRichText,
-  } from "@prismicio/svelte";
+  import { PrismicImage, PrismicLink, PrismicRichText } from "@prismicio/svelte";
   import { isFilled, type Content } from "@prismicio/client";
   import { cappedWidths } from "@reddoorla/maintenance/images";
 
@@ -18,8 +14,7 @@
   };
 
   type Item = Content.SectionGridSliceDefaultItem;
-  const hasText = (i: Item) =>
-    isFilled.richText(i.item_heading) || isFilled.richText(i.item_body);
+  const hasText = (i: Item) => isFilled.richText(i.item_heading) || isFilled.richText(i.item_body);
   const hasMedia = (i: Item) => isFilled.image(i.item_media);
 
   let items = $derived(slice.items as Item[]);
@@ -56,10 +51,7 @@
   {#if mode === "tiles"}
     <div class="grid grid-cols-2 gap-6 md:grid-cols-3">
       {#each items as item (item)}
-        <PrismicLink
-          field={item.item_link}
-          class="flex items-center justify-center bg-surface p-8"
-        >
+        <PrismicLink field={item.item_link} class="flex items-center justify-center bg-surface p-8">
           <!-- Logo tile: capped at 4rem tall, so it never needs a wide candidate. -->
           <PrismicImage
             field={item.item_media}

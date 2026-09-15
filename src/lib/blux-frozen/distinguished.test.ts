@@ -17,9 +17,7 @@ describe("the artifact shape the Distinguished Design rules rely on", () => {
   });
 
   it("splits it into exactly two grid columns, figure first then icons", () => {
-    const grid = band!.querySelectorAll(
-      '.block-grid-container[data-columns="2"]',
-    );
+    const grid = band!.querySelectorAll('.block-grid-container[data-columns="2"]');
     expect(grid).toHaveLength(1);
     const columns = grid[0]!.querySelectorAll(":scope > .cagriditem");
     expect(columns).toHaveLength(2);
@@ -35,35 +33,27 @@ describe("the artifact shape the Distinguished Design rules rely on", () => {
     // panel would also have stopped being the thing these rules describe.
     const panel = doc.querySelector("#page-block-3-item-1-item-0");
     expect(panel!.getAttribute("style")).toContain("rgb(255, 255, 255)");
-    expect(
-      panel!.querySelector(":scope > .blocks0container")!.getAttribute("style"),
-    ).toContain("padding: 100px 4% 80px");
+    expect(panel!.querySelector(":scope > .blocks0container")!.getAttribute("style")).toContain(
+      "padding: 100px 4% 80px",
+    );
   });
 
   it("stacks four icon cells in a one-column grid", () => {
-    const stack = doc.querySelectorAll(
-      '#page-block-3-item-1-item-0 .cagrid[data-columns="1"]',
-    );
+    const stack = doc.querySelectorAll('#page-block-3-item-1-item-0 .cagrid[data-columns="1"]');
     expect(stack).toHaveLength(1);
-    const cells = stack[0]!.querySelectorAll(
-      '[id^="page-block-3-item-1-item-0-item-"]',
-    );
+    const cells = stack[0]!.querySelectorAll('[id^="page-block-3-item-1-item-0-item-"]');
     expect(cells).toHaveLength(4);
   });
 
   it("gives every cell one icon holder and one label holder", () => {
     for (let i = 0; i < 4; i++) {
       const cell = doc.querySelector(`#page-block-3-item-1-item-0-item-${i}`);
-      expect(
-        cell!.querySelectorAll(".block-media-holder .ib.img"),
-      ).toHaveLength(1);
-      expect(
-        cell!.querySelectorAll(".block-title-holder .block-title"),
-      ).toHaveLength(1);
+      expect(cell!.querySelectorAll(".block-media-holder .ib.img")).toHaveLength(1);
+      expect(cell!.querySelectorAll(".block-title-holder .block-title")).toHaveLength(1);
       // The 8px gutter the row layout zeroes out.
-      expect(
-        cell!.querySelector(".block-title")!.getAttribute("style"),
-      ).toContain("padding: 0px 0px 0px 8px");
+      expect(cell!.querySelector(".block-title")!.getAttribute("style")).toContain(
+        "padding: 0px 0px 0px 8px",
+      );
     }
   });
 
@@ -71,21 +61,15 @@ describe("the artifact shape the Distinguished Design rules rely on", () => {
     // The band and the table are positioned against this `.block-content`, and
     // the building is what gives it its height — a second in-flow image here
     // would change what every percentage below resolves against.
-    const content = doc.querySelector(
-      "#page-block-3-item-0 > .blocks0container > .block-content",
-    );
+    const content = doc.querySelector("#page-block-3-item-0 > .blocks0container > .block-content");
     expect(content!.querySelectorAll(":scope > .ib.img")).toHaveLength(1);
-    expect(
-      content!.querySelector("#page-block-3-item-0-item-0"),
-    ).not.toBeNull();
+    expect(content!.querySelector("#page-block-3-item-0-item-0")).not.toBeNull();
   });
 });
 
 describe("DISTINGUISHED_CSS", () => {
   it("applies only above the artifact's own stacking breakpoints", () => {
-    expect(
-      DISTINGUISHED_CSS.startsWith("@media all and (min-width:1000px){"),
-    ).toBe(true);
+    expect(DISTINGUISHED_CSS.startsWith("@media all and (min-width:1000px){")).toBe(true);
     expect(DISTINGUISHED_CSS.endsWith("}")).toBe(true);
     // One block, so the closing brace above really does close the query.
     expect([...DISTINGUISHED_CSS.matchAll(/@media/g)]).toHaveLength(1);
@@ -96,15 +80,11 @@ describe("DISTINGUISHED_CSS", () => {
     expect(DISTINGUISHED_CSS).toContain(":first-child{order:2}");
     expect(DISTINGUISHED_CSS).toContain(":last-child{order:1}");
     // `.cagridFlexHeight>.grid-2` pins min AND max width; `width` alone loses.
-    expect(DISTINGUISHED_CSS).toContain(
-      "width:100%;min-width:100%;max-width:100%",
-    );
+    expect(DISTINGUISHED_CSS).toContain("width:100%;min-width:100%;max-width:100%");
   });
 
   it("clears the panel's inline white fill", () => {
-    expect(DISTINGUISHED_CSS).toContain(
-      "background-color:transparent!important",
-    );
+    expect(DISTINGUISHED_CSS).toContain("background-color:transparent!important");
   });
 
   it("draws the band at Figma's proportions of the building", () => {

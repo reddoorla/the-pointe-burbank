@@ -1,9 +1,5 @@
 <script lang="ts">
-  import {
-    PrismicImage,
-    PrismicLink,
-    PrismicRichText,
-  } from "@prismicio/svelte";
+  import { PrismicImage, PrismicLink, PrismicRichText } from "@prismicio/svelte";
   import { isFilled, type Content } from "@prismicio/client";
   import { cappedWidths } from "@reddoorla/maintenance/images";
   let { slice }: { slice: Content.BluxMediaTextSlice } = $props();
@@ -41,14 +37,9 @@
     </div>
   {/if}
   <div class="blux-media-text__text">
-    {#if isFilled.richText(slice.primary.title)}<PrismicRichText
-        field={slice.primary.title}
-      />{/if}
-    {#if isFilled.richText(slice.primary.body)}<PrismicRichText
-        field={slice.primary.body}
-      />{/if}
-    {#if isFilled.link(slice.primary.link)}<PrismicLink
-        field={slice.primary.link}
+    {#if isFilled.richText(slice.primary.title)}<PrismicRichText field={slice.primary.title} />{/if}
+    {#if isFilled.richText(slice.primary.body)}<PrismicRichText field={slice.primary.body} />{/if}
+    {#if isFilled.link(slice.primary.link)}<PrismicLink field={slice.primary.link}
         >{slice.primary.link_label || "Learn more"}</PrismicLink
       >{/if}
   </div>

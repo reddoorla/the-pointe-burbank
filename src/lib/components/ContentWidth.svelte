@@ -24,8 +24,7 @@
   // Note: keep these as literal strings — Tailwind's JIT doesn't scan template
   // literals with interpolations. If the numbers below change, update the
   // constants above so the edge-fade math stays in sync.
-  const baseClasses =
-    "max-w-[1220px] xl:max-w-[1440px] xl:mx-auto mx-[4%] w-[92%]";
+  const baseClasses = "max-w-[1220px] xl:max-w-[1440px] xl:mx-auto mx-[4%] w-[92%]";
   const defaultLayouts = "flex flex-col items-center justify-center relative";
 
   const edgeWidthPx = $derived.by(() => {
@@ -42,18 +41,11 @@
 
 {#snippet content()}
   {#if animateInOnScroll}
-    <div
-      use:animateIn
-      class="{baseClasses} {passedClasses || defaultLayouts}"
-      style={passedStyle}
-    >
+    <div use:animateIn class="{baseClasses} {passedClasses || defaultLayouts}" style={passedStyle}>
       {@render children?.()}
     </div>
   {:else}
-    <div
-      class="{baseClasses} {passedClasses || defaultLayouts}"
-      style={passedStyle}
-    >
+    <div class="{baseClasses} {passedClasses || defaultLayouts}" style={passedStyle}>
       {@render children?.()}
     </div>
   {/if}

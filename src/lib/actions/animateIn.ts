@@ -29,8 +29,7 @@ function resolveConfig(param: AnimateInParam): ResolvedConfig {
     typeof param === "boolean" ||
     (param !== undefined && typeof param === "object" && "trigger" in param);
 
-  const opts: AnimateInOptions =
-    typeof param === "object" && param !== null ? param : {};
+  const opts: AnimateInOptions = typeof param === "object" && param !== null ? param : {};
   const trigger = typeof param === "boolean" ? param : (opts.trigger ?? false);
 
   return {
@@ -83,8 +82,7 @@ export function animateIn(node: HTMLElement, param?: AnimateInParam) {
     const delay =
       cfg.stagger !== null
         ? cfg.index * cfg.stagger
-        : cfg.delayMax *
-          (node.getBoundingClientRect().left / window.innerWidth);
+        : cfg.delayMax * (node.getBoundingClientRect().left / window.innerWidth);
     node.style.transitionDelay = `${delay}ms`;
 
     observer = new IntersectionObserver(

@@ -29,8 +29,7 @@ const frames: CarouselFrame[] = [
   { media: { kind: "image", url: "https://cdn/c.jpg" } },
 ];
 
-const renderFrames = () =>
-  render(CarouselFrames, { props: { frames, label: "Photo slideshow" } });
+const renderFrames = () => render(CarouselFrames, { props: { frames, label: "Photo slideshow" } });
 
 describe("CarouselFrames", () => {
   it("renders an APG carousel region with one figure per frame", () => {

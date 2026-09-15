@@ -14,17 +14,11 @@
   };
   let { slice, context = {} }: Props = $props();
 
-  const band = $derived(
-    bandFor(context.presentation, slice.primary.band ?? null),
-  );
+  const band = $derived(bandFor(context.presentation, slice.primary.band ?? null));
 </script>
 
 {#if band?.tree}
-  <SectionBand
-    {band}
-    sliceType={slice.slice_type}
-    sliceVariation={slice.variation}
-  >
+  <SectionBand {band} sliceType={slice.slice_type} sliceVariation={slice.variation}>
     <BandContent {band}>
       <Grid node={band.tree} map={band.map} />
     </BandContent>

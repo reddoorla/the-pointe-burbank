@@ -18,9 +18,7 @@ const repositoryName = process.env.PRISMIC_REPOSITORY_NAME;
 const writeToken = process.env.PRISMIC_WRITE_TOKEN;
 
 if (!repositoryName || !writeToken) {
-  throw new Error(
-    "PRISMIC_REPOSITORY_NAME and PRISMIC_WRITE_TOKEN must be set.",
-  );
+  throw new Error("PRISMIC_REPOSITORY_NAME and PRISMIC_WRITE_TOKEN must be set.");
 }
 
 interface SourcePost {

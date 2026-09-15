@@ -6,9 +6,7 @@ import HeroBackgroundImage from "./HeroBackgroundImage.svelte";
 afterEach(() => {
   cleanup();
   // svelte:head content is not removed by cleanup(); clear it between tests.
-  document.head
-    .querySelectorAll("link[rel='preload']")
-    .forEach((el) => el.remove());
+  document.head.querySelectorAll("link[rel='preload']").forEach((el) => el.remove());
 });
 
 const prismicImage = (overrides: Record<string, unknown> = {}) =>
@@ -38,9 +36,7 @@ describe("HeroBackgroundImage", () => {
 
   it("emits a preload link so the browser discovers the LCP image pre-hydration", () => {
     render(HeroBackgroundImage, { image: prismicImage() });
-    const link = document.head.querySelector<HTMLLinkElement>(
-      "link[rel='preload'][as='image']",
-    )!;
+    const link = document.head.querySelector<HTMLLinkElement>("link[rel='preload'][as='image']")!;
     expect(link).toBeTruthy();
     expect(link.href).toContain("w=1920");
     expect(link.getAttribute("imagesrcset")).toContain("480w");

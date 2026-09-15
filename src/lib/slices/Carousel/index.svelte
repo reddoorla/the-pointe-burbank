@@ -1,9 +1,7 @@
 <script lang="ts">
   import { bandFor, type Presentation } from "$lib/blux/presentation";
   import SectionBand from "$lib/blux/SectionBand.svelte";
-  import CarouselFrames, {
-    type CarouselFrame,
-  } from "$lib/blux/CarouselFrames.svelte";
+  import CarouselFrames, { type CarouselFrame } from "$lib/blux/CarouselFrames.svelte";
 
   type Props = {
     slice: {
@@ -16,9 +14,7 @@
   };
   let { slice, context = {} }: Props = $props();
 
-  const band = $derived(
-    bandFor(context.presentation, slice.primary.band ?? null),
-  );
+  const band = $derived(bandFor(context.presentation, slice.primary.band ?? null));
   // Caption TEXT is Prismic-editable in the slice's items, zipped to the
   // manifest slides by index; the manifest carries the media + caption role.
   const frames = $derived(
@@ -39,11 +35,7 @@
 </script>
 
 {#if frames && frames.length > 0}
-  <SectionBand
-    {band}
-    sliceType={slice.slice_type}
-    sliceVariation={slice.variation}
-  >
+  <SectionBand {band} sliceType={slice.slice_type} sliceVariation={slice.variation}>
     <CarouselFrames
       {frames}
       label={slice.primary.label || "Photo slideshow"}

@@ -1,10 +1,5 @@
 import { describe, it, expect } from "vitest";
-import {
-  widthFor,
-  sizeUrl,
-  sizeImageSlots,
-  type ImageBoxes,
-} from "./image-size";
+import { widthFor, sizeUrl, sizeImageSlots, type ImageBoxes } from "./image-size";
 import type { SlotValue } from "./substitute";
 import boxes from "./frozen/home.image-boxes.json";
 import slots from "./frozen/home.slots.json";
@@ -94,9 +89,7 @@ describe("sizeImageSlots", () => {
   it("leaves text slots and unmeasured slots untouched", () => {
     const out = sizeImageSlots(values(), measured);
     expect(out.get("h.t0")).toEqual({ text: "not an image" });
-    expect(sizeImageSlots(values(), { viewport: 1440, boxes: {} })).toEqual(
-      values(),
-    );
+    expect(sizeImageSlots(values(), { viewport: 1440, boxes: {} })).toEqual(values());
   });
 
   it("does not mutate the map it was given", () => {
@@ -157,9 +150,7 @@ describe("the committed measurements", () => {
     // The four that dominate the transfer, with the numbers measured on
     // production: 5774px into an 823px box at 1.34MB, and the three carousel
     // slides at 3.4MB between them.
-    const shrunk = Object.entries(artifact.boxes).filter(
-      ([, b]) => widthFor(b) !== null,
-    );
+    const shrunk = Object.entries(artifact.boxes).filter(([, b]) => widthFor(b) !== null);
     expect(shrunk.length).toBeGreaterThanOrEqual(26);
     expect(widthFor(artifact.boxes["s10.i1"])).toBe(1700);
     for (const k of ["s6.i0", "s6.i1", "s6.i2"]) {

@@ -31,8 +31,6 @@ describe("BluxText slice", () => {
 
   it("renders a button when the link is filled", () => {
     const { getByText } = render(BluxText, { props: { slice } });
-    expect(getByText("Contact").closest("a")?.getAttribute("href")).toBe(
-      "https://example.com",
-    );
+    expect(getByText("Contact").closest("a")?.getAttribute("href")).toBe("https://example.com");
   });
 });

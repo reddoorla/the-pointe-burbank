@@ -25,9 +25,7 @@ describe("MediaText slice", () => {
     const { getByRole } = render(MediaText, {
       props: { slice: makeSlice("imageRight") },
     });
-    expect(getByRole("heading", { level: 2 }).textContent).toContain(
-      "Amenities",
-    );
+    expect(getByRole("heading", { level: 2 }).textContent).toContain("Amenities");
     expect(getByRole("img").getAttribute("alt")).toBe("Pool");
   });
 
