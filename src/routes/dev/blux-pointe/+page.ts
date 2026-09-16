@@ -13,7 +13,12 @@ import siteConfig from "./site-config.json";
 //   cp <tmp>/{render-fixture.json,site-config.json,theme.css} this-dir/
 //   # (render-fixture.json → fixture.json), then `prettier --write` them.
 // The load test's count canaries catch structural drift after a regen.
-export const prerender = true;
+// #717: this was `true`, which baked a dev-only fixture into the production
+// build AND would run the /dev layout guard at build time, where `dev` is
+// already false — failing the BUILD rather than the request. The Playwright
+// fidelity gate drives this route on the dev server, so nothing needs it
+// prerendered.
+export const prerender = false;
 
 type FixtureDoc = { uid: string; data: { slices: unknown[] } };
 
