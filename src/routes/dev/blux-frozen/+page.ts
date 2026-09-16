@@ -21,7 +21,12 @@ import manifest from "$lib/blux-frozen/frozen/home.slots.json";
 //   node dist/cli/bin.js blux freeze ~/Desktop/thePointe --out <tmp> --site home
 //   cp <tmp>/frozen/home.{html,style.css,fonts.json} <tmp>/home.slots.json \
 //      src/lib/blux-frozen/frozen/
-export const prerender = true;
+// #717: this was `true`, which baked a dev-only fixture into the production
+// build AND would run the /dev layout guard at build time, where `dev` is
+// already false — failing the BUILD rather than the request. The Playwright
+// fidelity gate drives this route on the dev server, so nothing needs it
+// prerendered.
+export const prerender = false;
 
 export function load() {
   return {
