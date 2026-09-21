@@ -8,7 +8,7 @@ jobs:
     permissions:
       contents: read
       pull-requests: write
-    uses: reddoorla/.github/.github/workflows/ci.yml@8f9852c4f69f629d1d785036366d74d9358645f9 # v1.4.1
+    uses: reddoorla/.github/.github/workflows/ci.yml@c714d9e472885bbf66f386e9f056a16aab7986d2 # v1.4.2
     with:
       node-version: "24"
       netlify-site: "the-pointe-burbank-rd"
