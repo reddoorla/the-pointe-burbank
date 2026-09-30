@@ -23,6 +23,18 @@ try {
   // no frozen artifact dir → not a frozen site
 }
 
+// VITE_REDDOOR_GATE_FIXTURES=1 builds the /dev fixtures into the bundle, for
+// the a11y gate's own build and nothing else (src/routes/dev/+layout.server.ts,
+// reddoor-maintenance#948). Set on Netlify it would deploy them, so refuse it
+// there, at module load.
+if (process.env.VITE_REDDOOR_GATE_FIXTURES && process.env.NETLIFY) {
+  throw new Error(
+    "VITE_REDDOOR_GATE_FIXTURES is set on Netlify: it builds the /dev fixtures into the " +
+      "deployed site. It belongs to the a11y gate's own build (reddoor-maint audit) only. " +
+      "Unset it in the Netlify environment.",
+  );
+}
+
 /** @type {import('@sveltejs/kit').Config} */
 const config = {
   compilerOptions: {
