@@ -1,0 +1,42 @@
+# Delivers this site's Prismic model changes. Managed by @reddoorla/maintenance
+# (`reddoor-maint prismic-ci`) — change it there and re-run, not here.
+#
+# On a PR touching a model: comment the delta, write nothing.
+# On merge to main: push those models to Prismic. Never delete.
+#
+# THE BRANCH FILTER ON `push:` IS LOAD-BEARING, not tidiness. The reusable
+# workflow's apply job also guards `github.ref == 'refs/heads/main'`,
+# and its comment calls this the other half of that gate: an unfiltered
+# `on: push:` fires on every branch AND every tag, so a feature branch's models
+# would reach production with no pull request and therefore no review anywhere in
+# the sequence. Keep both halves.
+name: prismic-models
+
+on:
+  # No branch filter here, deliberately: a model PR into any base deserves its
+  # delta comment, and the dry job is INCAPABLE of writing — it never passes
+  # `--apply`, and it holds no job that does.
+  pull_request:
+    paths:
+      - "customtypes/**"
+      - "src/lib/slices/**/model.json"
+  push:
+    branches: [main]
+    paths:
+      - "customtypes/**"
+      - "src/lib/slices/**/model.json"
+
+jobs:
+  prismic-models:
+    # A called workflow's jobs can only NARROW what the caller granted, so the
+    # PR-comment permission has to be granted here as well as there. Nothing in
+    # either job pushes code, so `contents` stays read.
+    permissions:
+      contents: read
+      pull-requests: write
+    uses: reddoorla/.github/.github/workflows/prismic-models.yml@558395431ddcb481ecba3dd84b78b38c338cfa03 # v1.4.0
+    secrets:
+      # Spelled exactly as the reusable workflow declares it. A workflow-local
+      # alias would not be a rename — it would be an undeclared secret, and the
+      # required one would arrive empty.
+      PRISMIC_WRITE_TOKEN: ${{ secrets.PRISMIC_WRITE_TOKEN }}
