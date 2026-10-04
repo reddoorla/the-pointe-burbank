@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import type { PageDocument } from "../../prismicio-types";
+import type { PageDocument } from "../../../prismicio-types";
 import {
   getAllPageDocs,
   getPageDoc,

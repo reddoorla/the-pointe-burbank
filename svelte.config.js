@@ -2,11 +2,11 @@ import { readFileSync, readdirSync } from "node:fs";
 import adapter from "@sveltejs/adapter-netlify";
 import { vitePreprocess } from "@sveltejs/vite-plugin-svelte";
 
-const slicemachine = JSON.parse(
-  readFileSync(new URL("./slicemachine.config.json", import.meta.url), "utf-8"),
+const prismicConfig = JSON.parse(
+  readFileSync(new URL("./prismic.config.json", import.meta.url), "utf-8"),
 );
 const isPlaceholderRepo =
-  (process.env.VITE_PRISMIC_ENVIRONMENT || slicemachine.repositoryName) ===
+  (process.env.VITE_PRISMIC_ENVIRONMENT || prismicConfig.repositoryName) ===
   "your-prismic-repo-name";
 
 // A frozen Blux site commits page artifacts under src/lib/blux-frozen/frozen.

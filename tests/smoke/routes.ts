@@ -9,13 +9,13 @@
 // placeholder repo → error(404)), so the entry below gates its expectation on
 // the repository name — mirroring `isPlaceholderRepo` in src/lib/prismicio.ts
 // and the entries() prerender guard in the home route. The moment a fork wires
-// a real Prismic repo in slicemachine.config.json, the same entry expects 200
+// a real Prismic repo in prismic.config.json, the same entry expects 200
 // with zero edits. The hydration marker `footer` is the shared layout footer,
 // present on every page including the error page.
 
 // Playwright runs this file as native ESM in Node, where JSON imports require
 // the explicit attribute (unlike Vite-bundled src/lib/prismicio.ts).
-import slicemachineConfig from "../../slicemachine.config.json" with { type: "json" };
+import prismicConfig from "../../prismic.config.json" with { type: "json" };
 
 export type SmokeRoute = {
   /** Route path to visit, e.g. "/" or "/about". */
@@ -29,9 +29,9 @@ export type SmokeRoute = {
 };
 
 // Same resolution order as src/lib/prismicio.ts (VITE_PRISMIC_ENVIRONMENT
-// override, then slicemachine.config.json). This file runs in the Playwright
+// override, then prismic.config.json). This file runs in the Playwright
 // process, so read process.env rather than import.meta.env.
-const repositoryName = process.env.VITE_PRISMIC_ENVIRONMENT || slicemachineConfig.repositoryName;
+const repositoryName = process.env.VITE_PRISMIC_ENVIRONMENT || prismicConfig.repositoryName;
 const isPlaceholderRepo = repositoryName === "your-prismic-repo-name";
 
 export const smokeRoutes: SmokeRoute[] = [

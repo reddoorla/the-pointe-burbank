@@ -1,0 +1,5 @@
+{
+  "repositoryName": "the-pointe-burbank",
+  "libraries": ["./src/lib/slices"],
+  "routes": []
+}

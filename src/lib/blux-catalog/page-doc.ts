@@ -1,6 +1,6 @@
 import { asText } from "@prismicio/client";
 
-import type { PageDocument } from "../../prismicio-types";
+import type { PageDocument } from "../../../prismicio-types";
 
 /** Page-document resolution for the shared `[[preview]]` routes.
  *

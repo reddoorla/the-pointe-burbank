@@ -29,6 +29,22 @@ coverage against the Blux export.
 **`README.md` is still the starter's.** It documents the template's component
 library, not this site. Do not read it as a description of what is here.
 
+**`src/lib/slices/index.ts` and `prismicio-types.d.ts` are generated** by the
+Prismic CLI (`pnpm prismic:gen`; Slice Machine is gone, deprecated by Prismic
+2026-09-18, and `scratchpad/regen-types.mjs`, which drove its manager, went with
+it). Edit a model's JSON, regenerate, commit both; the `prismic-codegen` job
+fails a PR whose generated files are stale. Both are in `.prettierignore`. The
+types file sits at the project root; `src/lib/blux-catalog/page-doc.ts` imports
+it by relative path, which also brings its `@prismicio/client` augmentation into
+the program. Run by an agent, the CLI refuses without `--task-id` and
+`--user-intent`, so an agent runs `pnpm exec prismic task-id` once, then
+`pnpm exec prismic gen types --task-id <id> --user-intent "<the ask>"` and the
+same for `gen slice-index`. Never `prismic push` or `prismic pull`: both delete
+to match. `/slice-simulator` is server-rendered (`prerender = false`) so
+`src/hooks.server.ts` can drop netlify.toml's `X-Frame-Options` there and let
+Prismic's Type Builder frame it; prerendered, it would be a static file carrying
+`SAMEORIGIN`.
+
 ## The work journal
 
 **Every working session appends a dated entry to `docs/workJournal.md`** — what

@@ -54,7 +54,7 @@ export default [
       "node_modules/",
       "static/",
       "customtypes/",
-      "src/lib/slices/**/index.js",
+      "src/lib/slices/index.ts",
     ],
   },
 ];
