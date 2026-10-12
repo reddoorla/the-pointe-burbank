@@ -34,7 +34,7 @@ jobs:
     permissions:
       contents: read
       pull-requests: write
-    uses: reddoorla/.github/.github/workflows/prismic-models.yml@558395431ddcb481ecba3dd84b78b38c338cfa03 # v1.4.0
+    uses: reddoorla/.github/.github/workflows/prismic-models.yml@c714d9e472885bbf66f386e9f056a16aab7986d2 # v1.4.2
     secrets:
       # Spelled exactly as the reusable workflow declares it. A workflow-local
       # alias would not be a rename — it would be an undeclared secret, and the
