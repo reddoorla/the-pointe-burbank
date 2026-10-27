@@ -26,8 +26,15 @@ describe("ProductListing", () => {
       products,
     });
     expect(getByRole("heading", { level: 1 }).textContent).toContain("Upholstered");
-    const links = getAllByRole("link");
-    expect(links).toHaveLength(3);
+    // Each product gets exactly one tile link: a designer may add other links
+    // (a back link to /products/<category> also lives under /products/), but a
+    // product shown twice is duplicated content.
+    const links = getAllByRole("link").filter((a) =>
+      products.some((p) => a.getAttribute("href") === `/products/${p.slug}`),
+    );
+    const hrefs = links.map((a) => a.getAttribute("href"));
+    for (const p of products)
+      expect(hrefs.filter((h) => h === `/products/${p.slug}`)).toHaveLength(1);
     expect(links[0]!.getAttribute("href")).toBe("/products/aria");
   });
 
