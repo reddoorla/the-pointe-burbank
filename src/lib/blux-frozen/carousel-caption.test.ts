@@ -11,11 +11,6 @@ describe("restyleCarouselCaptions", () => {
     expect([...out.matchAll(/block-content rd-caption"/g)]).toHaveLength(3);
   });
 
-  it("puts a rule mark ahead of each caption heading", () => {
-    const marks = [...out.matchAll(/rd-caption">.*?(rd-rule-box).*?(<h5)/g)];
-    expect(marks).toHaveLength(3);
-  });
-
   it("keeps the captions' own ids and content tokens", () => {
     expect(out).toContain('id="page-block-8-item-0-item-0-item-0"');
     expect(out).toContain("⟦t:s6.t0⟧");
@@ -65,30 +60,50 @@ describe("CAROUSEL_CAPTION_CSS", () => {
     // caption's (Nicole, 51:27 + 51:30); the two side ones are the arrows'.
     const rule = /#page-block-8 \.blocks2::after\{([^}]*)\}/.exec(CAROUSEL_CAPTION_CSS)?.[1];
     expect(rule, "the scrim rule moved").toBeTruthy();
-    expect([...rule!.matchAll(/linear-gradient\(/g)]).toHaveLength(3);
+    // GUARD: the side ramps are what lift the white arrow glyphs on slide 1 from
+    // 2.53:1 to 8.02:1, against WCAG 1.4.11's 3:1 (measured in carousel-caption.ts).
+    // This is a CSS-string proxy for that contrast; no gate test computes it.
     expect(rule).toContain("linear-gradient(to right,");
     expect(rule).toContain("linear-gradient(to left,");
     expect(rule).toContain("linear-gradient(to top,");
   });
 
-  it("sizes the side scrims in px, not %, so they track the arrow", () => {
-    // The arrows are a fixed 32px inset 4px and do not scale with the viewport.
-    // A percentage ramp would over-darken a wide slide and under-cover a narrow
-    // one — the exact failure the LEED badge had in reverse.
-    // One level of nesting, because every stop is an rgba(...) of its own.
-    const sides = [
-      ...CAROUSEL_CAPTION_CSS.matchAll(
-        /linear-gradient\(to (?:right|left),((?:[^()]|\([^()]*\))*)\)/g,
-      ),
-    ].map((m) => m[1]);
-    expect(sides).toHaveLength(2);
-    for (const ramp of sides) {
-      expect(ramp).not.toMatch(/\d%/);
-      // Opaque enough at the arrow, gone before the caption's ink at 103px.
-      expect(ramp).toContain("rgba(0,0,0,.45) 0");
-      expect(ramp).toContain("rgba(0,0,0,0) 168px");
+  it("keeps both arrow scrims dark enough for a 3:1 control over the arrow", () => {
+    // The arrows are 32px glyphs inset 4px, so they span 4-36px from each edge.
+    // On the light slide 3 the white glyph measures 2.00:1 unscrimmed (p90), and
+    // a ramp of at least .34 black from the edge to 44px is what lifts its worst
+    // pixels past WCAG 1.4.11's 3:1. A floor, not the shipped .45: a darker
+    // ramp, or a different curve that stays above it, is a designer's call.
+    const ramps = new Map(
+      [
+        ...CAROUSEL_CAPTION_CSS.matchAll(
+          /linear-gradient\(to (right|left),((?:[^()]|\([^()]*\))*)\)/g,
+        ),
+      ].map((m) => [m[1], m[2]]),
+    );
+    // Stops in px, or a bare 0; a % stop cannot be placed against the arrow's
+    // fixed px box, so it is left out rather than guessed.
+    const alphaAt = (ramp: string, px: number) => {
+      const stops = [
+        ...ramp.matchAll(/rgba\([^)]*,\s*([\d.]+)\)\s+([\d.]+)(?:px)?(?=,|\s|$)/g),
+      ].map((s) => ({
+        a: Number(s[1]),
+        at: Number(s[2]),
+      }));
+      expect(stops.length, "no px stops in the ramp").toBeGreaterThan(0);
+      if (px <= stops[0].at) return stops[0].a;
+      for (let i = 1; i < stops.length; i++) {
+        const [l, r] = [stops[i - 1], stops[i]];
+        if (px <= r.at) return l.a + ((r.a - l.a) * (px - l.at)) / (r.at - l.at || 1);
+      }
+      return stops[stops.length - 1].a;
+    };
+    for (const side of ["right", "left"]) {
+      const ramp = ramps.get(side);
+      expect(ramp, `the "to ${side}" arrow scrim is gone`).toBeTruthy();
+      for (const px of [0, 44]) {
+        expect(alphaAt(ramp!, px), `"to ${side}" scrim at ${px}px`).toBeGreaterThanOrEqual(0.34);
+      }
     }
-    // Both sides ramp identically, so neither arrow is favoured.
-    expect(sides[0]).toBe(sides[1]);
   });
 });

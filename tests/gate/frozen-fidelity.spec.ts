@@ -263,7 +263,8 @@ test("frozen the-pointe renders whole: ~14820px, 50 media, panels live, no token
 // slide is showing must overlap the track it lives in.
 //
 // Timing: slides cross-fade over 600ms and BOTH are painted for that window, so
-// every measurement here waits the fade out first. Playwright's click leaves the
+// every measurement here polls until exactly one slide is up. The config forces
+// reducedMotion: "reduce", which makes the swap instant. Playwright's click leaves the
 // pointer over the section, which holds the 7s auto-advance, so nothing moves
 // underneath the assertions.
 const CAROUSEL_FADE_MS = 600;
@@ -273,7 +274,6 @@ test("carousel: every slide lands inside the track when shown", async ({ page })
   await page.evaluate(() =>
     document.querySelector("#page-block-8")?.scrollIntoView({ block: "center" }),
   );
-  await page.waitForTimeout(300);
 
   // One flat shape in every case — a missing track or a wrong number of visible
   // slides reports as counts rather than as a different type, so the assertions
@@ -302,6 +302,7 @@ test("carousel: every slide lands inside the track when shown", async ({ page })
   // Three slides, so four clicks proves the wrap as well as each frame.
   const seen: number[] = [];
   for (let i = 0; i < 4; i++) {
+    await expect.poll(async () => (await shown()).visibleCount).toBe(1);
     const s = await shown();
     expect(s, "the slider should show exactly one of its slides").toMatchObject({
       slideCount: 3,
@@ -315,7 +316,6 @@ test("carousel: every slide lands inside the track when shown", async ({ page })
     expect(s.width).toBe(s.trackWidth);
     seen.push(s.index);
     await page.click("#page-block-8-right");
-    await page.waitForTimeout(CAROUSEL_FADE_MS + 150);
   }
   // Advancing must actually change frames, and wrap back to where it started.
   expect(seen).toEqual([0, 1, 2, 0]);

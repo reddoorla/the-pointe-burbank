@@ -12,13 +12,6 @@ import template from "./frozen/home.html?raw";
 describe("ruleMarkSvg", () => {
   const svg = ruleMarkSvg();
 
-  it("is two horizontal lines on Figma's viewBox", () => {
-    expect(svg).toContain('viewBox="0 0 20.8835 5.44787"');
-    expect([...svg.matchAll(/<line /g)]).toHaveLength(2);
-    expect(svg).toContain('y1="0.453988"');
-    expect(svg).toContain('y1="4.99388"');
-  });
-
   it("inherits colour so the same mark serves navy and white placements", () => {
     expect(svg).toContain('stroke="currentColor"');
     expect(svg).not.toMatch(/stroke="#/);

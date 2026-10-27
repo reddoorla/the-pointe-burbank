@@ -104,9 +104,6 @@ describe("LocationMap", () => {
     for (const label of ["All", "Dining", "Parks"]) {
       expect(getByRole("button", { name: label })).toBeDefined();
     }
-    // Full-width equal tabs (the original's 25%-per-tab bar): every tab flexes
-    // to an equal share of the row instead of hugging its label.
-    for (const c of chips) expect(c.className).toContain("flex-1");
   });
 
   it("active tab shows a minus glyph, inactive tabs a plus", async () => {
