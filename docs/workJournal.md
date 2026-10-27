@@ -82,12 +82,20 @@ visitor can read or operate. The carousel's cross-fade test now imports the
 real `FADE_MS` (one `export` added to `carousel.ts`) instead of a copy of 600.
 
 One loss was real. Lightening the left-arrow scrim from .45 to .2 at the edge
-drops the white arrow glyph on the light slide 3 (2.00:1 unscrimmed at p90) to
-about 2.6:1, under WCAG 1.4.11's 3:1 for a control. The old guard caught it
+drops the white arrow glyph on slide 1's right (1.17:1 unscrimmed at p90, the
+brightest background in `carousel-caption.ts`'s table) to about 1.9:1, under
+WCAG 1.4.11's 3:1 for a control. The old guard caught it
 only as an exact string (`rgba(0,0,0,.45) 0`, both sides identical). It is
 replaced in `carousel-caption.test.ts` by a floor: both side ramps are parsed
-and their alpha, interpolated between stops, must be at least .34 at 0 and at
-44px, the box the 32px arrow inset 4px sits in. Proved with the reviewer's
+and their alpha, interpolated between stops, must clear a floor over the
+arrow's ink (11.9-28.1px from the edge, the chevron path's extent at its 1.1
+hover scale). The floor, 0.372, is computed in the test from that table: the
+alpha that takes slide 1 right's p90 background to 3:1 when black is
+composited in encoded sRGB. Round 4 of review caught the first version of
+this, a flat .34 written as "slide 3 is the binding case": slide 3 needs only
+0.188, and a flat .34 ramp passed while modelling 2.73:1 on slide 1. The
+reviewer's suggested .38 over the 4-36px icon box would have failed the
+shipped ramp itself, which is .380 at 28.1px and .36 at 36px. Proved with the reviewer's
 mutant (`caption-side-scrim-too-light`) through `mutate.mjs`: red, 1 of 9.
 
 What surprised me: the first version of that floor survived the mutant. Its
