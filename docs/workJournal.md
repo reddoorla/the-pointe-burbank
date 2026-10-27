@@ -82,9 +82,9 @@ visitor can read or operate. The carousel's cross-fade test now imports the
 real `FADE_MS` (one `export` added to `carousel.ts`) instead of a copy of 600.
 
 One loss was real. Lightening the left-arrow scrim from .45 to .2 at the edge
-drops the white arrow glyph on slide 1's right (1.17:1 unscrimmed at p90, the
-brightest background in `carousel-caption.ts`'s table) to about 1.9:1, under
-WCAG 1.4.11's 3:1 for a control. The old guard caught it
+leaves .238 where the arrow's ink begins. Over a background as bright as slide
+1's right (1.17:1 unscrimmed at p90, the brightest in `carousel-caption.ts`'s
+table) that models about 2.1:1, under WCAG 1.4.11's 3:1 for a control. The old guard caught it
 only as an exact string (`rgba(0,0,0,.45) 0`, both sides identical). It is
 replaced in `carousel-caption.test.ts` by a floor: both side ramps are parsed
 and their alpha, interpolated between stops, must clear a floor over the
