@@ -63,7 +63,7 @@ session genuinely needs. Note what it also had to say: `README.md` is still the
 this site. That has been true since the initial commit and nobody wrote it
 down, which is the shape of gap this journal is for.
 
-## 2026-10-27 — Fleet test audit, batch B: 43 unreachable or design-value unit pins go, the arrow scrim's contrast floor stays (#TBD)
+## 2026-10-27 — Fleet test audit, batch B: 43 unreachable or design-value unit pins go, the arrow scrim's contrast floor stays (#54)
 
 Why: the fleet test audit (`reddoorla/reddoor-workspace`
 `audits/2026-10-26-fleet-test-audit/report.md`) mutated every candidate pin on
