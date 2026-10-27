@@ -275,11 +275,20 @@ describe("animateIn — triggered mode", () => {
     document.body.appendChild(el);
 
     const ret = animateIn(el);
-    const before = el.style.transition;
+    FakeIntersectionObserver.instances[0].trigger(true);
+    const before = {
+      transition: el.style.transition,
+      opacity: el.style.opacity,
+      transform: el.style.transform,
+    };
     ret.update({ duration: 500 });
 
-    // Viewport mode ignores updates: the transition is the one it mounted with.
-    expect(el.style.transition).toBe(before);
+    // Viewport mode ignores updates: the transition is the one it mounted
+    // with, and a revealed element stays revealed (the observer has already
+    // disconnected, so a re-hide would leave the content invisible).
+    expect(el.style.transition).toBe(before.transition);
+    expect(el.style.opacity).toBe(before.opacity);
+    expect(el.style.transform).toBe(before.transform);
   });
 });
 
