@@ -92,7 +92,9 @@ describe("CAROUSEL_CAPTION_CSS", () => {
       // Every stop, split at the ramp's top-level commas. Inside the arrow's
       // box each one must be black at a px position: a `transparent`, an
       // `hsl()` or a white stop would otherwise drop out of the reading and
-      // the interpolation would run straight across a clear patch.
+      // the interpolation would run straight across a clear patch. The parser
+      // accepts only `rgba(0,0,0,a)`, so a red from a darker ramp written in
+      // another syntax is about the syntax, not the contrast.
       const stops = ramp
         .split(/,(?![^(]*\))/)
         .map((t) => t.trim())
@@ -106,7 +108,11 @@ describe("CAROUSEL_CAPTION_CSS", () => {
           m !== null && (m[3] === "px" || Number(m[2]) === 0),
           `"to ${side}" stop "${stop}" is not black at a px position inside the arrow's ${BOX}px box`,
         ).toBe(true);
-        placed.push({ a: Number(m![1]), at: Number(m![2]) });
+        // CSS clamps a stop placed before the one ahead of it to that one's
+        // position, so a stop written out of order sits where the browser
+        // draws it.
+        const at = Math.max(Number(m![2]), placed.length ? placed[placed.length - 1].at : 0);
+        placed.push({ a: Number(m![1]), at });
       }
       const alphaAt = (px: number) => {
         if (px <= placed[0].at) return placed[0].a;
@@ -116,8 +122,13 @@ describe("CAROUSEL_CAPTION_CSS", () => {
         }
         return placed[placed.length - 1].a;
       };
-      const at = [0, BOX, ...placed.map((p) => p.at).filter((x) => x > 0 && x < BOX)];
-      return at.map((px) => ({ px, a: alphaAt(px) }));
+      // Each stop's own alpha inside the box (two stops at one position are a
+      // hard step, and both sides of it are drawn), plus the box's two ends.
+      return [
+        { px: 0, a: alphaAt(0) },
+        { px: BOX, a: alphaAt(BOX) },
+        ...placed.filter((p) => p.at < BOX).map((p) => ({ px: p.at, a: p.a })),
+      ];
     };
     for (const side of ["right", "left"]) {
       const ramp = ramps.get(side);
