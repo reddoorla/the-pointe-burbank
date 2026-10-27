@@ -62,3 +62,11 @@ session genuinely needs. Note what it also had to say: `README.md` is still the
 **starter's** README, describing the template's component library rather than
 this site. That has been true since the initial commit and nobody wrote it
 down, which is the shape of gap this journal is for.
+
+## 2026-10-27 — Inherit the starters' test-pin fixes (#TBD)
+
+Batch C of the fleet test audit (`reddoorla/reddoor-workspace` `audits/2026-10-26-fleet-test-audit/report.md`) fixed design-value and exact-count pins in the starters, and this site carries the starters' copies of those tests, so the same fixes are ported here. The hunks applied cleanly; the intent is the starters' own, with no design value, no source read as text and no exact list.
+
+`src/lib/actions/animateIn.test.ts` "honors a custom delayMax" pinned `transitionDelay` to exactly `400ms` at `delayMax: 800`, a duration, which this repo's "Tests build; they don't freeze" keeps out of the gate. It now takes the starter's three relations: `delayMax: 0` reveals with no delay, `delayMax: 100` keeps the delay at or under 100, and an element at `left: 800` reveals later than one at `left: 200`. The last relation is the one that still notices a stagger that ignores position or reads the wrong edge; without it the first two hold even when every delay is 0. From reddoor-starter-blux#53 come two more. `src/lib/components/ProductListing.test.ts` counted every link on the listing (`toHaveLength(3)`), an exact list a designer may add to; it now asserts exactly one `/products/<slug>` link per product, so an added back link passes and a product shown twice fails. `src/lib/slices/BluxCollection/BluxCollection.test.ts` scopes its anchor count to `.blux-collection__cards`, so a heading or "View all" link outside the card list no longer reads as a card link.
+
+Every kept assertion was proved by mutation, with the starter PRs' mutants plus one per new relation and a negative control: 9 mutants, 5 red as expected and 4 surviving as expected. The survivors are the ones the starters already named: a `delayMax` clamped to 400ms only shortens a stagger (design value), an added sub-category heading link and a "View all" link are what the rewrites mean to allow, and the negative control, the delay's position ratio written as `left * (1 / innerWidth)`, stays green as it must.
