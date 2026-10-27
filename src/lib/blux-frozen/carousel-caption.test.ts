@@ -96,12 +96,13 @@ describe("CAROUSEL_CAPTION_CSS", () => {
     // inset 4px whose chevron path (`#site-icon-left`/`-right` in the frozen
     // artifact, viewBox 32) spans x 8.64-23.36, and hover scales it 1.1 about
     // its centre: 16 -/+ 7.36 * 1.1 = 7.90-24.10, plus the 4px inset, is
-    // 11.9-28.1px from the slide's edge. Outside that span there is no white
-    // to separate: the shipped ramp is .36 at 36px, the icon box's inner edge,
-    // and its lowest point over the ink is .380 at 28.1px, 0.008 clear. A
-    // floor, not the shipped .45: a darker ramp, or a different curve that
-    // stays above it, is a designer's call.
-    const [INK_FROM, INK_TO] = [11.9, 28.1];
+    // 11.9-28.1px from the slide's edge. WCAG 1.4.11 measures the glyph
+    // against the colours adjacent to it, so the span takes a pixel either
+    // side: 10.9-29.1px. The shipped ramp is .36 at 36px, the icon box's inner
+    // edge, and its lowest point over that span is .377 at 29.1px, 0.005
+    // clear. A floor, not the shipped .45: a darker ramp, or a different curve
+    // that stays above it, is a designer's call.
+    const [INK_FROM, INK_TO] = [10.9, 29.1];
     const ramps = new Map(
       [
         ...CAROUSEL_CAPTION_CSS.matchAll(

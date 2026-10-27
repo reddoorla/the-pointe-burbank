@@ -84,26 +84,27 @@ real `FADE_MS` (one `export` added to `carousel.ts`) instead of a copy of 600.
 One loss was real. Lightening the left-arrow scrim from .45 to .2 at the edge
 leaves .238 where the arrow's ink begins. Over a background as bright as slide
 1's right (1.17:1 unscrimmed at p90, the brightest in `carousel-caption.ts`'s
-table) that models about 2.1:1, under WCAG 1.4.11's 3:1 for a control. The old guard caught it
-only as an exact string (`rgba(0,0,0,.45) 0`, both sides identical). It is
-replaced in `carousel-caption.test.ts` by a floor: both side ramps are parsed
-and their alpha, interpolated between stops, must clear a floor over the
-arrow's ink (11.9-28.1px from the edge, the chevron path's extent at its 1.1
-hover scale). The floor, 0.372, is computed in the test from that table: the
-alpha that takes slide 1 right's p90 background to 3:1 when black is
-composited in encoded sRGB. Round 4 of review caught the first version of
-this, a flat .34 written as "slide 3 is the binding case": slide 3 needs only
-0.188, and a flat .34 ramp passed while modelling 2.73:1 on slide 1. The
-reviewer's suggested .38 over the 4-36px icon box would have failed the
-shipped ramp itself, which is .380 at 28.1px and .36 at 36px. Proved with the reviewer's
-mutant (`caption-side-scrim-too-light`) through `mutate.mjs`: red, 1 of 9.
+table) that models about 2.1:1, under WCAG 1.4.11's 3:1 for a control. The old
+guard caught it only as an exact string (`rgba(0,0,0,.45) 0`, both sides
+identical). It is replaced in `carousel-caption.test.ts` by a floor: both side
+ramps are parsed and their alpha, interpolated between stops, must clear a floor
+over the arrow's ink (11.9-28.1px from the edge, the chevron path's extent at
+its 1.1 hover scale, plus a pixel of adjacent background either side, so
+10.9-29.1px). The floor, 0.372, is computed in the test from that table: the
+alpha that takes slide 1 right's p90 background to 3:1 when black is composited
+in encoded sRGB. Round 4 of review caught the first version of this, a flat .34
+written as "slide 3 is the binding case": slide 3 needs only 0.188, and a flat
+.34 ramp passed while modelling 2.73:1 on slide 1. The reviewer's suggested .38
+over the 4-36px icon box would have failed the shipped ramp itself, which is
+.380 at 28.1px and .36 at 36px. Proved with the reviewer's mutant
+(`caption-side-scrim-too-light`) through `mutate.mjs`: red, 1 of 9.
 
 What surprised me: the first version of that floor survived the mutant. Its
 stop parser wanted a `px` unit, and the edge stop is written as a bare `0`, so
 the parser skipped it and read the 44px stop's .34 as the value at the edge.
 Running the mutant by hand before trusting the table found it; the parser now
-accepts a unitless stop and leaves `%` stops out rather than guessing their
-position.
+accepts a unitless stop and fails on a `%` stop over the ink rather than
+guessing its position.
 
 `tests/gate/frozen-fidelity.spec.ts` keeps every pin the audit's branch had
 deleted (the ~14820px height band, the 1440 width guard, the availability
@@ -128,7 +129,9 @@ track's `aria-roledescription="carousel"`, which only hydration sets: a click
 landing before the arrows are wired is lost. Review also tightened the scrim
 floor. It sampled only 0px and 44px, and an almost clear `.05` dip between 1%
 and 3% passed it, though main's exact-string test caught that. It now checks
-every stop inside the 44px box and fails on any stop there that is not black at a px position (round 2 caught `transparent` and white stops slipping through a looser parser). The second
-carousel test ("the cross-fade overlaps without disturbing the layout") keeps
-its fixed sleeps and its mid-fade window. They are timing in the gate, and they
-wait, like the restored pins, for batch A's tiers to give them a nightly home.
+every stop over the arrow's ink (10.9-29.1px) and fails on any stop there that
+is not black at a px position, a `%` stop included (round 2 caught `transparent`
+and white stops slipping through a looser parser). The second carousel test
+("the cross-fade overlaps without disturbing the layout") keeps its fixed sleeps
+and its mid-fade window. They are timing in the gate, and they wait, like the
+restored pins, for batch A's tiers to give them a nightly home.
