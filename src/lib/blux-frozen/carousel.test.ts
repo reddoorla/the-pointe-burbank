@@ -225,7 +225,7 @@ describe("the cross-fade", () => {
     click("page-block-8-right");
     // Mid-fade: the outgoing slide is still painted, which is what makes it a
     // cross-fade rather than a cut through the page background.
-    await vi.advanceTimersByTimeAsync(1);
+    await vi.advanceTimersByTimeAsync(FADE_MS / 2);
     expect(visible().filter((d) => d === "block")).toHaveLength(2);
     await settle();
     expect(visible()).toEqual(["none", "block", "none"]);

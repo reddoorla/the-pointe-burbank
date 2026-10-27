@@ -62,6 +62,8 @@ describe("CAROUSEL_CAPTION_CSS", () => {
     expect(rule, "the scrim rule moved").toBeTruthy();
     // GUARD: the side ramps are what lift the white arrow glyphs on slide 1 from
     // 2.53:1 to 8.02:1, against WCAG 1.4.11's 3:1 (measured in carousel-caption.ts).
+    // The light slide 3, at 2.00:1 unscrimmed, is the binding case: see the floor
+    // test below.
     // This is a CSS-string proxy for that contrast; no gate test computes it.
     expect(rule).toContain("linear-gradient(to right,");
     expect(rule).toContain("linear-gradient(to left,");
@@ -81,28 +83,41 @@ describe("CAROUSEL_CAPTION_CSS", () => {
         ),
       ].map((m) => [m[1], m[2]]),
     );
-    // Stops in px, or a bare 0; a % stop cannot be placed against the arrow's
-    // fixed px box, so it is left out rather than guessed.
-    const alphaAt = (ramp: string, px: number) => {
-      const stops = [
-        ...ramp.matchAll(/rgba\([^)]*,\s*([\d.]+)\)\s+([\d.]+)(?:px)?(?=,|\s|$)/g),
-      ].map((s) => ({
-        a: Number(s[1]),
-        at: Number(s[2]),
-      }));
-      expect(stops.length, "no px stops in the ramp").toBeGreaterThan(0);
-      if (px <= stops[0].at) return stops[0].a;
-      for (let i = 1; i < stops.length; i++) {
-        const [l, r] = [stops[i - 1], stops[i]];
-        if (px <= r.at) return l.a + ((r.a - l.a) * (px - l.at)) / (r.at - l.at || 1);
+    // The ramp is piecewise linear, so its lowest alpha over 0-44px is at a stop
+    // inside that box or at one of its two ends: check all of those. A % stop
+    // cannot be placed against the arrow's fixed px box, so one that comes
+    // before the box ends fails rather than being guessed or skipped.
+    const BOX = 44;
+    const floorPoints = (ramp: string, side: string) => {
+      const stops = [...ramp.matchAll(/rgba\([^)]*,\s*([\d.]+)\)\s*(?:([\d.]+)(px|%)?)?/g)].map(
+        (s) => ({ a: Number(s[1]), at: s[2] === undefined ? undefined : Number(s[2]), unit: s[3] }),
+      );
+      expect(stops.length, `no stops in the "to ${side}" ramp`).toBeGreaterThan(0);
+      const placed: { a: number; at: number }[] = [];
+      for (const s of stops) {
+        if (placed.length && placed[placed.length - 1].at >= BOX) break;
+        expect(
+          s.at !== undefined && s.unit !== "%",
+          `"to ${side}" has a stop with no px position inside the arrow's ${BOX}px box`,
+        ).toBe(true);
+        placed.push({ a: s.a, at: s.at! });
       }
-      return stops[stops.length - 1].a;
+      const alphaAt = (px: number) => {
+        if (px <= placed[0].at) return placed[0].a;
+        for (let i = 1; i < placed.length; i++) {
+          const [l, r] = [placed[i - 1], placed[i]];
+          if (px <= r.at) return l.a + ((r.a - l.a) * (px - l.at)) / (r.at - l.at || 1);
+        }
+        return placed[placed.length - 1].a;
+      };
+      const at = [0, BOX, ...placed.map((p) => p.at).filter((x) => x > 0 && x < BOX)];
+      return at.map((px) => ({ px, a: alphaAt(px) }));
     };
     for (const side of ["right", "left"]) {
       const ramp = ramps.get(side);
       expect(ramp, `the "to ${side}" arrow scrim is gone`).toBeTruthy();
-      for (const px of [0, 44]) {
-        expect(alphaAt(ramp!, px), `"to ${side}" scrim at ${px}px`).toBeGreaterThanOrEqual(0.34);
+      for (const { px, a } of floorPoints(ramp!, side)) {
+        expect(a, `"to ${side}" scrim at ${px}px`).toBeGreaterThanOrEqual(0.34);
       }
     }
   });
