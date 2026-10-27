@@ -89,18 +89,24 @@ describe("CAROUSEL_CAPTION_CSS", () => {
     // before the box ends fails rather than being guessed or skipped.
     const BOX = 44;
     const floorPoints = (ramp: string, side: string) => {
-      const stops = [...ramp.matchAll(/rgba\([^)]*,\s*([\d.]+)\)\s*(?:([\d.]+)(px|%)?)?/g)].map(
-        (s) => ({ a: Number(s[1]), at: s[2] === undefined ? undefined : Number(s[2]), unit: s[3] }),
-      );
+      // Every stop, split at the ramp's top-level commas. Inside the arrow's
+      // box each one must be black at a px position: a `transparent`, an
+      // `hsl()` or a white stop would otherwise drop out of the reading and
+      // the interpolation would run straight across a clear patch.
+      const stops = ramp
+        .split(/,(?![^(]*\))/)
+        .map((t) => t.trim())
+        .filter(Boolean);
       expect(stops.length, `no stops in the "to ${side}" ramp`).toBeGreaterThan(0);
       const placed: { a: number; at: number }[] = [];
-      for (const s of stops) {
+      for (const stop of stops) {
         if (placed.length && placed[placed.length - 1].at >= BOX) break;
+        const m = /^rgba\(\s*0\s*,\s*0\s*,\s*0\s*,\s*([\d.]+)\s*\)\s+([\d.]+)(px)?$/.exec(stop);
         expect(
-          s.at !== undefined && s.unit !== "%",
-          `"to ${side}" has a stop with no px position inside the arrow's ${BOX}px box`,
+          m !== null && (m[3] === "px" || Number(m[2]) === 0),
+          `"to ${side}" stop "${stop}" is not black at a px position inside the arrow's ${BOX}px box`,
         ).toBe(true);
-        placed.push({ a: s.a, at: s.at! });
+        placed.push({ a: Number(m![1]), at: Number(m![2]) });
       }
       const alphaAt = (px: number) => {
         if (px <= placed[0].at) return placed[0].a;

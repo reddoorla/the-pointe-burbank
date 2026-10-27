@@ -263,10 +263,11 @@ test("frozen the-pointe renders whole: ~14820px, 50 media, panels live, no token
 // slide is showing must overlap the track it lives in.
 //
 // Timing: slides cross-fade over 600ms and BOTH are painted for that window, so
-// every measurement here polls until exactly one slide is up. The config forces
-// reducedMotion: "reduce", which makes the swap instant. Playwright's click leaves the
-// pointer over the section, which holds the 7s auto-advance, so nothing moves
-// underneath the assertions.
+// the first test polls until exactly one slide is up (the config forces
+// reducedMotion: "reduce", which makes the swap instant); the second still
+// waits out CAROUSEL_FADE_MS. Playwright's click leaves the pointer over the
+// section, which holds the 7s auto-advance, so nothing moves underneath the
+// assertions.
 const CAROUSEL_FADE_MS = 600;
 
 test("carousel: every slide lands inside the track when shown", async ({ page }) => {
