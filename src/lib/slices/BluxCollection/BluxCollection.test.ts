@@ -106,7 +106,8 @@ describe("BluxCollection slice", () => {
         context: { collections: { product: docs } },
       },
     });
-    const anchors = container.querySelectorAll("a");
+    // Scoped to the card list: a heading or "View all" link is not a card link.
+    const anchors = container.querySelectorAll(".blux-collection__cards a");
     expect(anchors).toHaveLength(1);
     expect(anchors[0].getAttribute("href")).toBe("https://vendor.example/iron-lamp");
     // The linked card is the external-link one.
