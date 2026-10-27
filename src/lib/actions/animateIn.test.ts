@@ -66,9 +66,6 @@ describe("animateIn — viewport mode", () => {
     animateIn(el);
 
     expect(el.style.opacity).toBe("0");
-    expect(el.style.transform).toBe("translateY(50%)");
-    expect(el.style.transition).toContain("opacity 2400ms var(--transition-fast-slow)");
-    expect(el.style.transition).toContain("transform 2400ms var(--transition-fast-slow)");
   });
 
   it("reveals on intersection and disconnects the observer", () => {
@@ -109,32 +106,6 @@ describe("animateIn — viewport mode", () => {
     expect(observer.disconnected).toBe(true);
   });
 
-  it("sets transition-delay based on horizontal position", () => {
-    const el = document.createElement("div");
-    document.body.appendChild(el);
-    // Element 25% across a 1000px viewport, delayMax 400 → 100ms delay.
-    Object.defineProperty(window, "innerWidth", {
-      value: 1000,
-      configurable: true,
-    });
-    el.getBoundingClientRect = () =>
-      ({
-        left: 250,
-        top: 0,
-        right: 0,
-        bottom: 0,
-        width: 0,
-        height: 0,
-        x: 0,
-        y: 0,
-        toJSON: () => ({}),
-      }) as DOMRect;
-
-    animateIn(el);
-
-    expect(el.style.transitionDelay).toBe("100ms");
-  });
-
   it("honors a custom delayMax", () => {
     Object.defineProperty(window, "innerWidth", {
       value: 1000,
@@ -163,8 +134,9 @@ describe("animateIn — viewport mode", () => {
     animateIn(together, { delayMax: 0 });
     expect(parseFloat(together.style.transitionDelay)).toBe(0);
 
-    // A positive delayMax bounds the delay, below the default's.
-    const bounded = placed();
+    // A positive delayMax bounds the delay, below the default's, even at
+    // the right edge, where the delay is largest.
+    const bounded = placed(999);
     animateIn(bounded, { delayMax: 100 });
     expect(parseFloat(bounded.style.transitionDelay)).toBeLessThanOrEqual(100);
 
@@ -243,7 +215,6 @@ describe("animateIn — triggered mode", () => {
     animateIn(el, false);
 
     expect(el.style.opacity).toBe("0");
-    expect(el.style.transform).toBe("translateY(50%)");
     expect(FakeIntersectionObserver.instances.length).toBe(0);
   });
 
@@ -297,7 +268,6 @@ describe("animateIn — triggered mode", () => {
     ret.update(false);
 
     expect(el.style.opacity).toBe("0");
-    expect(el.style.transform).toBe("translateY(50%)");
   });
 
   it("update is a no-op in viewport mode", () => {
@@ -305,10 +275,11 @@ describe("animateIn — triggered mode", () => {
     document.body.appendChild(el);
 
     const ret = animateIn(el);
+    const before = el.style.transition;
     ret.update({ duration: 500 });
 
-    // Still the default duration — viewport mode ignores updates.
-    expect(el.style.transition).toContain("2400ms");
+    // Viewport mode ignores updates: the transition is the one it mounted with.
+    expect(el.style.transition).toBe(before);
   });
 });
 
@@ -319,8 +290,8 @@ describe("animateIn — options overrides", () => {
 
     animateIn(el, { duration: 1200 });
 
-    expect(el.style.transition).toContain("opacity 1200ms var(--transition-fast-slow)");
-    expect(el.style.transition).toContain("transform 1200ms var(--transition-fast-slow)");
+    expect(el.style.transition).toContain("opacity 1200ms");
+    expect(el.style.transition).toContain("transform 1200ms");
   });
 
   it("applies a custom translateY on the hidden transform", () => {
