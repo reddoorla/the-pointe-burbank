@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
-import { hydrateCarousels } from "./carousel";
+import { hydrateCarousels, FADE_MS } from "./carousel";
 import template from "./frozen/home.html?raw";
 
 // The freeze's own shape, reproduced exactly: an active slide carrying
@@ -31,7 +31,6 @@ const markup = (slides = 3) =>
   `<button id="page-block-8-right" aria-label="right arrow"></button>` +
   `</section>`;
 
-const FADE_MS = 600;
 const AUTO_MS = 7000;
 
 const els = () => [...document.querySelectorAll<HTMLElement>(".cagriditem")];

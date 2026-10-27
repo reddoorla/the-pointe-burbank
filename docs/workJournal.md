@@ -62,3 +62,76 @@ session genuinely needs. Note what it also had to say: `README.md` is still the
 **starter's** README, describing the template's component library rather than
 this site. That has been true since the initial commit and nobody wrote it
 down, which is the shape of gap this journal is for.
+
+## 2026-10-27 — Fleet test audit, batch B: 43 unreachable or design-value unit pins go, the arrow scrim's contrast floor stays (#54)
+
+Why: the fleet test audit (`reddoorla/reddoor-workspace`
+`audits/2026-10-26-fleet-test-audit/report.md`) mutated every candidate pin on
+this site and asked, for each mutant, what a visitor would lose. The answer here
+is mostly nothing. Production renders one `frozen_page` document through
+`src/lib/blux-frozen/`, `blux-presentation.json` is empty and there are no
+`page` or `catalog_page` documents, so the Blux slices and `src/lib/blux/`
+components those tests pin (Grid, BandContent, LocationMap, SplitFeature,
+Gallery, BluxGrid, BluxSection, ScreenWidthMedia's Vimeo caps, BrandIcon's
+default class) render only on `/dev` routes. 36 of the classed losses in this
+PR are that kind: unreachable. 7 are design values on the frozen page itself:
+the caption's decorative rule mark and the rule mark's own viewBox and line
+count, a fourth scrim gradient, the side ramp's px-versus-% unit, the 600ms
+cross-fade, and the body underline's `1.137em + 4px` row. None changes what a
+visitor can read or operate. The carousel's cross-fade test now imports the
+real `FADE_MS` (one `export` added to `carousel.ts`) instead of a copy of 600.
+
+One loss was real. Lightening the left-arrow scrim from .45 to .2 at the edge
+leaves .238 where the arrow's ink begins. Over a background as bright as slide
+1's right (1.17:1 unscrimmed at p90, the brightest in `carousel-caption.ts`'s
+table) that models about 2.1:1, under WCAG 1.4.11's 3:1 for a control. The old
+guard caught it only as an exact string (`rgba(0,0,0,.45) 0`, both sides
+identical). It is replaced in `carousel-caption.test.ts` by a floor: both side
+ramps are parsed and their alpha, interpolated between stops, must clear a floor
+over the arrow's ink (11.9-28.1px from the edge, the chevron path's extent at
+its 1.1 hover scale, plus a pixel of adjacent background either side, so
+10.9-29.1px). The floor, 0.372, is computed in the test from that table: the
+alpha that takes slide 1 right's p90 background to 3:1 when black is composited
+in encoded sRGB. Round 4 of review caught the first version of this, a flat .34
+written as "slide 3 is the binding case": slide 3 needs only 0.188, and a flat
+.34 ramp passed while modelling 2.73:1 on slide 1. The reviewer's suggested .38
+over the 4-36px icon box would have failed the shipped ramp itself, which is
+.380 at 28.1px and .36 at 36px. Proved with the reviewer's mutant
+(`caption-side-scrim-too-light`) through `mutate.mjs`: red, 1 of 9.
+
+What surprised me: the first version of that floor survived the mutant. Its
+stop parser wanted a `px` unit, and the edge stop is written as a bare `0`, so
+the parser skipped it and read the 44px stop's .34 as the value at the edge.
+Running the mutant by hand before trusting the table found it; the parser now
+accepts a unitless stop and fails on a `%` stop over the ink rather than
+guessing its position.
+
+`tests/gate/frozen-fidelity.spec.ts` keeps every pin the audit's branch had
+deleted (the ~14820px height band, the 1440 width guard, the availability
+panel's box, the rule-mark count and dash widths, the Incentives hover colours,
+the footer spacer heights, the exact nav list). This site has no scaffold tier
+yet; batch A adds one in its own PR and moves those there, so deleting them here
+would lose them before they had somewhere to go. Only the first carousel test
+changed: its two fixed sleeps became a poll until exactly one slide is up, which
+under the config's `reducedMotion: "reduce"` is immediate. The spec passes 3 of
+3 against a production build (`VITE_REDDOOR_GATE_FIXTURES=1 vite build`, then
+`vite preview`), the only build where `/dev/blux-frozen` answers outside
+`vite dev`. `animateIn.test.ts` is left alone: its inherited-copy fix is handled
+with the template's.
+
+That poll was wrong on its first CI run, and the defect is worth naming.
+"Exactly one slide is up" is also true of the old slide in the instant after a
+click, before the swap starts. So the loop recorded slide 0 twice (`[0, 0, 1,
+2]`) and the wrap assertion failed. It passed 3 of 3 locally only because the
+local machine was slower to poll. The poll now also waits for the index to move
+off the frame recorded last. Before the first click, the test waits for the
+track's `aria-roledescription="carousel"`, which only hydration sets: a click
+landing before the arrows are wired is lost. Review also tightened the scrim
+floor. It sampled only 0px and 44px, and an almost clear `.05` dip between 1%
+and 3% passed it, though main's exact-string test caught that. It now checks
+every stop over the arrow's ink (10.9-29.1px) and fails on any stop there that
+is not black at a px position, a `%` stop included (round 2 caught `transparent`
+and white stops slipping through a looser parser). The second carousel test
+("the cross-fade overlaps without disturbing the layout") keeps its fixed sleeps
+and its mid-fade window. They are timing in the gate, and they wait, like the
+restored pins, for batch A's tiers to give them a nightly home.

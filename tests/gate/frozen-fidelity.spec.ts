@@ -263,9 +263,11 @@ test("frozen the-pointe renders whole: ~14820px, 50 media, panels live, no token
 // slide is showing must overlap the track it lives in.
 //
 // Timing: slides cross-fade over 600ms and BOTH are painted for that window, so
-// every measurement here waits the fade out first. Playwright's click leaves the
-// pointer over the section, which holds the 7s auto-advance, so nothing moves
-// underneath the assertions.
+// the first test polls until exactly one slide is up (the config forces
+// reducedMotion: "reduce", which makes the swap instant); the second still
+// waits out CAROUSEL_FADE_MS. Playwright's click leaves the pointer over the
+// section, which holds the 7s auto-advance, so nothing moves underneath the
+// assertions.
 const CAROUSEL_FADE_MS = 600;
 
 test("carousel: every slide lands inside the track when shown", async ({ page }) => {
@@ -273,7 +275,10 @@ test("carousel: every slide lands inside the track when shown", async ({ page })
   await page.evaluate(() =>
     document.querySelector("#page-block-8")?.scrollIntoView({ block: "center" }),
   );
-  await page.waitForTimeout(300);
+  // A click before hydrateCarousels() wires the arrows is lost. Hydration names
+  // the track a carousel after the listeners are on, and the frozen HTML never
+  // carries that attribute, so its presence is the signal to start clicking.
+  await expect(page.locator('#page-block-8 [aria-roledescription="carousel"]')).toBeAttached();
 
   // One flat shape in every case — a missing track or a wrong number of visible
   // slides reports as counts rather than as a different type, so the assertions
@@ -302,6 +307,16 @@ test("carousel: every slide lands inside the track when shown", async ({ page })
   // Three slides, so four clicks proves the wrap as well as each frame.
   const seen: number[] = [];
   for (let i = 0; i < 4; i++) {
+    // Wait for the click to land, not just for one slide to be up: the old
+    // slide is "exactly one up" too until the swap starts, so the poll also
+    // waits for the index to move off the frame recorded last.
+    const prev = seen.at(-1);
+    await expect
+      .poll(async () => {
+        const v = await shown();
+        return v.visibleCount === 1 && v.index !== prev;
+      })
+      .toBe(true);
     const s = await shown();
     expect(s, "the slider should show exactly one of its slides").toMatchObject({
       slideCount: 3,
@@ -315,7 +330,6 @@ test("carousel: every slide lands inside the track when shown", async ({ page })
     expect(s.width).toBe(s.trackWidth);
     seen.push(s.index);
     await page.click("#page-block-8-right");
-    await page.waitForTimeout(CAROUSEL_FADE_MS + 150);
   }
   // Advancing must actually change frames, and wrap back to where it started.
   expect(seen).toEqual([0, 1, 2, 0]);
