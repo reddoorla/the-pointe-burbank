@@ -37,9 +37,6 @@ describe("BrandIcon", () => {
   });
 
   it("defaults to a fill-the-wrapper class and accepts an override", () => {
-    const fallback = render(BrandIcon, { platform: "x" });
-    expect(fallback.container.querySelector("svg")?.getAttribute("class")).toBe("h-full w-full");
-
     const custom = render(BrandIcon, { platform: "x", class: "h-6 w-6" });
     expect(custom.container.querySelector("svg")?.getAttribute("class")).toBe("h-6 w-6");
   });

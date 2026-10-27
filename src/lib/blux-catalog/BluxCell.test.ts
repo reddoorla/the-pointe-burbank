@@ -2,6 +2,7 @@ import { render, cleanup } from "@testing-library/svelte";
 import { describe, it, expect, afterEach } from "vitest";
 import BluxCell from "./BluxCell.svelte";
 import type { BluxCellData } from "./cell";
+import { gridCellBasis } from "./layout";
 
 afterEach(() => cleanup());
 const rt = (level: string, text: string) => [{ type: level, text, spans: [] }];
@@ -64,7 +65,9 @@ describe("BluxCell visual fields", () => {
     const { container } = render(BluxCell, { props: { cell, basis: "100%" } });
     const subCells = container.querySelectorAll<HTMLElement>(".blux-subgrid > .blux-cell");
     expect(subCells).toHaveLength(2);
-    expect(subCells[0].style.getPropertyValue("--cell-basis")).toBe("calc(50% - 2%)");
+    // The basis is the row-of-two one (k = the subgrid's own cell count); the
+    // gutter arithmetic itself is layout.test.ts's.
+    expect(subCells[0].style.getPropertyValue("--cell-basis")).toBe(gridCellBasis(undefined, 2));
   });
 });
 

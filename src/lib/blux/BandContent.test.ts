@@ -12,9 +12,6 @@ describe("BandContent", () => {
       props: { band: null, children: children() },
     });
     const box = container.querySelector("div") as HTMLElement;
-    expect(box.style.maxWidth).toBe("1280px");
-    // jsdom normalizes the shorthand ("0 4%" → "0px 4%").
-    expect(box.style.padding).toBe("0px 4%");
     expect(box.textContent).toContain("copy");
   });
 

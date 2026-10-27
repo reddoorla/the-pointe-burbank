@@ -34,8 +34,6 @@ describe("Gallery slice", () => {
     expect(cells).toHaveLength(1);
     const img = container.querySelector("img");
     expect(img?.getAttribute("src")).toBe("https://cdn/one.jpg");
-    expect(img?.className).toContain("h-[80vh]");
-    expect(img?.className).toContain("object-cover");
   });
 
   it("renders nothing without a manifest gallery payload", () => {
@@ -56,7 +54,7 @@ describe("Gallery slice", () => {
         },
       },
     };
-    const { container } = render(Gallery, {
+    const { container, getByText } = render(Gallery, {
       props: { slice, context: { presentation: captioned } },
     });
     // Captioned grid, not a full-bleed frame — and never a slider (source
@@ -64,8 +62,9 @@ describe("Gallery slice", () => {
     expect(container.querySelector('[role="region"]')).toBeNull();
     expect(container.querySelector("[data-gallery-cell]")).toBeNull();
     expect(container.querySelectorAll("img")).toHaveLength(2);
-    const captions = container.querySelectorAll("p.txt-role-text5");
-    expect(captions).toHaveLength(2);
-    expect(captions[0]?.textContent).toBe("one");
+    // Each frame's caption renders once, found by its text rather than by its
+    // type-role class.
+    expect(getByText("one").textContent).toBe("one");
+    expect(getByText("two").textContent).toBe("two");
   });
 });

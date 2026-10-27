@@ -79,7 +79,7 @@ const ARROWS = { prev: "-left", next: "-right" } as const;
  * keeps the order of the two gestures legible — the photograph settles, then
  * the mark draws across it.
  */
-const FADE_MS = 600;
+export const FADE_MS = 600;
 
 /**
  * The site's one motion curve, shared with the rule marks and the body-link
