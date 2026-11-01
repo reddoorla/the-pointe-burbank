@@ -42,38 +42,60 @@ function measure(page: Page) {
     // or of a slider's parked slides. auto and scroll let the visitor scroll
     // anything in the box's scrollable extent into view, so past one of those
     // the line can sit anywhere in its box. A clipping ancestor only clips boxes
-    // whose containing block it is or contains, so an absolute box skips static
-    // ancestors up to its positioned one, and a fixed box escapes them all.
-    // display: contents boxes have no rect.
+    // whose containing block it is or contains (see `seen`). display: contents
+    // boxes have no rect.
+    // Whether a box forms a containing block for absolute and fixed
+    // descendants other than by `position`: a transform in any of its forms,
+    // filter, paint/layout containment, or will-change naming one of them.
+    const formsBlock = (cs: CSSStyleDeclaration) =>
+      cs.transform !== "none" ||
+      cs.translate !== "none" ||
+      cs.rotate !== "none" ||
+      cs.scale !== "none" ||
+      cs.perspective !== "none" ||
+      cs.filter !== "none" ||
+      /paint|layout|strict|content/.test(cs.contain) ||
+      /transform|translate|rotate|scale|perspective|filter/.test(cs.willChange);
     const seen = (el: Element, line: DOMRect) => {
       let [x0, x1, y0, y1] = [line.left, line.right, line.top, line.bottom];
-      let escaped = false;
+      // An absolute box skips static ancestors up to its containing block; a
+      // fixed box skips everything up to an ancestor that forms one by
+      // transform, filter or containment (usually none: then nothing clips it).
+      let escaped: "" | "absolute" | "fixed" = "";
       for (let a: Element | null = el; a && a !== document.body; a = a.parentElement) {
         const cs = getComputedStyle(a);
         if (cs.display === "contents") continue;
-        const containing = cs.position !== "static" || cs.transform !== "none";
-        if (!escaped || containing) {
-          escaped = false;
+        const block = formsBlock(cs);
+        const containing =
+          escaped === "fixed"
+            ? block
+            : escaped === "absolute"
+              ? cs.position !== "static" || block
+              : true;
+        if (containing) {
+          escaped = "";
           const b = a.getBoundingClientRect();
           const scrolls = (o: string) => o === "auto" || o === "scroll";
+          // Paint containment clips to the box on both axes, like overflow: clip.
+          const paint = /paint|strict|content/.test(cs.contain);
           if (scrolls(cs.overflowX)) {
             const l = b.left - a.scrollLeft;
             if (Math.min(x1, l + a.scrollWidth) - Math.max(x0, l) <= 1) return false;
             [x0, x1] = [b.left, b.right];
-          } else if (cs.overflowX !== "visible") {
+          } else if (cs.overflowX !== "visible" || paint) {
             [x0, x1] = [Math.max(x0, b.left), Math.min(x1, b.right)];
           }
           if (scrolls(cs.overflowY)) {
             const t = b.top - a.scrollTop;
             if (Math.min(y1, t + a.scrollHeight) - Math.max(y0, t) <= 1) return false;
             [y0, y1] = [b.top, b.bottom];
-          } else if (cs.overflowY !== "visible") {
+          } else if (cs.overflowY !== "visible" || paint) {
             [y0, y1] = [Math.max(y0, b.top), Math.min(y1, b.bottom)];
           }
           if (x1 - x0 <= 1 || y1 - y0 <= 1) return false;
         }
-        if (cs.position === "fixed") break;
-        if (cs.position === "absolute") escaped = true;
+        if (cs.position === "fixed") escaped = "fixed";
+        else if (cs.position === "absolute") escaped = "absolute";
       }
       return true;
     };
