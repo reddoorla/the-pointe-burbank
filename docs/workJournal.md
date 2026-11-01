@@ -157,3 +157,16 @@ P1-90's census (reddoorla/reddoor-maintenance#1876) found the home page 335px wi
 The fix is a render-time rule in `FROZEN_ENHANCE_CSS`, below the round-2 `.text12` type scale: at ≤700px the block's `.block-content` becomes an inline-size container, and the heading is `min(48px, 14cqi)`. That gives 42.7px at 320, and 48px wherever the column is 343px or wider (a 358px screen and up). The block holds only the eyebrow and this heading, and its `.block-content` is an inline-block at `width: 100%`, so the container does not collapse it. The 80px desktop size is untouched. Sized for "distinguished": a longer single word in that Prismic slot would need a smaller factor.
 
 `tests/smoke/mobile-overflow.spec.ts` checks `/` and `/contact` at 320, 390, 768, 820 and 1024. Reverting the rule turns it red at 320 (336px) on both runs. Review round 1 (Opus) was clean; its minors (pin reduced motion in the spec, cover `/contact`, note the CMS-word dependency, drop a redundant `:has`) are folded in.
+
+**P1-90d: the shared `measure()` moved on.** Rounds 3 and 4 of the Williamson review (reddoorla/williamson-construction-co#46) found more holes in `seen()`, each reproduced on a blank-page fixture against a paint test. The fixes:
+
+- backdrop-filter, preserve-3d and content-visibility now form containing blocks;
+- clip-path and mask-image clip, on every ancestor;
+- a text-overflow ellipsis ends the line, but only on the line's own block container;
+- plain inline boxes no longer clip;
+- clipping uses the padding box;
+- a line must be on screen at both edges;
+- open shadow roots and slots are walked;
+- text inside an `inert` subtree (a carousel's peeking slide) is skipped.
+
+The spec here takes the same function. None of those patterns is on this site's routes. This PR's mutation still behaves as recorded: the heading rule reverted is red at 320 (335px), run twice. The branch passes 10 of 10.
