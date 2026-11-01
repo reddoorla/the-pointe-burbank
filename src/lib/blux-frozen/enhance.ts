@@ -829,4 +829,16 @@ export const FROZEN_ENHANCE_CSS = [
   // the rule mark's gesture and timing. Nicole's comment on node 51:42. The nav
   // deliberately gets no underline; see underline-draw.ts.
   UNDERLINE_DRAW_CSS,
+
+  // P1-90: "distinguished" (the Distinguished Design heading, 48px at ≤700px,
+  // 6.98em) is 335px wide, and its block has no side padding, so on a 320px
+  // phone the page was 335px wide. The original Blux site overflows the same
+  // way. Size the heading against its 305px column: 14cqi gives 42.7px there,
+  // and stays 48px wherever the column is 343px or wider (a 358px screen and
+  // up). Scoped to the block (its one `.block-content` holds only the eyebrow
+  // and this heading) and to the ≤700px step above, so the 80px desktop size is
+  // never touched. Sized for "distinguished": a longer single word put in this
+  // Prismic slot would need a smaller factor.
+  "@media all and (max-width:700px){#page-block-2 .block-content{container-type:inline-size}" +
+    "#page-block-2 .text12{font-size:min(48px,14cqi)}}",
 ].join("");
