@@ -22,12 +22,51 @@ and both halves of that machinery live here.
 
 **There is no `pnpm verify` here**, unlike the current starter. The gates are
 `pnpm lint`, `pnpm check`, `pnpm test:unit` and `pnpm test:smoke` — the last
-covering `tests/smoke/`, `tests/a11y/` and the two offline fidelity gates in
-`tests/gate/`, which render the frozen and catalog artifacts and assert text
-coverage against the Blux export.
+runs only the Playwright specs tagged `@smoke`, drawn from `tests/smoke/`,
+`tests/a11y/` and `tests/gate/` (the frozen page's structure, carousel and CMS
+agreement; the catalog fidelity specs there render the Blux export offline and
+stay out of the gate). See "Tests build; they don't freeze" below.
 
 **`README.md` is still the starter's.** It documents the template's component
 library, not this site. Do not read it as a description of what is here.
+
+## Tests build; they don't freeze
+
+Tests are how an agent builds against a comp without a human watching: a
+geometry spec that measures a band against the Figma frame is exactly the
+instrument that gets the band right. Once the slice ships, the same spec
+becomes a fence around a design decision a human is entitled to change, and it
+turns a one-line tweak into a CI round trip. This site took the tiers
+`reddoor-starter` ships (reddoorla/reddoor-starter#180) in the fleet test
+audit's batch A. The suite is tiered by what a red _means_:
+
+| Tier                | Command                                     | Runs                                    | Holds                                                                                                                                                |
+| ------------------- | ------------------------------------------- | --------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Gate** (contract) | `pnpm test` (vitest + Playwright `@smoke`)  | every PR, inside the required `ci / ci` | what a client would call a bug: no horizontal overflow, the page's landmarks and nav targets, the carousel, AA contrast and names, the CMS agreement |
+| **Nightly**         | `pnpm test:nightly`                         | `nightly.yml`, never blocks a merge     | the carousel cross-fade layout: real behaviour, but its assertion is a race against a 600ms clock                                                    |
+| **Scaffold**        | `pnpm test:scaffold` (`pnpm test:e2e`: all) | on demand, while building               | comp geometry, pixel and computed-style pins, the numbers the frozen page and the catalog were built to                                              |
+
+- **A human's design change wins.** When a size, spacing, colour that still
+  passes AA, duration, border, or an added button or link turns a test red,
+  the test is what is wrong: update it or delete it in the same PR.
+- **Design values never enter the gate.** A gate test asserts what a user
+  observes, never a class list, a px, a ms, an opacity, or an exact count a
+  designer or editor may change ("exactly three slides"): assert the item that
+  matters is _in_ the list, or read the count off the page.
+- **`@smoke` is earned.** A test tagged `{ tag: "@smoke" }` has no fixed
+  sleeps, no frame counting, no animation windows, no rect read that asserts a
+  position or size, no computed-style colour or size, and no element count a
+  new button would change. Comparing two of the page's own boxes (a slide
+  against its track, text against the viewport edge) reads a relation, not a
+  design value, so it is a contract and may be tagged.
+- **A `@smoke` test that interacts, or reads what script builds, waits on
+  `html[data-hydrated]`** (written by the root layout's `onMount`) or on the
+  carousel's own hydration marker, never on a server-rendered element: CI's
+  smoke step runs on `vite dev`, where `load` fires about 2s before hydration.
+- **A flaky timing test leaves the gate; its window does not widen.** Tag it
+  `@nightly`, or delete it if it guards nothing a client would notice.
+- **A new Playwright spec that is a contract needs its tag.** An untagged one
+  silently lands in scaffold, outside CI.
 
 ## The work journal
 

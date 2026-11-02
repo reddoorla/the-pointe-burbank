@@ -37,72 +37,83 @@ const template = artifact("home.html");
 // A failure here means "template and CMS are out of step", and the fix is to
 // republish rather than to edit this file. Deploying while it is red ships the
 // scrambled footer, so it is deliberately a gate and not a warning.
-test("committed template and published Prismic document agree", async ({ page }) => {
-  // The values the template's footer tokens expect, straight from the freeze
-  // manifest — never hand-copied, so a future re-freeze updates them with it.
-  const byKey = new Map(
-    manifest.slots.filter((s) => s.kind === "text").map((s) => [s.key, s.text ?? ""]),
-  );
-  // Scoped to the FOOTER region of the template. The nav is the wrong probe:
-  // `dropNavLinks` deletes three of its items and `rewriteNavLabels` renames a
-  // fourth, so its slots are expected not to render and would fail this on
-  // purpose. The footer renders its slots verbatim.
-  const footerAt = template.indexOf("<footer");
-  expect(footerAt, "no <footer> in the artifact").toBeGreaterThan(-1);
-  const expected = [...template.slice(footerAt).matchAll(/⟦t:(h\.t\d+)⟧/g)]
-    .map((m) => byKey.get(m[1]!))
-    .filter((v): v is string => v !== undefined)
-    .map((v) => decodeEntities(v).trim())
-    .filter(Boolean)
-    // The two address slots hold Cloudflare's "[email protected]" placeholder,
-    // and `decodeCloudflareEmails` in enhance.ts swaps each for the real
-    // address at render time — so their rendered text NEVER equals the value
-    // the document stores, and matching them by text would fail on a correct
-    // page. They are checked separately below instead. Ordering coverage is
-    // unaffected: a shifted key moves the surrounding values, which are the
-    // ones compared here.
-    .filter((v) => v !== EMAIL_PLACEHOLDER);
-  expect(
-    expected.length,
-    "no footer text slots found — the artifact or its key scheme changed",
-  ).toBeGreaterThanOrEqual(8);
+test(
+  "committed template and published Prismic document agree",
+  { tag: "@smoke" },
+  async ({ page }) => {
+    // The values the template's footer tokens expect, straight from the freeze
+    // manifest — never hand-copied, so a future re-freeze updates them with it.
+    const byKey = new Map(
+      manifest.slots.filter((s) => s.kind === "text").map((s) => [s.key, s.text ?? ""]),
+    );
+    // Scoped to the FOOTER region of the template. The nav is the wrong probe:
+    // `dropNavLinks` deletes three of its items and `rewriteNavLabels` renames a
+    // fourth, so its slots are expected not to render and would fail this on
+    // purpose. The footer renders its slots verbatim.
+    const footerAt = template.indexOf("<footer");
+    expect(footerAt, "no <footer> in the artifact").toBeGreaterThan(-1);
+    const footerValues = [...template.slice(footerAt).matchAll(/⟦t:(h\.t\d+)⟧/g)]
+      .map((m) => byKey.get(m[1]!))
+      .filter((v): v is string => v !== undefined)
+      .map((v) => decodeEntities(v).trim())
+      .filter(Boolean);
+    // How many email slots the freeze's footer has, read from the artifact so a
+    // re-freeze that adds or drops one needs no edit here.
+    const emailSlots = footerValues.filter((v) => v === EMAIL_PLACEHOLDER).length;
+    const expected = footerValues
+      // The two address slots hold Cloudflare's "[email protected]" placeholder,
+      // and `decodeCloudflareEmails` in enhance.ts swaps each for the real
+      // address at render time — so their rendered text NEVER equals the value
+      // the document stores, and matching them by text would fail on a correct
+      // page. They are checked separately below instead. Ordering coverage is
+      // unaffected: a shifted key moves the surrounding values, which are the
+      // ones compared here.
+      .filter((v) => v !== EMAIL_PLACEHOLDER);
+    expect(
+      expected.length,
+      "no footer text slots found — the artifact or its key scheme changed",
+    ).toBeGreaterThanOrEqual(8);
 
-  await page.goto("/", { waitUntil: "load" });
-  await page.evaluate(() => document.fonts.ready.then(() => undefined));
+    await page.goto("/", { waitUntil: "load" });
+    await page.evaluate(() => document.fonts.ready.then(() => undefined));
 
-  const rendered: string[] = await page.evaluate(() =>
-    [...document.querySelectorAll("footer li")]
-      .map((el) => (el.textContent ?? "").replace(/\s+/g, " ").trim())
-      .filter(Boolean),
-  );
+    const rendered: string[] = await page.evaluate(() =>
+      [...document.querySelectorAll("footer li")]
+        .map((el) => (el.textContent ?? "").replace(/\s+/g, " ").trim())
+        .filter(Boolean),
+    );
 
-  // The address slots still have to RENDER — dropping them from the ordering
-  // check above must not become a way for them to disappear. Both decode to a
-  // real mailbox, so requiring one per slot proves the decode ran and the slots
-  // carried a payload.
-  const addresses = rendered.filter((line) => /\S+@\S+\.\S+/.test(line));
-  expect(
-    addresses,
-    `expected one decoded address per email slot. Rendered: ${JSON.stringify(rendered)}`,
-  ).toHaveLength(2);
+    // The address slots still have to RENDER — dropping them from the ordering
+    // check above must not become a way for them to disappear. Both decode to a
+    // real mailbox, so requiring one per slot proves the decode ran and the slots
+    // carried a payload.
+    const addresses = rendered.filter((line) => /\S+@\S+\.\S+/.test(line));
+    expect(emailSlots, "no email slots found in the footer — the artifact changed").toBeGreaterThan(
+      0,
+    );
+    expect(
+      addresses.length,
+      `expected at least one decoded address per email slot. Rendered: ${JSON.stringify(rendered)}`,
+    ).toBeGreaterThanOrEqual(emailSlots);
 
-  // Every expected value must appear, IN ORDER — a subsequence rather than
-  // strict equality, so the decoded addresses sitting between them are simply
-  // skipped over. A key shift still breaks the ordering, which is what this
-  // catches.
-  const missing: string[] = [];
-  let at = 0;
-  for (const want of expected) {
-    const hit = rendered.findIndex((line, i) => i >= at && line.includes(want));
-    if (hit === -1) missing.push(want);
-    else at = hit;
-  }
-  expect(
-    missing,
-    `published document is out of step with the committed template — ` +
-      `republish the frozen_page migration release. Rendered: ${JSON.stringify(rendered)}`,
-  ).toEqual([]);
-});
+    // Every expected value must appear, IN ORDER — a subsequence rather than
+    // strict equality, so the decoded addresses sitting between them are simply
+    // skipped over. A key shift still breaks the ordering, which is what this
+    // catches.
+    const missing: string[] = [];
+    let at = 0;
+    for (const want of expected) {
+      const hit = rendered.findIndex((line, i) => i >= at && line.includes(want));
+      if (hit === -1) missing.push(want);
+      else at = hit;
+    }
+    expect(
+      missing,
+      `published document is out of step with the committed template — ` +
+        `republish the frozen_page migration release. Rendered: ${JSON.stringify(rendered)}`,
+    ).toEqual([]);
+  },
+);
 
 /**
  * What Cloudflare's email protection leaves in the markup where an address was.
