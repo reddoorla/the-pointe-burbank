@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { onMount } from "svelte";
   import { PrismicPreview } from "@prismicio/svelte/kit";
   import { page } from "$app/state";
   import { afterNavigate, beforeNavigate } from "$app/navigation";
@@ -24,6 +25,15 @@
   // instantly instead of gliding under app.css's smooth-scroll. See the util.
   beforeNavigate(disableSmoothScroll);
   afterNavigate(restoreSmoothScroll);
+
+  // Evidence that script has taken the page over, for the Playwright specs that
+  // must not read the page before hydration (`vite dev`, which CI's smoke step
+  // uses, fires `load` about 2s before it): only a mounted root layout writes
+  // it, so it is absent with scripting off and before hydration. Nothing styles
+  // from it. Same marker as reddoor-starter's root layout.
+  onMount(() => {
+    document.documentElement.dataset.hydrated = "";
+  });
 </script>
 
 <!-- Single head source for the whole app. Static routes feed their title

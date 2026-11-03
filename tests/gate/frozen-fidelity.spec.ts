@@ -23,19 +23,11 @@ const allowed = (s: string) => ALLOWED_CONSOLE.some((re) => re.test(s));
 export const GATE_VIEWPORT_WIDTH = 1440;
 test.use({ viewport: { width: GATE_VIEWPORT_WIDTH, height: 900 } });
 
-test("frozen the-pointe renders whole: ~14820px, 50 media, panels live, no tokens", async ({
-  page,
-}) => {
-  const errors: string[] = [];
-  page.on("console", (m: ConsoleMessage) => {
-    if (m.type() === "error" && !allowed(m.text()) && !allowed(m.location()?.url ?? "")) {
-      errors.push(m.text());
-    }
-  });
-  page.on("pageerror", (e) => {
-    if (!allowed(e.message)) errors.push(e.message);
-  });
-
+// The comp's numbers: untagged, so it runs in `pnpm test:scaffold` and not in the
+// merge gate. What a visitor would call a bug on this page (no console errors, no
+// residual slot token, one <main> with the nav and footer outside it, nav links
+// that land on their sections) is "the frozen page keeps its structure" below.
+test("frozen the-pointe renders whole: ~14820px, 50 media, panels live", async ({ page }) => {
   await page.goto("/dev/blux-frozen", { waitUntil: "load" });
   await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight));
   // Wait for web fonts to settle (they drive text height) rather than a blind sleep.
@@ -69,7 +61,7 @@ test("frozen the-pointe renders whole: ~14820px, 50 media, panels live, no token
   const backgrounds = await page.evaluate(
     () =>
       [...document.querySelectorAll<HTMLElement>("*")].filter((e) =>
-        /url\(/.test(e.style.backgroundImage),
+        /url\("[^"]+"\)/.test(e.style.backgroundImage),
       ).length,
   );
   expect(backgrounds).toBeGreaterThanOrEqual(50);
@@ -80,9 +72,6 @@ test("frozen the-pointe renders whole: ~14820px, 50 media, panels live, no token
     panelText: document.querySelector(".rd-avail")?.textContent ?? "",
     ruleMarks: document.querySelectorAll("svg.rd-rule").length,
     rulePngs: document.querySelectorAll('[data-media*="ec0c6ec6"],[data-media*="bf56be7d"]').length,
-    navItems: [...document.querySelectorAll("a.navigation0ullia.data-hashlink")].map(
-      (a) => `${a.textContent?.trim()} -> ${a.getAttribute("href")}`,
-    ),
   }));
   expect(rebuilt.panelText).toContain("480,000 SF");
 
@@ -133,18 +122,6 @@ test("frozen the-pointe renders whole: ~14820px, 50 media, panels live, no token
   expect(panelHeight).toBeCloseTo(201.97, 1);
   expect(rebuilt.ruleMarks).toBe(9);
   expect(rebuilt.rulePngs).toBe(0);
-  // Round 4 (2026-08-03) brought Amenities and Burbank back and added Contact
-  // Us alongside the repurposed Availability item; only Vision stays dropped.
-  // Asserted as labels + targets rather than a count, because the count alone
-  // passed just as happily when the render produced two Availability links —
-  // the exact failure mode of getting addContactNavItem's ordering wrong.
-  expect(rebuilt.navItems).toEqual([
-    "Amenities -> #page-block-5",
-    "Burbank -> #page-block-8",
-    "Availability -> #availability",
-    "Contact Us -> #footer0",
-  ]);
-
   // Each mark's draw-in dash must equal its own rendered width. The marks carry
   // `vector-effect="non-scaling-stroke"`, which resolves stroke-dasharray in
   // SCREEN pixels rather than viewBox units, so any mismatch finishes the
@@ -187,29 +164,6 @@ test("frozen the-pointe renders whole: ~14820px, 50 media, panels live, no token
   }));
   expect(onHover).toEqual({ bg: "rgb(5, 58, 108)", fg: "rgb(255, 255, 255)" });
 
-  // Landmark structure. The Blux export ships a nav and a footer but no main,
-  // and a frozen page renders bare — the root layout skips its own
-  // <main id="main-content"> — so nothing else supplies one. The nav and footer
-  // must stay OUTSIDE it: nested inside <main> they stop being their own
-  // landmarks, which is what a naive "wrap the whole body" fix would do.
-  const landmarks = await page.evaluate(() => {
-    const main = document.querySelector("main");
-    return {
-      mains: document.querySelectorAll("main").length,
-      mainId: main?.id ?? null,
-      navsOutside: document.querySelectorAll("nav").length,
-      navInsideMain: !!main?.querySelector("nav"),
-      footerInsideMain: !!main?.querySelector("footer"),
-    };
-  });
-  expect(landmarks).toEqual({
-    mains: 1,
-    mainId: "page-content",
-    navsOutside: 1,
-    navInsideMain: false,
-    footerInsideMain: false,
-  });
-
   // Footer spacer. The export encodes the blank line between "Lic. 00852254"
   // and the next contact block as a list item whose VALUE is " &nbsp;" — layout
   // stored as content. Prismic Rich Text cannot hold a whitespace-only value, so
@@ -241,6 +195,87 @@ test("frozen the-pointe renders whole: ~14820px, 50 media, panels live, no token
     blank: true,
     paddingSpacers: [74, 44, 32, 100, 32],
   });
+});
+
+// The page's structure, as a visitor or a screen reader meets it. Tagged
+// `@smoke`: none of it reads a size, a colour or a count a designer would change.
+// Moved here from "renders whole" above (2026-11-02, fleet test audit batch A),
+// which keeps the comp's numbers and stays out of the merge gate.
+test("frozen the-pointe page keeps its structure", { tag: "@smoke" }, async ({ page }) => {
+  const errors: string[] = [];
+  page.on("console", (m: ConsoleMessage) => {
+    if (m.type() === "error" && !allowed(m.text()) && !allowed(m.location()?.url ?? "")) {
+      errors.push(m.text());
+    }
+  });
+  page.on("pageerror", (e) => {
+    if (!allowed(e.message)) errors.push(e.message);
+  });
+
+  await page.goto("/dev/blux-frozen", { waitUntil: "load" });
+  // `vite dev` fires `load` about 2s before hydration; an error thrown while
+  // hydrating, or markup script rewrites, would land after an earlier read.
+  await page.locator("html[data-hydrated]").waitFor({ state: "attached" });
+
+  // Baked backgrounds must carry a real url. A blank one (a Prismic image that
+  // did not resolve) still matches a bare `url(`, so the count alone passes it.
+  const bg = await page.evaluate(() => {
+    const withUrl = [...document.querySelectorAll<HTMLElement>("*")].filter((e) =>
+      /url\(/.test(e.style.backgroundImage),
+    );
+    return {
+      total: withUrl.length,
+      empty: withUrl.filter((e) => !/url\("[^"]+"\)/.test(e.style.backgroundImage)).length,
+    };
+  });
+  expect(bg.total, "no baked backgrounds").toBeGreaterThan(0);
+  expect(bg.empty, "backgrounds with an empty url").toBe(0);
+
+  // Landmark structure. The Blux export ships a nav and a footer but no main,
+  // and a frozen page renders bare — the root layout skips its own
+  // <main id="main-content"> — so nothing else supplies one. The nav and footer
+  // must stay OUTSIDE it: nested inside <main> they stop being their own
+  // landmarks, which is what a naive "wrap the whole body" fix would do.
+  const landmarks = await page.evaluate(() => {
+    const main = document.querySelector("main");
+    return {
+      mains: document.querySelectorAll("main").length,
+      navs: document.querySelectorAll("nav").length,
+      navInsideMain: !!main?.querySelector("nav"),
+      footerInsideMain: !!main?.querySelector("footer"),
+    };
+  });
+  expect(landmarks.mains, "the page needs exactly one <main>").toBe(1);
+  expect(landmarks.navs, "the page needs its nav").toBeGreaterThan(0);
+  expect(landmarks.navInsideMain, "the nav must stay outside <main>").toBe(false);
+  expect(landmarks.footerInsideMain, "the footer must stay outside <main>").toBe(false);
+
+  // The nav's section links: each lands on an element that exists, and none is
+  // listed twice. Round 4 (2026-08-03) added Contact Us beside the repurposed
+  // Availability item, and a count alone passed just as happily when the render
+  // produced two Availability links — the failure mode of getting
+  // addContactNavItem's ordering wrong. The labels and their positions are the
+  // comp's, so they are not pinned here.
+  const navItems = await page.evaluate(() =>
+    [...document.querySelectorAll("a.navigation0ullia.data-hashlink")].map((a) => {
+      const href = a.getAttribute("href") ?? "";
+      return {
+        label: a.textContent?.trim() ?? "",
+        href,
+        lands: href.startsWith("#") && href.length > 1 && !!document.querySelector(href),
+      };
+    }),
+  );
+  expect(navItems.length, "the nav lost its section links").toBeGreaterThan(0);
+  expect(
+    navItems.filter((n) => !n.lands),
+    "nav links whose target is not on the page",
+  ).toEqual([]);
+  const labels = navItems.map((n) => n.label);
+  expect(new Set(labels).size, `a nav label is listed twice: ${labels.join(", ")}`).toBe(
+    labels.length,
+  );
+  expect(labels, "the nav needs a way to the contact block").toContain("Contact Us");
 
   // No residual slot token survived substitution.
   expect(await page.content()).not.toContain("⟦");
@@ -264,76 +299,84 @@ test("frozen the-pointe renders whole: ~14820px, 50 media, panels live, no token
 //
 // Timing: slides cross-fade over 600ms and BOTH are painted for that window, so
 // the first test polls until exactly one slide is up (the config forces
-// reducedMotion: "reduce", which makes the swap instant); the second still
-// waits out CAROUSEL_FADE_MS. Playwright's click leaves the pointer over the
+// reducedMotion: "reduce", which makes the swap instant) and is `@smoke`; the
+// second still waits out CAROUSEL_FADE_MS, races that clock, and is `@nightly`.
+// Playwright's click leaves the pointer over the
 // section, which holds the 7s auto-advance, so nothing moves underneath the
 // assertions.
 const CAROUSEL_FADE_MS = 600;
 
-test("carousel: every slide lands inside the track when shown", async ({ page }) => {
-  await page.goto("/dev/blux-frozen", { waitUntil: "load" });
-  await page.evaluate(() =>
-    document.querySelector("#page-block-8")?.scrollIntoView({ block: "center" }),
-  );
-  // A click before hydrateCarousels() wires the arrows is lost. Hydration names
-  // the track a carousel after the listeners are on, and the frozen HTML never
-  // carries that attribute, so its presence is the signal to start clicking.
-  await expect(page.locator('#page-block-8 [aria-roledescription="carousel"]')).toBeAttached();
+test(
+  "carousel: every slide lands inside the track when shown",
+  { tag: "@smoke" },
+  async ({ page }) => {
+    await page.goto("/dev/blux-frozen", { waitUntil: "load" });
+    await page.evaluate(() =>
+      document.querySelector("#page-block-8")?.scrollIntoView({ block: "center" }),
+    );
+    // A click before hydrateCarousels() wires the arrows is lost. Hydration names
+    // the track a carousel after the listeners are on, and the frozen HTML never
+    // carries that attribute, so its presence is the signal to start clicking.
+    await expect(page.locator('#page-block-8 [aria-roledescription="carousel"]')).toBeAttached();
 
-  // One flat shape in every case — a missing track or a wrong number of visible
-  // slides reports as counts rather than as a different type, so the assertions
-  // below need no narrowing and a structural failure still names itself.
-  const shown = () =>
-    page.evaluate(() => {
-      const track = document.querySelector("#page-block-8 .caslider");
-      const slides = track
-        ? [...track.children].filter((c) => c.classList.contains("cagriditem"))
-        : [];
-      const visible = slides.filter((c) => getComputedStyle(c as HTMLElement).display !== "none");
-      const t = track?.getBoundingClientRect();
-      const r = visible.length === 1 ? visible[0].getBoundingClientRect() : null;
-      return {
-        slideCount: slides.length,
-        visibleCount: visible.length,
-        index: r ? slides.indexOf(visible[0]) : -1,
-        // How much of the slide's box overlaps the track's. A parked slide sits
-        // a full width to the side, so this goes to zero or below.
-        overlapX: r && t ? Math.min(r.right, t.right) - Math.max(r.left, t.left) : -1,
-        width: r ? Math.round(r.width) : -1,
-        trackWidth: t ? Math.round(t.width) : -1,
-      };
-    });
+    // One flat shape in every case — a missing track or a wrong number of visible
+    // slides reports as counts rather than as a different type, so the assertions
+    // below need no narrowing and a structural failure still names itself.
+    const shown = () =>
+      page.evaluate(() => {
+        const track = document.querySelector("#page-block-8 .caslider");
+        const slides = track
+          ? [...track.children].filter((c) => c.classList.contains("cagriditem"))
+          : [];
+        const visible = slides.filter((c) => getComputedStyle(c as HTMLElement).display !== "none");
+        const t = track?.getBoundingClientRect();
+        const r = visible.length === 1 ? visible[0].getBoundingClientRect() : null;
+        return {
+          slideCount: slides.length,
+          visibleCount: visible.length,
+          index: r ? slides.indexOf(visible[0]) : -1,
+          // How much of the slide's box overlaps the track's. A parked slide sits
+          // a full width to the side, so this goes to zero or below.
+          overlapX: r && t ? Math.min(r.right, t.right) - Math.max(r.left, t.left) : -1,
+          width: r ? Math.round(r.width) : -1,
+          trackWidth: t ? Math.round(t.width) : -1,
+        };
+      });
 
-  // Three slides, so four clicks proves the wrap as well as each frame.
-  const seen: number[] = [];
-  for (let i = 0; i < 4; i++) {
-    // Wait for the click to land, not just for one slide to be up: the old
-    // slide is "exactly one up" too until the swap starts, so the poll also
-    // waits for the index to move off the frame recorded last.
-    const prev = seen.at(-1);
-    await expect
-      .poll(async () => {
-        const v = await shown();
-        return v.visibleCount === 1 && v.index !== prev;
-      })
-      .toBe(true);
-    const s = await shown();
-    expect(s, "the slider should show exactly one of its slides").toMatchObject({
-      slideCount: 3,
-      visibleCount: 1,
-    });
-    // The whole bug in one assertion: a parked slide barely overlaps, or not
-    // at all. A slide that is properly in the track overlaps it entirely.
-    expect
-      .soft(s.overlapX, `slide ${s.index} is parked outside the track`)
-      .toBeGreaterThan(s.trackWidth * 0.99);
-    expect(s.width).toBe(s.trackWidth);
-    seen.push(s.index);
-    await page.click("#page-block-8-right");
-  }
-  // Advancing must actually change frames, and wrap back to where it started.
-  expect(seen).toEqual([0, 1, 2, 0]);
-});
+    // One click per slide plus one proves the wrap as well as each frame. The
+    // count is read off the page, so a slide added in the CMS needs no edit here.
+    const { slideCount } = await shown();
+    expect(slideCount, "a carousel needs at least two slides to advance").toBeGreaterThanOrEqual(2);
+    const seen: number[] = [];
+    for (let i = 0; i < slideCount + 1; i++) {
+      // Wait for the click to land, not just for one slide to be up: the old
+      // slide is "exactly one up" too until the swap starts, so the poll also
+      // waits for the index to move off the frame recorded last.
+      const prev = seen.at(-1);
+      await expect
+        .poll(async () => {
+          const v = await shown();
+          return v.visibleCount === 1 && v.index !== prev;
+        })
+        .toBe(true);
+      const s = await shown();
+      expect(s, "the slider should show exactly one of its slides").toMatchObject({
+        slideCount,
+        visibleCount: 1,
+      });
+      // The whole bug in one assertion: a parked slide barely overlaps, or not
+      // at all. A slide that is properly in the track overlaps it entirely.
+      expect
+        .soft(s.overlapX, `slide ${s.index} is parked outside the track`)
+        .toBeGreaterThan(s.trackWidth * 0.99);
+      expect(s.width).toBe(s.trackWidth);
+      seen.push(s.index);
+      await page.click("#page-block-8-right");
+    }
+    // Advancing must actually change frames, and wrap back to where it started.
+    expect(seen).toEqual([...Array.from({ length: slideCount }, (_, k) => k), 0]);
+  },
+);
 
 // The cross-fade's layout contract.
 //
@@ -343,61 +386,65 @@ test("carousel: every slide lands inside the track when shown", async ({ page })
 // overlays instead of displacing. Unit tests can assert the inline styles but
 // not what the box model then does with them, and "the styles were right" is
 // precisely the reasoning that shipped the parked-slide bug.
-test("carousel: the cross-fade overlaps without disturbing the layout", async ({ page }) => {
-  // This gate asserts the cross-fade itself — two slides painted at once
-  // mid-transition. @reddoorla/maintenance 0.90 emulates `prefers-reduced-motion:
-  // reduce` fleet-wide, and the site's app.css correctly collapses the fade to an
-  // instant swap under it, so only one slide is ever up and the assertion can't
-  // hold. Opt this one test back into motion; reduced-motion behaviour is the
-  // right default for every other test in this file.
-  await page.emulateMedia({ reducedMotion: "no-preference" });
-  await page.goto("/dev/blux-frozen", { waitUntil: "load" });
-  await page.evaluate(() =>
-    document.querySelector("#page-block-8")?.scrollIntoView({ block: "center" }),
-  );
-  await page.waitForTimeout(300);
+test(
+  "carousel: the cross-fade overlaps without disturbing the layout",
+  { tag: "@nightly" },
+  async ({ page }) => {
+    // This gate asserts the cross-fade itself — two slides painted at once
+    // mid-transition. @reddoorla/maintenance 0.90 emulates `prefers-reduced-motion:
+    // reduce` fleet-wide, and the site's app.css correctly collapses the fade to an
+    // instant swap under it, so only one slide is ever up and the assertion can't
+    // hold. Opt this one test back into motion; reduced-motion behaviour is the
+    // right default for every other test in this file.
+    await page.emulateMedia({ reducedMotion: "no-preference" });
+    await page.goto("/dev/blux-frozen", { waitUntil: "load" });
+    await page.evaluate(() =>
+      document.querySelector("#page-block-8")?.scrollIntoView({ block: "center" }),
+    );
+    await page.waitForTimeout(300);
 
-  const geometry = () =>
-    page.evaluate(() => {
-      const track = document.querySelector("#page-block-8 .caslider")!;
-      const t = track.getBoundingClientRect();
-      const painted = [...track.children]
-        .filter((c) => c.classList.contains("cagriditem"))
-        .filter((c) => getComputedStyle(c as HTMLElement).display !== "none")
-        .map((c) => {
-          const r = c.getBoundingClientRect();
-          return {
-            overlapX: Math.min(r.right, t.right) - Math.max(r.left, t.left),
-            width: Math.round(r.width),
-          };
-        });
-      return {
-        painted,
-        trackWidth: Math.round(t.width),
-        trackHeight: Math.round(t.height),
-      };
-    });
+    const geometry = () =>
+      page.evaluate(() => {
+        const track = document.querySelector("#page-block-8 .caslider")!;
+        const t = track.getBoundingClientRect();
+        const painted = [...track.children]
+          .filter((c) => c.classList.contains("cagriditem"))
+          .filter((c) => getComputedStyle(c as HTMLElement).display !== "none")
+          .map((c) => {
+            const r = c.getBoundingClientRect();
+            return {
+              overlapX: Math.min(r.right, t.right) - Math.max(r.left, t.left),
+              width: Math.round(r.width),
+            };
+          });
+        return {
+          painted,
+          trackWidth: Math.round(t.width),
+          trackHeight: Math.round(t.height),
+        };
+      });
 
-  const before = await geometry();
-  expect(before.painted).toHaveLength(1);
+    const before = await geometry();
+    expect(before.painted).toHaveLength(1);
 
-  await page.click("#page-block-8-right");
-  await page.waitForTimeout(150); // mid-fade
+    await page.click("#page-block-8-right");
+    await page.waitForTimeout(150); // mid-fade
 
-  const during = await geometry();
-  expect(during.painted, "both slides should be painted mid-fade").toHaveLength(2);
-  // Neither the width nor the height may move while two slides are up: that is
-  // the whole reason the outgoing one leaves the flow.
-  expect(during.trackWidth).toBe(before.trackWidth);
-  expect(during.trackHeight).toBe(before.trackHeight);
-  // …and both are stacked ON the track, not one of them shoved off the side.
-  for (const p of during.painted) {
-    expect(p.width).toBe(before.trackWidth);
-    expect(p.overlapX).toBeGreaterThan(before.trackWidth * 0.99);
-  }
+    const during = await geometry();
+    expect(during.painted, "both slides should be painted mid-fade").toHaveLength(2);
+    // Neither the width nor the height may move while two slides are up: that is
+    // the whole reason the outgoing one leaves the flow.
+    expect(during.trackWidth).toBe(before.trackWidth);
+    expect(during.trackHeight).toBe(before.trackHeight);
+    // …and both are stacked ON the track, not one of them shoved off the side.
+    for (const p of during.painted) {
+      expect(p.width).toBe(before.trackWidth);
+      expect(p.overlapX).toBeGreaterThan(before.trackWidth * 0.99);
+    }
 
-  await page.waitForTimeout(CAROUSEL_FADE_MS + 150);
-  const after = await geometry();
-  expect(after.painted).toHaveLength(1);
-  expect(after.trackHeight).toBe(before.trackHeight);
-});
+    await page.waitForTimeout(CAROUSEL_FADE_MS + 150);
+    const after = await geometry();
+    expect(after.painted).toHaveLength(1);
+    expect(after.trackHeight).toBe(before.trackHeight);
+  },
+);

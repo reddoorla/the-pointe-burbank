@@ -15,7 +15,10 @@
     "test": "pnpm test:unit && pnpm test:smoke",
     "test:unit": "vitest run",
     "test:unit:watch": "vitest",
-    "test:smoke": "playwright install chromium && playwright test",
+    "test:smoke": "playwright install chromium && playwright test --grep @smoke",
+    "test:nightly": "playwright test --grep @nightly",
+    "test:scaffold": "playwright test --grep-invert @smoke",
+    "test:e2e": "playwright test",
     "slicemachine": "start-slicemachine"
   },
   "devDependencies": {
