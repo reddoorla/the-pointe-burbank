@@ -61,7 +61,7 @@ test("frozen the-pointe renders whole: ~14820px, 50 media, panels live", async (
   const backgrounds = await page.evaluate(
     () =>
       [...document.querySelectorAll<HTMLElement>("*")].filter((e) =>
-        /url\(/.test(e.style.backgroundImage),
+        /url\("[^"]+"\)/.test(e.style.backgroundImage),
       ).length,
   );
   expect(backgrounds).toBeGreaterThanOrEqual(50);
@@ -217,6 +217,20 @@ test("frozen the-pointe page keeps its structure", { tag: "@smoke" }, async ({ p
   // hydrating, or markup script rewrites, would land after an earlier read.
   await page.locator("html[data-hydrated]").waitFor({ state: "attached" });
 
+  // Baked backgrounds must carry a real url. A blank one (a Prismic image that
+  // did not resolve) still matches a bare `url(`, so the count alone passes it.
+  const bg = await page.evaluate(() => {
+    const withUrl = [...document.querySelectorAll<HTMLElement>("*")].filter((e) =>
+      /url\(/.test(e.style.backgroundImage),
+    );
+    return {
+      total: withUrl.length,
+      empty: withUrl.filter((e) => !/url\("[^"]+"\)/.test(e.style.backgroundImage)).length,
+    };
+  });
+  expect(bg.total, "no baked backgrounds").toBeGreaterThan(0);
+  expect(bg.empty, "backgrounds with an empty url").toBe(0);
+
   // Landmark structure. The Blux export ships a nav and a footer but no main,
   // and a frozen page renders bare — the root layout skips its own
   // <main id="main-content"> — so nothing else supplies one. The nav and footer
@@ -286,7 +300,8 @@ test("frozen the-pointe page keeps its structure", { tag: "@smoke" }, async ({ p
 // Timing: slides cross-fade over 600ms and BOTH are painted for that window, so
 // the first test polls until exactly one slide is up (the config forces
 // reducedMotion: "reduce", which makes the swap instant) and is `@smoke`; the
-// second still waits out CAROUSEL_FADE_MS, races that clock, and is `@nightly`. Playwright's click leaves the pointer over the
+// second still waits out CAROUSEL_FADE_MS, races that clock, and is `@nightly`.
+// Playwright's click leaves the pointer over the
 // section, which holds the 7s auto-advance, so nothing moves underneath the
 // assertions.
 const CAROUSEL_FADE_MS = 600;
