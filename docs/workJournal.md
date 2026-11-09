@@ -170,3 +170,9 @@ The fix is a render-time rule in `FROZEN_ENHANCE_CSS`, below the round-2 `.text1
 - text inside an `inert` subtree (a carousel's peeking slide) is skipped.
 
 The spec here takes the same function. None of those patterns is on this site's routes. This PR's mutation still behaves as recorded: the heading rule reverted is red at 320 (335px), run twice. The branch passes 10 of 10.
+
+## 2026-11-09 — `@types/node` declared at `^24.19.2`, so Node's types stop hanging on slice-machine (reddoor-workspace P1-106)
+
+Nothing here declared `@types/node`. svelte-check gets Node's types (`node:fs`, `process`) only because the lockfile resolves `@types/node` as the optional peer of vite, vitest and sharp, and pnpm resolves an optional peer only while some package in the graph depends on it outright. Here that is one package: `@types/http-proxy`, reached through slice-machine-ui → start-slicemachine → `http-proxy-middleware@2`. So a clean relock keeps it today, at 26.6.6: Node 26's types against the Node 24 this site runs (`.nvmrc`), and Node 26 is held fleet-wide. When that chain stops pulling `@types/http-proxy`, the next lock-file maintenance drops `@types/node`, and svelte-check fails. That happened on roalson-interests on 11-09 (its #344, 146 errors in 46 files; fixed by its #346) and on reddoor-starter-blux, where nothing held the peer and lock-file maintenance has been red since 11-03 (36 errors).
+
+The fix is Roalson's: `pnpm add -D @types/node@^24.19.2`. In the lockfile, the peer resolutions under vite, vitest and sharp move from 26.6.6 to 24.19.2, and the direct entry joins them; no other package moves. `@types/node@26.6.6` stays in the lockfile as `@types/http-proxy`'s own dependency, where svelte-check no longer reads it. Belief corrected on the way: a relock does not reproduce the failure while `node_modules` is in place, because pnpm reuses the old resolution; the census had to move `node_modules` aside to see what Renovate sees.
